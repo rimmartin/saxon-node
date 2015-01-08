@@ -2,7 +2,7 @@
     "name": "saxon-node",
     "description": "",
     "version": "0.0.1",
-    "main": "./saxon-node.js",
+    "main": "./index.js",
     "author": {
         "name": "roger",
         "email": "you@email.example"
