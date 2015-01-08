@@ -1,0 +1,27 @@
+{
+    "name": "saxon-node",
+    "description": "",
+    "version": "0.0.1",
+    "main": "./saxon-node.js",
+    "author": {
+        "name": "roger",
+        "email": "you@email.example"
+    },
+    "keywords": [],
+    "licenses": {
+        "type": "none"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/YOUR_LOGIN/saxon-node.git"
+    },
+    "dependencies" : {
+        "co" : "4.0.0",
+        "co-fs" : "1.2.0",
+        "should" : "4.3.0",
+        "mocha-co" : "1.17.1-co.1"
+    },
+    "bugs": {
+        "url": "http://github.com/YOUR_LOGIN/saxon-node/issues"
+    }
+}
