@@ -3,9 +3,8 @@
 #include <string>
 #include <iostream>
 
-#include "SaxonApiException.hpp"
-#include "SaxonProcessor.hpp"
-#include "XsltProcessor.hpp"
+#include "SaxonProcessorJS.hpp"
+#include "XsltProcessorJS.hpp"
 
 using namespace v8;
 
@@ -14,8 +13,8 @@ extern "C" {
     static void init (Handle<Object> target) {
         
         // initialize wrapped objects
-        saxon::SaxonProcessor::Initialize(target);
-        saxon::XsltProcessor::Initialize(target);
+        saxon_node::SaxonProcessorJS::Initialize(target);
+        saxon_node::XsltProcessorJS::Initialize(target);
         
     }
     

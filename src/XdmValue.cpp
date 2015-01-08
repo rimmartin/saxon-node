@@ -1,8 +1,3 @@
-#include <jni.h>
-
-#include "SaxonApiException.hpp"
-#include "SaxonProcessor.hpp"
-#include "XsltProcessor.hpp"
 #include "XdmValue.h"
 
 
@@ -10,15 +5,15 @@
 * XdmNode Class implementation
 */
 
-        jobject makeXdmValue(saxon::SaxonProcessor *proc, JNIEnv *env){
+        jobject makeXdmValue(SaxonProcessor *proc, JNIEnv *env){
 	 if(env == NULL) {
-		std::cerr<<"Error: env is null\n"<<std::endl;
+		cerr<<"Error: env is null\n"<<endl;
 	 }
 	   jclass xdmValueClass = proc->lookForClass(env, "net/sf/saxon/option/cpp/XdmValueForCpp");
 	   jmethodID MID_init = proc->findConstructor (env, xdmValueClass, "()V");
  	   jobject xdmValue = (jobject)env->NewObject(xdmValueClass, MID_init);
       		if (!xdmValue) {
-	        	std::cerr<<"Error: failed to allocate an object\n"<<std::endl;
+	        	cerr<<"Error: failed to allocate an object\n"<<endl;
         		return NULL;
       		}
 
@@ -27,74 +22,73 @@
 	}
 
 
-	jobject makeXdmValue(saxon::SaxonProcessor *proc, JNIEnv *env, bool b){ 
+	jobject makeXdmValue(SaxonProcessor *proc, JNIEnv *env, bool b){ 
 	 if(env == NULL) {
-		std::cerr<<"Error: env is null\n"<<std::endl;
+		cerr<<"Error: env is null\n"<<endl;
 	 }
 		jclass xdmValueClass = proc->lookForClass(env, "net/sf/saxon/option/cpp/XdmValueForCpp");
 	        jmethodID MID_init = proc->findConstructor (env, xdmValueClass, "(Z)V");
  		jobject xdmValue = (jobject)(env->NewObject(xdmValueClass, MID_init, (jboolean)b));
       		if (!xdmValue) {
-	        	std::cerr<<"Error: failed to allocate an object\n"<<std::endl;
+	        	cerr<<"Error: failed to allocate an object\n"<<endl;
         		return NULL;
       		}
 		return xdmValue;
 	}
 
-	jobject makeXdmValue(saxon::SaxonProcessor *proc, JNIEnv *env, int i){ 
+	jobject makeXdmValue(SaxonProcessor *proc, JNIEnv *env, int i){ 
 	 if(env == NULL) {
-		std::cerr<<"Error: env is null\n"<<std::endl;
+		cerr<<"Error: env is null\n"<<endl;
 	 }
 		jclass xdmValueClass = proc->lookForClass(env, "net/sf/saxon/option/cpp/XdmValueForCpp");
 	        jmethodID MID_init = proc->findConstructor (env, xdmValueClass, "(I)V");
  		jobject xdmValue = (jobject)(env->NewObject(xdmValueClass, MID_init, (jint)i));
       		if (!xdmValue) {
-	        	std::cerr<<"Error: failed to allocate an XdmValueForCpp object \n"<<std::endl;
+	        	cerr<<"Error: failed to allocate an XdmValueForCpp object \n"<<endl;
         		return NULL;
       		}
 		return xdmValue;
 	}
 
 
-	jobject makeXdmValue(saxon::SaxonProcessor *proc, JNIEnv *env, std::string type, std::string valueStr){ 
+	jobject makeXdmValue(SaxonProcessor *proc, JNIEnv *env, string type, string valueStr){ 
 	 if(env == NULL) {
-		std::cerr<<"Error: env is null\n"<<std::endl;
+		cerr<<"Error: env is null\n"<<endl;
 	 }
 		jclass xdmValueClass = proc->lookForClass(env, "net/sf/saxon/option/cpp/XdmValueForCpp");
 	        jmethodID MID_init = proc->findConstructor (env, xdmValueClass, "(Ljava/lang/String;Ljava/lang/String;)V");
 		if(!MID_init) {
-			std::cerr<<"methodID not found"<<std::endl;
+			cerr<<"methodID not found"<<endl;
 		}
  		jobject xdmValue = (jobject)(env->NewObject(xdmValueClass, MID_init, env->NewStringUTF(type.c_str()), env->NewStringUTF(valueStr.c_str())));
 		
 	
       		if (xdmValue==NULL) {
 			proc->checkForException(env, xdmValueClass, xdmValue);
-	        	std::cerr<<"Error: failed to allocate an XdmValueForCpp object \n"<<std::endl;
+	        	cerr<<"Error: failed to allocate an XdmValueForCpp object \n"<<endl;
         		return NULL;
       		}
 		return xdmValue;
 	}
 
 
-	jobject makeXdmValue(saxon::SaxonProcessor *proc, JNIEnv *env, std::string valueStr){ 
+	jobject makeXdmValue(SaxonProcessor *proc, JNIEnv *env, string valueStr){ 
 	 if(env == NULL) {
-		std::cerr<<"Error: env is null\n"<<std::endl;
+		cerr<<"Error: env is null\n"<<endl;
 	 }
 		jclass xdmValueClass = proc->lookForClass(env, "net/sf/saxon/option/cpp/XdmValueForCpp");
 	        jmethodID MID_init = proc->findConstructor (env, xdmValueClass, "(Ljava/lang/String;Ljava/lang/String;)V");
- 		jobject xdmValue = (jobject)(env->NewObject(xdmValueClass, MID_init, env->NewStringUTF("std::string"), env->NewStringUTF(valueStr.c_str())));
+ 		jobject xdmValue = (jobject)(env->NewObject(xdmValueClass, MID_init, env->NewStringUTF("string"), env->NewStringUTF(valueStr.c_str())));
 		proc->checkForException(env, xdmValueClass, xdmValue);
 	
       		if (xdmValue==NULL) {
-	        	std::cerr<<"Error: failed to allocate an XdmValueForCpp object \n"<<std::endl;
+	        	cerr<<"Error: failed to allocate an XdmValueForCpp object \n"<<endl;
         		return NULL;
       		}
 		return xdmValue;
 	}
 
 
-namespace saxon {
 
     const char * XdmValue::getErrorMessage(int i){
 	if(exception== NULL) return NULL;
@@ -127,13 +121,13 @@ namespace saxon {
 			case 'O' :{
 				 jmethodID mID;
 
-			          std::string methodName = "getStringValue";
-			          std::string args = "()Ljava/lang/String;";
+			          string methodName = "getStringValue";
+			          string args = "()Ljava/lang/String;";
 		 		jclass xdmValueClass = proc->lookForClass(proc->env, "net/sf/saxon/option/cpp/XdmValueForCpp");
 				  mID = (jmethodID)(proc->env)->GetMethodID(xdmValueClass, methodName.c_str(), args.c_str());
 			          if (!mID) {
-				    std::cout<<"\nError: MyClassInDll "<<methodName<<"()"<<" not found"<<std::endl;
-			            return std::string("ERROR: Method Not Found: "+methodName).c_str();
+				    cout<<"\nError: MyClassInDll "<<methodName<<"()"<<" not found"<<endl;
+			            return string("ERROR: Method Not Found: "+methodName).c_str();
          			}
 				   jstring valueStr1 = (jstring)(proc->env)->CallObjectMethod(xdmValuei, mID);
 				   if(valueStr1){
@@ -148,6 +142,7 @@ namespace saxon {
 	}
 
 	jobject XdmValue::getUnderlyingValue(SaxonProcessor *p){
+		JNIEnv *env = p->env;
 		switch(valueType) {
 			case 'I' :
 				return makeXdmValue(p, p->env, valueInt);
@@ -181,4 +176,3 @@ namespace saxon {
 		}
 	
 	}
-}

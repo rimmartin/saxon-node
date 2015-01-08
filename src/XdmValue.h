@@ -9,18 +9,16 @@
 #define SAXON_XDMVALUE_H
 
 
-#include <stdio.h>
-#include <string>
-#include <iostream>
-
+#include <string.h>
+#include "SaxonProcessor.h"
 #include <typeinfo> //used for testing only
 
-namespace saxon {
 /*! <code>XdmValue</code>. Value in the XDM data model. A value is a sequence of zero or more items,
  * each item being either an atomic value or a node. This class is a wrapper of the the XdmValue object created in Java.
  * <p/>
  */
-//class SaxonApiException;
+using namespace std;
+class SaxonApiException;
 class SaxonProcessor;
 
 class XdmValue {
@@ -44,10 +42,10 @@ public:
 	} 
 
     /**
-     * A Constructor. Create an xs:std::string value
-     * @param val - std::string value
+     * A Constructor. Create an xs:string value
+     * @param val - string value
      */
-	XdmValue(std::string val){
+	XdmValue(string val){
 		valueStr = val;
 		valueType= 'S';	
 	}
@@ -57,7 +55,7 @@ public:
      * @param type - specify target type of the value  
      * @param val - Value to convert
      */
-	XdmValue(std::string tStr, std::string val){
+	XdmValue(string tStr, string val){
 		valueStr = val;
 		typeStr = tStr;
 		valueType= 'U';	
@@ -65,11 +63,11 @@ public:
 
 
     /**
-     * A Constructor. Create an xs:std::string value
-     * @param val - std::string value
+     * A Constructor. Create an xs:string value
+     * @param val - string value
      */
 	XdmValue(char * val){
-		valueStr = std::string(val);
+		valueStr = string(val);
 		valueType= 'S';
 	}
 
@@ -108,7 +106,7 @@ public:
 	jobject getUnderlyingValue(SaxonProcessor *p);
 
     /**
-     * Get the std::string representation of the XdmValue.
+     * Get the string representation of the XdmValue.
      * @return char array
      */
 	const char * getStringValue(SaxonProcessor *p);
@@ -118,19 +116,18 @@ public:
         const char * getErrorMessage(int i);
         const char * getErrorCode(int i);
 	int exceptionCount();
-	std::string checkFailures(){return failure;}
+	string checkFailures(){return failure;}
 	SaxonProcessor *processor;
 private:
-	std::string typeStr;/*!< Internal usage.*/
+	string typeStr;/*!< Internal usage.*/
 	char valueType;  /*!< Internal usage. The type of the XdmValue, U Null, I Int, Z bool, S String, O jobject */
-	std::string valueStr;  /*!< Internal usage. String representation of the XdmValue, if available */
+	string valueStr;  /*!< Internal usage. String representation of the XdmValue, if available */
 	int valueInt;
 	bool valueBool;
 	jobject xdmValuei;
 	SaxonApiException * exception;
-	std::string failure;
+	string failure;
 
-};
 };
 
 #endif /** SAXON_XDMVALUE_H **/
