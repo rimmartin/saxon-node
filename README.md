@@ -12,3 +12,8 @@ To run it needs the harmony switch and at least nodejs v0.11.x
 ```bash
 node --harmony saxon-node.js /home/user/testing-grounds/BCL/analyze.xml /home/user/NetBeansProjects/OOBackbone/stylesheets/divconIsSpecies.xsl
 ```
+
+To test
+```bash
+mocha --harmony --require should
+```
