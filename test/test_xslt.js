@@ -9,18 +9,20 @@ var saxon = require('saxonXslt');
 //      yield setup();
         content = yield fs.readFile("./test/examples/xml/foo.xml", "utf8");
         saxonProcessor = new saxon.SaxonProcessor(false);
+        console.dir("saxonProcessor "+saxonProcessor.version());
+        saxonProcessor.setcwd(".");
     });
 
     it("should be from memory buffer", function*() {
         try
         {
-            saxonProcessor = new saxon.SaxonProcessor(false);
+             console.dir("start 1");
             var xsltProcessor = saxonProcessor.newTransformer();
             xsltProcessor.compile("./test/examples/xsl/baz.xsl");
-            xsltProcessor.parseXmlString(content);
-            var pdbContent = xsltProcessor.xsltApplyStylesheet();
-//            console.dir(pdbContent);
-            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+//            xsltProcessor.parseXmlString(content);
+//            var pdbContent = xsltProcessor.xsltApplyStylesheet();
+//            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+             console.dir("end 1");
         }
         catch (err) {
         console.dir(err.message);
@@ -30,11 +32,13 @@ var saxon = require('saxonXslt');
     it("should use direct xml file", function*() {
         try
         {
-            saxonProcessor = new saxon.SaxonProcessor(false);
+             console.dir("start 2");
             var xsltProcessor = saxonProcessor.newTransformer();
+             console.dir("compile 2");
             xsltProcessor.compile("./test/examples/xsl/baz.xsl");
             var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
-            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+//            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+             console.dir("end 2");
         }
         catch (err) {
         console.dir(err.message);
@@ -44,10 +48,29 @@ var saxon = require('saxonXslt');
     it("should use direct xml and xsl files", function*() {
         try
         {
-            saxonProcessor = new saxon.SaxonProcessor(false);
+             console.dir("start 3");
             var xsltProcessor = saxonProcessor.newTransformer();
             var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
-            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+//            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+        }
+        catch (err) {
+        console.dir(err.message);
+             console.dir("end 3");
+        }
+    });
+
+    it("should be compiled and applied to file multiple times", function*() {
+        try
+        {
+             console.dir("start 4");
+            var xsltProcessor = saxonProcessor.newTransformer();
+//            xsltProcessor.compile("./test/examples/xsl/baz.xsl");
+            for(var i=0;i<10;i++)
+            {
+                var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
+                pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+            }
+             console.dir("end 4");
         }
         catch (err) {
         console.dir(err.message);

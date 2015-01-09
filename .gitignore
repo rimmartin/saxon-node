@@ -1,4 +1,5 @@
 /build/
 *.log
 *.sh
+*.txt
 /node_modules/

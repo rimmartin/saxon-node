@@ -143,7 +143,18 @@ namespace saxon_node {
         };
 
         static void xsltSaveResultToFile(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            if(args.Length()!=3 || !args[0]->IsString() || !args[1]->IsString() || !args[2]->IsString())
+            {
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "not correct arguments")));
+                args.GetReturnValue().SetUndefined();
+            }
+            // unwrap xsltProcessor object
+            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            // the source
+            String::Utf8Value sourceFile(args[0]->ToString());
+            String::Utf8Value stylesheetfile(args[1]->ToString());
+            String::Utf8Value outputfile(args[2]->ToString());
+            xp->xsltProcessor->xsltSaveResultToFile((*sourceFile), (*stylesheetfile), (*outputfile));
             args.GetReturnValue().SetUndefined();
         };
 
@@ -202,7 +213,7 @@ namespace saxon_node {
             //std::cout<<(*source)<<std::endl;
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-            xp->xsltProcessor->parseXmlString(*source);
+            xp->value=xp->xsltProcessor->parseXmlString(*source);
             args.GetReturnValue().SetUndefined();
         };
 
@@ -248,6 +259,7 @@ namespace saxon_node {
         Local<Object> procJS;
         SaxonProcessorJS* proc;
         std::shared_ptr<XsltProcessor> xsltProcessor;
+        XdmValue* value;
 
     };
 

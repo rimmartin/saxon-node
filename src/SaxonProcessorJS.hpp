@@ -6,6 +6,7 @@
 #include <node.h>
 #include <node_object_wrap.h>
 #include <string>
+#include <cstring>
 #include <memory>
 
 #include "SaxonProcessor.h"
@@ -26,7 +27,6 @@ namespace saxon_node {
 
         static void Initialize(Handle<Object> target) {
             // instantiate constructor function template
-            std::cout << "Initialize 1 " << std::endl;
             Local<FunctionTemplate> t = FunctionTemplate::New(v8::Isolate::GetCurrent(), New);
             t->SetClassName(String::NewFromUtf8(v8::Isolate::GetCurrent(), "SaxonProcessor"));
             t->InstanceTemplate()->SetInternalFieldCount(1);
@@ -40,6 +40,9 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "setSourceFile", setSourceFile);
             NODE_SET_PROTOTYPE_METHOD(t, "setProperty", setProperty);
             NODE_SET_PROTOTYPE_METHOD(t, "getProperties", getProperties);
+            NODE_SET_PROTOTYPE_METHOD(t, "setcwd", setcwd);
+            NODE_SET_PROTOTYPE_METHOD(t, "setResourcesDirectory", setResourcesDirectory);
+            NODE_SET_PROTOTYPE_METHOD(t, "version", version);
             //        Local<Function> f=t->GetFunction();
             // append this function to the target object
             target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "SaxonProcessor"), t->GetFunction());
@@ -52,8 +55,8 @@ namespace saxon_node {
 
         };
 
-        SaxonProcessorJS(bool l) : cwd("") {
-            processor.reset(new SaxonProcessor(false));
+        SaxonProcessorJS(bool l) : cwd(""), processor (new SaxonProcessor(false)) {
+//            processor.reset(new SaxonProcessor(false));
         };
         SaxonProcessorJS(const SaxonProcessorJS& orig) = delete;
 
@@ -62,12 +65,16 @@ namespace saxon_node {
         static Persistent<FunctionTemplate> Constructor;
 
         static void New(const v8::FunctionCallbackInfo<Value>& args) {
-            // create hdf file object
+            // create processor object
             SaxonProcessorJS* sp;
             if (args.Length() < 1)
+            {
                 sp = new SaxonProcessorJS();
+            }
             else
+            {
                 sp = new SaxonProcessorJS(args[0]->ToBoolean()->BooleanValue());
+            }
 
             // extend target object with file
             sp->Wrap(args.This());
@@ -110,6 +117,32 @@ namespace saxon_node {
         static void getProperties(const v8::FunctionCallbackInfo<Value>& args) {
             v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
             args.GetReturnValue().SetUndefined();
+        };
+
+        static void setcwd(const v8::FunctionCallbackInfo<Value>& args) {
+            if(args.Length()==1 && args[0]->IsString())
+            {
+                SaxonProcessorJS* sp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
+                String::Utf8Value cwd(args[0]->ToString());
+                sp->processor->setcwd((*cwd));
+                args.GetReturnValue().SetUndefined();
+            }
+        };
+
+        static void setResourcesDirectory(const v8::FunctionCallbackInfo<Value>& args) {
+            if(args.Length()==1 && args[0]->IsString())
+            {
+                SaxonProcessorJS* sp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
+                String::Utf8Value resourcesDirectory(args[0]->ToString());
+                sp->processor->setResourcesDirectory((*resourcesDirectory));
+                args.GetReturnValue().SetUndefined();
+            }
+        };
+
+        static void version(const v8::FunctionCallbackInfo<Value>& args) {
+                SaxonProcessorJS* sp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
+                const char* buffer=sp->processor->version();
+                args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
         };
 
     protected:
