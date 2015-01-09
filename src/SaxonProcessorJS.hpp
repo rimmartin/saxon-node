@@ -54,7 +54,6 @@ namespace saxon_node {
 
         SaxonProcessorJS(bool l) : cwd("") {
             processor.reset(new SaxonProcessor(false));
-            std::cout << "SaxonP " << l << std::endl;
         };
         SaxonProcessorJS(const SaxonProcessorJS& orig) = delete;
 
@@ -65,7 +64,6 @@ namespace saxon_node {
         static void New(const v8::FunctionCallbackInfo<Value>& args) {
             // create hdf file object
             SaxonProcessorJS* sp;
-            std::cout << "New " << args.Length() << std::endl;
             if (args.Length() < 1)
                 sp = new SaxonProcessorJS();
             else

@@ -19,3 +19,26 @@ To test
 ```bash
 mocha --harmony --require should
 ```
+
+To code
+```node
+    var saxonProcessor = new saxon.SaxonProcessor(false);
+    var xsltProcessor = saxonProcessor.newTransformer();
+    var results = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
+```
+
+```node
+    var saxonProcessor = new saxon.SaxonProcessor(false);
+    var xsltProcessor = saxonProcessor.newTransformer();
+    xsltProcessor.compile("./test/examples/xsl/baz.xsl");
+    var results = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
+```
+
+```node
+    var saxonProcessor = new saxon.SaxonProcessor(false);
+    var xsltProcessor = saxonProcessor.newTransformer();
+    xsltProcessor.compile("./test/examples/xsl/baz.xsl");
+    xsltProcessor.parseXmlString(content);
+    var results = xsltProcessor.xsltApplyStylesheet();
+```
+

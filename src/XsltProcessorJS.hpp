@@ -148,11 +148,41 @@ namespace saxon_node {
         };
 
         static void xsltApplyStylesheet(const v8::FunctionCallbackInfo<Value>& args) {
-            // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-            const char* buffer=xp->xsltProcessor->xsltApplyStylesheet(NULL, NULL);
-            args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
-
+            switch(args.Length())
+            {
+                case 1:
+                    if(args[0]->IsString())
+                    {
+                        // unwrap xsltProcessor object
+                        XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                        // the source
+                        String::Utf8Value source(args[0]->ToString());
+                        const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*source), NULL);
+                        args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+                    }
+                    break;
+                case 2:
+                    if(args[0]->IsString() && args[1]->IsString())
+                    {
+                        // unwrap xsltProcessor object
+                        XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                        // the source
+                        String::Utf8Value sourceFile(args[0]->ToString());
+                        String::Utf8Value stylesheetfile(args[1]->ToString());
+                        const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*sourceFile), (*stylesheetfile));
+                        args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+                    }
+                    break;
+                default:
+                    // unwrap xsltProcessor object
+                    XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                    const char* buffer=xp->xsltProcessor->xsltApplyStylesheet(NULL, NULL);
+                    args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+                    break;
+            }
+//            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "arguments aren't strings")));
+//            args.GetReturnValue().SetUndefined();
+//            return;
         };
 
         static void parseXmlFile(const v8::FunctionCallbackInfo<Value>& args) {
