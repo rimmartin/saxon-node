@@ -5,6 +5,7 @@
 
 #include "SaxonProcessorJS.hpp"
 #include "XsltProcessorJS.hpp"
+#include "XQueryProcessorJS.hpp"
 
 using namespace v8;
 
@@ -15,6 +16,7 @@ extern "C" {
         // initialize wrapped objects
         saxon_node::SaxonProcessorJS::Initialize(target);
         saxon_node::XsltProcessorJS::Initialize(target);
+        saxon_node::XQueryProcessorJS::Initialize(target);
         
     }
     

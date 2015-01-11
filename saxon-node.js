@@ -17,7 +17,6 @@ try
     var xsltProcessor = saxonProcessor.newTransformer();
     if(process.argv.length>4)
     {
-        console.dir(process.argv.length+" "+process.argv[4]);
         for(var index=4;index<process.argv.length;index++)
         {
             var pair = process.argv[index].split("=");

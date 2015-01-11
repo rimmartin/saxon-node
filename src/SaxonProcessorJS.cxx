@@ -6,6 +6,7 @@
 
 #include "SaxonProcessorJS.hpp"
 #include "XsltProcessorJS.hpp"
+#include "XQueryProcessorJS.hpp"
 
 
 v8::Persistent<v8::FunctionTemplate> saxon_node::SaxonProcessorJS::Constructor;
@@ -18,5 +19,14 @@ void saxon_node::SaxonProcessorJS::newTransformer(const v8::FunctionCallbackInfo
 
 };
 
+void saxon_node::SaxonProcessorJS::newXQueryProcessor(const v8::FunctionCallbackInfo<Value>& args) {
+    Local<Object> instance = saxon_node::XQueryProcessorJS::Instantiate(args.This());
+
+    args.GetReturnValue().Set(instance);
+
+};
+
+
 v8::Persistent<v8::FunctionTemplate> saxon_node::XsltProcessorJS::Constructor;
+v8::Persistent<v8::FunctionTemplate> saxon_node::XQueryProcessorJS::Constructor;
 

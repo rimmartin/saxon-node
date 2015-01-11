@@ -17,9 +17,11 @@ namespace saxon_node {
     //using namespace node;
 
     class XsltProcessorJS;
+    class XQueryProcessorJS;
 
     class SaxonProcessorJS : public node::ObjectWrap {
         friend class XsltProcessorJS;
+        friend class XQueryProcessorJS;
     protected:
         std::string cwd;
         std::shared_ptr<SaxonProcessor> processor;
@@ -75,6 +77,7 @@ namespace saxon_node {
             {
                 sp = new SaxonProcessorJS(args[0]->ToBoolean()->BooleanValue());
             }
+//            std::cout<<"xsl:product-name "<<sp->processor->getProperty("xsl:product-name")<<std::endl;
 
             // extend target object with file
             sp->Wrap(args.This());
@@ -84,10 +87,7 @@ namespace saxon_node {
         };
         static void newTransformer(const v8::FunctionCallbackInfo<Value>& args);
 
-        static void newXQueryProcessor(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
-        };
+        static void newXQueryProcessor(const v8::FunctionCallbackInfo<Value>& args);
 
         static void parseFile(const v8::FunctionCallbackInfo<Value>& args) {
             v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
