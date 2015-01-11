@@ -20,7 +20,7 @@ To test
 mocha --harmony --require should
 ```
 
-To code
+To code for xslt
 ```node
     var saxonProcessor = new saxon.SaxonProcessor(false);
     var xsltProcessor = saxonProcessor.newTransformer();
@@ -49,3 +49,9 @@ Parameters can be passed to the xsl by putting value pairs on the parameters obj
     xsltProcessor.parameters[ "elements-of-interest" ]="Na, O, C, H";
 ```
 
+To code for xquery
+```node
+    var xqueryProcessor = saxonProcessor.newXQueryProcessor();
+    var query = yield fs.readFile("./test/examples/query/books-to-html.xq", "utf8");
+    var htmlContent = xqueryProcessor.executeQueryToString("./test/examples/query/books.xml", query);
+```
