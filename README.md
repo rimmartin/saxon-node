@@ -42,3 +42,10 @@ To code
     var results = xsltProcessor.xsltApplyStylesheet();
 ```
 
+Parameters can be passed to the xsl by putting value pairs on the parameters object of the XsltProcessor
+
+```node
+    var xsltProcessor = saxonProcessor.newTransformer();
+    xsltProcessor.parameters[ "elements-of-interest" ]="Na, O, C, H";
+```
+

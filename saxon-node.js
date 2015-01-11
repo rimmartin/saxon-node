@@ -15,10 +15,22 @@ try
     var content = yield fs.readFile(global.inputXmlPath, "utf8");
     var saxonProcessor = new saxon.SaxonProcessor(false);
     var xsltProcessor = saxonProcessor.newTransformer();
+    if(process.argv.length>4)
+    {
+        console.dir(process.argv.length+" "+process.argv[4]);
+        for(var index=4;index<process.argv.length;index++)
+        {
+            var pair = process.argv[index].split("=");
+            xsltProcessor.parameters[pair[0]]=pair[1];
+        }
+    }
     xsltProcessor.compile(global.xslPath);
+            for(var i=0;i<10;i++)
+            {
     xsltProcessor.parseXmlString(content);
     var pdbContent = xsltProcessor.xsltApplyStylesheet();
     console.dir(pdbContent);
+            }
 }
 catch (err) {
 console.dir(err.message);

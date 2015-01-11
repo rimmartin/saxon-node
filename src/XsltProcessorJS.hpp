@@ -89,7 +89,7 @@ namespace saxon_node {
             xp->Wrap(args.This());
 
             // attach various properties
-            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "path"), String::NewFromUtf8(v8::Isolate::GetCurrent(), f->m_file->getFileName().c_str()));
+            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"), Object::New(v8::Isolate::GetCurrent()));
         };
 
         static void setSourceValue(const v8::FunctionCallbackInfo<Value>& args) {
@@ -159,6 +159,8 @@ namespace saxon_node {
         };
 
         static void xsltApplyStylesheet(const v8::FunctionCallbackInfo<Value>& args) {
+            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
+            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
             switch(args.Length())
             {
                 case 1:
@@ -166,6 +168,16 @@ namespace saxon_node {
                     {
                         // unwrap xsltProcessor object
                         XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                        for(uint32_t index=0;index<parameterNames->Length();index++)
+                        {
+//                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
+                            Local<Object> obj=parameterNames->Get(index)->ToObject();
+//                            std::cout<<"obj "<<obj->IsString()<<std::endl;
+                            String::Utf8Value pn(obj->ToString());
+                            String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+                            xp->xsltProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                        }
                         // the source
                         String::Utf8Value source(args[0]->ToString());
                         const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*source), NULL);
@@ -177,6 +189,16 @@ namespace saxon_node {
                     {
                         // unwrap xsltProcessor object
                         XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                        for(uint32_t index=0;index<parameterNames->Length();index++)
+                        {
+//                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
+                            Local<Object> obj=parameterNames->Get(index)->ToObject();
+//                            std::cout<<"obj "<<obj->IsString()<<std::endl;
+                            String::Utf8Value pn(obj->ToString());
+                            String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+                            xp->xsltProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                        }
                         // the source
                         String::Utf8Value sourceFile(args[0]->ToString());
                         String::Utf8Value stylesheetfile(args[1]->ToString());
@@ -187,6 +209,16 @@ namespace saxon_node {
                 default:
                     // unwrap xsltProcessor object
                     XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                    for(uint32_t index=0;index<parameterNames->Length();index++)
+                    {
+//                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
+                        Local<Object> obj=parameterNames->Get(index)->ToObject();
+//                            std::cout<<"obj "<<obj->IsString()<<std::endl;
+                        String::Utf8Value pn(obj->ToString());
+                        String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                        std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+                        xp->xsltProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                    }
                     const char* buffer=xp->xsltProcessor->xsltApplyStylesheet(NULL, NULL);
                     args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
                     break;

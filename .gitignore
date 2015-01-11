@@ -3,3 +3,4 @@
 *.sh
 *.txt
 /node_modules/
+/private/
