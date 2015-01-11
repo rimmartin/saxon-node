@@ -13,15 +13,18 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/rimmartin/saxon-node.git"
+        "url": "https://github.com/rimmartin/saxon-node"
     },
     "dependencies" : {
+      "should" : "*"
+    },
+    "devDependencies" : {
         "co" : "4.0.0",
         "co-fs" : "1.2.0",
         "should" : "4.3.0",
         "mocha-co" : "1.17.1-co.1"
     },
     "bugs": {
-        "url": "http://github.com/rimmartin/saxon-node/issues"
+        "url": "null"
     }
 }
