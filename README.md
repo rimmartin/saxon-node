@@ -1,6 +1,6 @@
 # saxon-node
 
-An exploration of binding Saxon/C
+An exploration of binding Saxon/C http://www.saxonica.com/html/saxon-c/index.html
 
 To tell it where the Saxon/C is set the environment variable SAXON_HOME to path:
 

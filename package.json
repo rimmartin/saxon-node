@@ -1,6 +1,6 @@
 {
     "name": "saxon-node",
-    "description": "",
+    "description": "An exploration of binding Saxon/C",
     "version": "0.0.1",
     "main": "./index.js",
     "author": {
@@ -9,7 +9,7 @@
     },
     "keywords": [],
     "licenses": {
-        "type": "none"
+        "type": "mit"
     },
     "repository": {
         "type": "git",
@@ -21,10 +21,6 @@
         "should" : "4.3.0",
         "mocha-co" : "1.17.1-co.1"
     },
-  "contributors" : [ "Roger I Martin <mathmldashx@yahoo.com> (https://github.com/rimmartin/)" ],
-  "license" : {
-    "type" : "mit"
-  },
     "bugs": {
         "url": "http://github.com/rimmartin/saxon-node/issues"
     }
