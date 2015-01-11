@@ -5,7 +5,7 @@
     "main": "./index.js",
     "author": {
         "name": "roger",
-        "email": "you@email.example"
+        "email": "mathmldashx@yahoo.com"
     },
     "keywords": [],
     "licenses": {
@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/YOUR_LOGIN/saxon-node.git"
+        "url": "git://github.com/rimmartin/saxon-node.git"
     },
     "dependencies" : {
         "co" : "4.0.0",
@@ -21,7 +21,11 @@
         "should" : "4.3.0",
         "mocha-co" : "1.17.1-co.1"
     },
+  "contributors" : [ "Roger I Martin <mathmldashx@yahoo.com> (https://github.com/rimmartin/)" ],
+  "license" : {
+    "type" : "mit"
+  },
     "bugs": {
-        "url": "http://github.com/YOUR_LOGIN/saxon-node/issues"
+        "url": "http://github.com/rimmartin/saxon-node/issues"
     }
 }
