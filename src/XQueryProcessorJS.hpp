@@ -195,15 +195,18 @@ namespace saxon_node {
                     {
                         // unwrap xqueryProcessor object
                         XQueryProcessorJS* xp = ObjectWrap::Unwrap<XQueryProcessorJS>(args.This());
-                        for(uint32_t index=0;index<parameterNames->Length();index++)
+                        if(args.This()->IsDirty())
                         {
-//                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                            Local<Object> obj=parameterNames->Get(index)->ToObject();
-//                            std::cout<<"obj "<<obj->IsString()<<std::endl;
-                            String::Utf8Value pn(obj->ToString());
-                            String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
-                            xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                            for(uint32_t index=0;index<parameterNames->Length();index++)
+                            {
+    //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
+                                Local<Object> obj=parameterNames->Get(index)->ToObject();
+    //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
+                                String::Utf8Value pn(obj->ToString());
+                                String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+                                xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                            }
                         }
                         // the source
                         String::Utf8Value source(args[0]->ToString());

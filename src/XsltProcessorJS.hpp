@@ -205,6 +205,8 @@ namespace saxon_node {
                     {
                         // unwrap xsltProcessor object
                         XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                        if(args.This()->IsDirty())
+                        {
                         for(uint32_t index=0;index<parameterNames->Length();index++)
                         {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
@@ -222,6 +224,7 @@ namespace saxon_node {
                             String::Utf8Value pnValue(properties->Get(propertyNames->Get(index)->ToString())->ToString());
 //                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             xp->xsltProcessor->setProperty(*pn, *pnValue);
+                        }
                         }
                         // the source
                         String::Utf8Value sourceFile(args[0]->ToString());
