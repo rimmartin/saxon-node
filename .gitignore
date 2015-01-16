@@ -2,5 +2,6 @@
 *.log
 *.sh
 *.txt
+*.cmd
 /node_modules/
 /private/
