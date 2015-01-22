@@ -7,8 +7,8 @@ To tell it where the Saxon/C is set the environment variable SAXON_HOME to path:
 ```bash
 export SAXON_HOME=/home/user/Software/Saxonica/Saxon-HEC0.3.1
 ```
-For the build phase, as with integrating Saxon/C interface code the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; Linking is with libsaxon.so that comes wth Saxon/C in it's home folder.
-The libsaxon.so seems to know where $SAXON_HOME/rt is during runtime.  rt is the http://www.excelsiorjet.com/ that Saxon/C provides.
+For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; Linking is with libsaxon.so that comes wth Saxon/C in it's home folder.
+The libsaxon.so seems to know where $SAXON_HOME/rt is during runtime.  rt is the runtime http://www.excelsiorjet.com/ that Saxon/C provides.
 
 To run it needs the harmony switch and at least nodejs v0.11.x http://blog.nodejs.org/2014/09/24/node-v0-11-14-unstable/
 
