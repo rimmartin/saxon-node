@@ -10,7 +10,7 @@
 #include <jni.h>
 
 	
-#ifdef __linux__
+#if defined __linux__ || defined __APPLE__
 #include <stdlib.h>
         #include <string.h>
         #include <dlfcn.h>
