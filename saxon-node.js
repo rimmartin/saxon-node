@@ -28,7 +28,7 @@ try
             {
     xsltProcessor.parseXmlString(content);
     var pdbContent = xsltProcessor.xsltApplyStylesheet();
-    console.dir(pdbContent);
+    console.dir(pdbContent.toString());
             }
 }
 catch (err) {

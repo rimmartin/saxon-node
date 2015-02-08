@@ -1,0 +1,11 @@
+*.sh
+*.sh~
+*.h5
+*.xml
+*.xmol
+build
+*.log
+*.txt
+/node_modules/
+/private/
+

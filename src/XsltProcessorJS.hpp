@@ -5,6 +5,7 @@
 #include <uv.h>
 #include <node.h>
 #include <node_object_wrap.h>
+#include <node_buffer.h>
 #include <string>
 #include <cstring>
 #include <memory>
@@ -197,7 +198,7 @@ namespace saxon_node {
                         // the source
                         String::Utf8Value source(args[0]->ToString());
                         const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*source), NULL);
-                        args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+                        args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), buffer, std::strlen(buffer)));
                     }
                     break;
                 case 2:
@@ -230,7 +231,7 @@ namespace saxon_node {
                         String::Utf8Value sourceFile(args[0]->ToString());
                         String::Utf8Value stylesheetfile(args[1]->ToString());
                         const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*sourceFile), (*stylesheetfile));
-                        args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+                        args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), buffer, std::strlen(buffer)));
                     }
                     break;
                 default:
@@ -247,7 +248,7 @@ namespace saxon_node {
                         xp->xsltProcessor->setParameter(*pn, new XdmValue(*pnValue));
                     }
                     const char* buffer=xp->xsltProcessor->xsltApplyStylesheet(NULL, NULL);
-                    args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+                    args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), buffer, std::strlen(buffer)));
                     break;
             }
 //            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "arguments aren't strings")));

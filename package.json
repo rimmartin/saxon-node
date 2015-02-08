@@ -1,7 +1,7 @@
 {
     "name": "saxon-node",
     "description": "An exploration of binding Saxon/C",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "main": "./index.js",
     "author": {
         "name": "roger",
