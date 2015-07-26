@@ -5,3 +5,5 @@
 *.cmd
 /node_modules/
 /private/
+/lib/binding/
+.c9/

@@ -9,6 +9,14 @@ To tell it where the Saxon/C is set the environment variable SAXON_HOME to path:
 ```bash
 export SAXON_HOME=/home/user/Software/Saxonica/Saxon-HEC0.3.1
 ```
+
+####Prebuilts
+Attempting to provide prebuilt native modules to eliminate build issues for users.  Testing this for Ubuntu, MacOSX v10.7. 
+```bash
+npm install --fallback-to-build
+```
+
+####Building
 For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; Linking is with libsaxon.so that comes wth Saxon/C in it's home folder.
 The libsaxon.so seems to know where $SAXON_HOME/rt is during runtime.  rt is the runtime http://www.excelsiorjet.com/ that Saxon/C provides.
 
@@ -19,13 +27,13 @@ export LD_LIBRARY_PATH=$SAXON_HOME:$LD_LIBRARY_PATH
 node --harmony saxon-node.js /home/user/testing-grounds/BCL/analyze.xml /home/user/NetBeansProjects/OOBackbone/stylesheets/divconIsSpecies.xsl
 ```
 
-To test
+####To test
 ```bash
 export LD_LIBRARY_PATH=$SAXON_HOME:$LD_LIBRARY_PATH
 mocha --harmony --require should
 ```
 
-To code for xslt
+####To code for xslt
 ```node
     var saxonProcessor = new saxon.SaxonProcessor(false);
     var xsltProcessor = saxonProcessor.newTransformer();
@@ -54,7 +62,7 @@ Parameters can be passed to the xsl by putting value pairs on the parameters obj
     xsltProcessor.parameters[ "elements-of-interest" ]="Na, O, C, H";
 ```
 
-To code for xquery
+####To code for xquery
 ```node
     var xqueryProcessor = saxonProcessor.newXQueryProcessor();
     var query = yield fs.readFile("./test/examples/query/books-to-html.xq", "utf8");
