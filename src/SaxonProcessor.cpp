@@ -1,4 +1,5 @@
-#ifndef __linux__
+#if defined __linux__ || defined __APPLE__
+#else
 	#include "stdafx.h"
 	#include <Tchar.h>
 #endif
@@ -10,7 +11,7 @@
 #include "XQueryProcessor.cpp"
 #include "XdmValue.cpp"
 #ifndef CPP_ONLY
-#include "php_saxon.cpp"
+//#include "php_saxon.cpp"
 #endif
 #ifdef DEBUG
 #include <signal.h>
@@ -18,7 +19,7 @@
 #include <stdio.h>
 
 char dllname[] =
-    #ifdef __linux__
+    #if defined __linux__ || defined __APPLE__
         "/usr/lib/libsaxon.so";
     #else
         "C:\\Program Files\\Saxonica\\SaxonHEC0.3\\libsaxon.dll";
@@ -30,10 +31,10 @@ char dllname[] =
  */
 HANDLE loadDll(char* name)
 {
-#ifndef __linux__
-	HANDLE hDll = LoadLibrary (_T("C:\\Program Files\\Saxonica\\SaxonHEC0.3\\libsaxon.dll")); // Used for windows only
-#else
+#if defined __linux__ || defined __APPLE__
 	HANDLE hDll = LoadLibrary(name);
+#else
+	HANDLE hDll = LoadLibrary (_T("C:\\Program Files\\Saxonica\\SaxonHEC0.3\\libsaxon.dll")); // Used for windows only
 #endif
 
     if (!hDll) {
@@ -72,19 +73,19 @@ extern "C" void initJavaRT(HANDLE myDllHandle, JavaVM** pjvm, JNIEnv** penv)
     JavaVMInitArgs args;
     JNI_GetDefaultJavaVMInitArgs_func = 
              (jint (JNICALL *) (void *args))
-#ifndef __linux__
-         GetProcAddress ((HMODULE)myDllHandle, "JNI_GetDefaultJavaVMInitArgs");    
-#else
+#if defined __linux__ || defined __APPLE__
              GetProcAddress (myDllHandle, "JNI_GetDefaultJavaVMInitArgs");
+#else
+         GetProcAddress ((HMODULE)myDllHandle, "JNI_GetDefaultJavaVMInitArgs");    
 #endif
 
     JNI_CreateJavaVM_func =
              (jint (JNICALL *) (JavaVM **pvm, void **penv, void *args))
 
-#ifndef __linux__
-        GetProcAddress ((HMODULE)myDllHandle, "JNI_CreateJavaVM");   
-#else
+#if defined __linux__ || defined __APPLE__
              GetProcAddress (myDllHandle, "JNI_CreateJavaVM");
+#else
+        GetProcAddress ((HMODULE)myDllHandle, "JNI_CreateJavaVM");   
 
 #endif
 

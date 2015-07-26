@@ -1,9 +1,13 @@
-/build/
-*.log
 *.sh
+*.sh~
+*.h5
+*.xml
+*.xmol
+build
+*.log
 *.txt
-*.cmd
 /node_modules/
 /private/
+/nbproject/
 /lib/binding/
 .c9/

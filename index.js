@@ -1,5 +1,8 @@
 
-saxonXslt = require ("./build/Release/obj.target/saxonXslt");
+var binary = require('node-pre-gyp');
+var path = require('path');
+var binding_path = binary.find(path.resolve(path.join(__dirname,'./package.json')));
+var saxonXslt = require(binding_path);
 
-console.dir("saxon exports");
+//console.dir("saxon exports");
 module.exports=saxonXslt;

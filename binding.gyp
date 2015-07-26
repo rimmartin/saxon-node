@@ -52,8 +52,44 @@
                         '%SAXON_HOME%/libsaxon.dll'
                     ]
                 }
+            }],
+            ['OS=="mac"', {
+                'cflags': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions", "-Wl,--allow-multiple-definition"],
+                'xcode_settings': {
+                    'OTHER_CFLAGS': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions"]
+                },
+                'include_dirs': [
+                    '$(SAXON_HOME)/include',
+                    '$(JAVA_HOME)/include',
+                    '$(JAVA_HOME)/include/darwin',
+                    'src/'
+                ],
+                'sources': [
+                    'src/SaxonProcessor.cpp',
+                    'src/SaxonProcessorJS.cxx',
+                    'src/saxonXslt.cxx'
+                ],
+                'link_settings': {
+                    'libraries': [
+                        '$(SAXON_HOME)/libsaxon.dylib'
+                    ],
+                    'ldflags': [
+                        '-L$(SAXON_HOME)'
+                    ]
+                }
             }]
            ]
-        }
+        },
+        {
+            "target_name": "action_after_build",
+            "type": "none",
+            "dependencies": [ "<(module_name)" ],
+            "copies": [
+            {
+              "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
+              "destination": "<(module_path)"
+            }
+            ]
+        }        
     ]
 }

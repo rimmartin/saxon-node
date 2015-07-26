@@ -1,14 +1,14 @@
 {
     "name": "saxon-node",
     "description": "An exploration of binding Saxon/C",
-    "version": "0.0.1",
+    "version": "0.0.4",
     "main": "./index.js",
     "author": {
         "name": "roger",
         "email": "mathmldashx@yahoo.com"
     },
     "keywords": [],
-    "licenses": {
+    "license": {
         "type": "mit"
     },
     "repository": {
@@ -16,15 +16,28 @@
         "url": "https://github.com/rimmartin/saxon-node"
     },
     "dependencies" : {
-      "should" : "*"
+      "node-pre-gyp": "0.6.8"
     },
+    "bundledDependencies":["node-pre-gyp"],
     "devDependencies" : {
         "co" : "4.0.0",
         "co-fs" : "1.2.0",
         "should" : "4.3.0",
-        "mocha-co" : "1.17.1-co.1"
+        "mocha" : "2.2.5",
+        "co-mocha" : "1.1.0",
+        "aws-sdk": "2.1.39"
     },
+    "scripts": {
+        "install": "node-pre-gyp install --fallback-to-build",
+        "prebuild": "node-pre-gyp rebuild && node-pre-gyp package"
+    },
+    "binary": {
+        "module_name": "saxonXslt",
+        "module_path": "./lib/binding/",
+        "host": "https://saxon-node.s3-us-west-2.amazonaws.com",
+        "remote_path": "./v{version}"
+    },    
     "bugs": {
-        "url": "null"
+        "url": "https://github.com/rimmartin/saxon-node/issues"
     }
 }
