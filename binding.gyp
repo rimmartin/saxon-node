@@ -28,28 +28,41 @@
                 }
             }],
             ['OS=="win"', {
-                'cflags!': [ '-fno-exceptions' ],
-                'cflags_cc!': [ '-fno-exceptions' ],
-                'cflags': ["-fPIC", "-O4", "/m 3", "-DCPP_ONLY", "-std=c++11", "-fexceptions"],
-                'cflags_cc': ["-fPIC", "-O4", "/m 3", "-DCPP_ONLY", "-std=c++11", "-fexceptions"],
                 'include_dirs': [
-                    '%SAXON_HOME%/Saxon-C-API',
-                    '%JAVA_HOME%/include',
-                    '%JAVA_HOME%/include/win32',
-                    './src',
-                    'C:\Software\node-v0.11.14\src'
+                    "%SAXON_HOME%/Saxon-C-API",
+                    "%JAVA_HOME%/include",
+                    "%JAVA_HOME%/include/win32",
+                    "./src"
                 ],
                 'sources': [
                     'src\SaxonProcessor.cpp',
                     'src\SaxonProcessorJS.cxx',
                     'src\saxonXslt.cxx'
                 ],
-                'libraries': [
-                    '%SAXON_HOME%/libsaxon.dll'
-                ],
+                'msbuild_toolset': 'v120',
+                "configurations": {
+                            "Release": {
+                'msvs_settings':
+                {
+                    'VCCLCompilerTool':
+                    {
+                        'RuntimeLibrary': 2,        # shared release
+                        'ExceptionHandling': 1,     # /EHsc
+                        "PreprocessorDefinitions" :
+                        [
+                            "CPP_ONLY"
+                        ],
+                        'AdditionalOptions': 
+                        [
+                            '/EHsc' # Enable unwind semantics for Exception Handling.  This one actually does the trick - and no warning either.
+                        ]
+                    }
+                }
+              }
+              },
                 'link_settings': {
                     'libraries': [
-                        '%SAXON_HOME%/libsaxon.dll'
+                        '$(SAXON_HOME)/libsaxon.dll'
                     ]
                 }
             }],
