@@ -11,16 +11,16 @@
 
 v8::Persistent<v8::FunctionTemplate> saxon_node::SaxonProcessorJS::Constructor;
 
-void saxon_node::SaxonProcessorJS::newTransformer(const v8::FunctionCallbackInfo<Value>& args) {
+void saxon_node::SaxonProcessorJS::newTransformer(const v8::FunctionCallbackInfo<v8::Value>& args) {
     
-    Local<Object> instance = saxon_node::XsltProcessorJS::Instantiate(args.This());
+    v8::Local<v8::Object> instance = saxon_node::XsltProcessorJS::Instantiate(args.This());
 
     args.GetReturnValue().Set(instance);
 
 };
 
-void saxon_node::SaxonProcessorJS::newXQueryProcessor(const v8::FunctionCallbackInfo<Value>& args) {
-    Local<Object> instance = saxon_node::XQueryProcessorJS::Instantiate(args.This());
+void saxon_node::SaxonProcessorJS::newXQueryProcessor(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    v8::Local<v8::Object> instance = saxon_node::XQueryProcessorJS::Instantiate(args.This());
 
     args.GetReturnValue().Set(instance);
 

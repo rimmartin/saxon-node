@@ -29,10 +29,12 @@
             }],
             ['OS=="win"', {
                 'include_dirs': [
-                    "%SAXON_HOME%/Saxon-C-API",
-                    "%JAVA_HOME%/include",
-                    "%JAVA_HOME%/include/win32",
-                    "./src"
+                    "<!(echo %SAXON_HOME%)/Saxon-C-API",
+                    "<!(echo %JAVA_HOME%)/include",
+                    "<!(echo %JAVA_HOME%)/include/win32",
+                    "./src",
+                    "C:\\Software\\node-v0.12.7\\src",
+                    "C:\\Software\\node-v0.12.7\\deps\\v8\\include"
                 ],
                 'sources': [
                     'src\SaxonProcessor.cpp',
@@ -62,7 +64,7 @@
               },
                 'link_settings': {
                     'libraries': [
-                        '$(SAXON_HOME)/libsaxon.dll'
+                        '<!(echo %SAXON_HOME%)/libsaxon.dll'
                     ]
                 }
             }],

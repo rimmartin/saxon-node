@@ -1,6 +1,6 @@
 #if defined __linux__ || defined __APPLE__
 #else
-	#include "stdafx.h"
+	//#include "stdafx.h"
 	#include <Tchar.h>
 #endif
 
