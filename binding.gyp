@@ -86,7 +86,6 @@
                 ],
                 'link_settings': {
                     'libraries': [
-                        '$(SAXON_HOME)/libsaxon.dylib'
                     ],
                     'ldflags': [
                         '-L$(SAXON_HOME)'
