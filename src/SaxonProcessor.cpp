@@ -19,10 +19,12 @@
 #include <stdio.h>
 
 char dllname[] =
-    #if defined __linux__ || defined __APPLE__
-        "/usr/lib/libsaxon.so";
+    #if defined __linux__
+        "libsaxon.so";
+    #elif defined __APPLE__
+        "libsaxon.dylib";
     #else
-        "C:\\Program Files\\Saxonica\\SaxonHEC0.3\\libsaxon.dll";
+        "libsaxon.dll";
     #endif
 
 
@@ -31,11 +33,7 @@ char dllname[] =
  */
 HANDLE loadDll(char* name)
 {
-#if defined __linux__ || defined __APPLE__
 	HANDLE hDll = LoadLibrary(name);
-#else
-	HANDLE hDll = LoadLibrary (_T("C:\\Program Files\\Saxonica\\SaxonHEC0.3\\libsaxon.dll")); // Used for windows only
-#endif
 
     if (!hDll) {
         printf ("Unable to load %s\n", name);
@@ -316,7 +314,16 @@ SaxonProcessor::SaxonProcessor(bool l){
         resources_dir = "/usr/lib/saxon-data";
     }
     #else
+    if(getenv("SAXON_HOME")!=NULL)
+    {
+        dllName = std::string(getenv("SAXON_HOME"))+"/libsaxon.dll";
+        resources_dir = std::string(getenv("SAXON_HOME"))+"/saxon-data";
+        std::cout<<"dllName: "<<dllName<<std::endl;
+    }
+    else
+    {
         resources_dir =  "C:\\Program Files\\Saxonica\\SaxonHEC0.3";
+    }
     #endif
     license = l;
     HANDLE myDllHandle = loadDll ((char*)dllName.c_str());

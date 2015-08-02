@@ -37,9 +37,9 @@
                     "C:\\Software\\node-v0.12.7\\deps\\v8\\include"
                 ],
                 'sources': [
-                    'src\SaxonProcessor.cpp',
-                    'src\SaxonProcessorJS.cxx',
-                    'src\saxonXslt.cxx'
+                    'src/SaxonProcessor.cpp',
+                    'src/SaxonProcessorJS.cxx',
+                    'src/saxonXslt.cxx'
                 ],
                 'msbuild_toolset': 'v120',
                 "configurations": {
@@ -64,7 +64,6 @@
               },
                 'link_settings': {
                     'libraries': [
-                        '<!(echo %SAXON_HOME%)/libsaxon.dll'
                     ]
                 }
             }],
