@@ -11,13 +11,16 @@ export SAXON_HOME=/home/user/Software/Saxonica/Saxon-HEC0.3.1
 ```
 
 ####Prebuilts
-Attempting to provide prebuilt native modules to eliminate build issues for users.  Testing this for Ubuntu, MacOSX v10.7. 
+
+ linux-x64, darwin-x64 and win32-ia32. More are being made.
+
 ```bash
 npm install --fallback-to-build
 ```
 
-####Building
-For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; Linking is with libsaxon.so that comes wth Saxon/C in it's home folder.
+####Building (only if needed; contact me if there is a particular prebuild you would use)
+If a compatible prebuilt is not found, a number of environment variables are needed.
+For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; libsaxon that comes wth Saxon/C is laoded from it's home folder.
 The libsaxon.so seems to know where $SAXON_HOME/rt is during runtime.  rt is the runtime http://www.excelsiorjet.com/ that Saxon/C provides.
 
 To run it needs the harmony switch and at least nodejs v0.11.x http://blog.nodejs.org/2014/09/24/node-v0-11-14-unstable/
@@ -26,6 +29,7 @@ To run it needs the harmony switch and at least nodejs v0.11.x http://blog.nodej
 export LD_LIBRARY_PATH=$SAXON_HOME:$LD_LIBRARY_PATH
 node --harmony saxon-node.js /home/user/testing-grounds/BCL/analyze.xml /home/user/NetBeansProjects/OOBackbone/stylesheets/divconIsSpecies.xsl
 ```
+Yet this isn't the purpose to run xslt as this small app.  The intention is the calling of the API from your applications.
 
 ####To test
 ```bash
