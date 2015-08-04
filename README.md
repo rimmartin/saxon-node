@@ -52,6 +52,13 @@ mocha --harmony --require should
 ```
 
 ```node
+    var xsltProcessor = saxonProcessor.newTransformer();
+    var xslt = yield fs.readFile("./test/examples/xml/baz.xsl", "utf8");
+    xsltProcessor.compileString(xslt);
+    var results = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
+```
+
+```node
     var saxonProcessor = new saxon.SaxonProcessor(false);
     var xsltProcessor = saxonProcessor.newTransformer();
     xsltProcessor.compile("./test/examples/xsl/baz.xsl");
