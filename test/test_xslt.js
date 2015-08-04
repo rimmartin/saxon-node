@@ -40,6 +40,20 @@ var saxon = require('saxonXslt');
         }
     });
 
+    it("should use direct xml file and an in memory xslt", function*() {
+        try
+        {
+            var xsltProcessor = saxonProcessor.newTransformer();
+            var xslt = yield fs.readFile("./test/examples/xml/baz.xsl", "utf8");
+            xsltProcessor.compileString(xslt);
+            var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
+            pdbContent.toString().should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+        }
+        catch (err) {
+        console.dir(err.message);
+        }
+    });
+
     it("should use direct xml and xsl files", function*() {
         try
         {

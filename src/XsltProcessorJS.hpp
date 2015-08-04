@@ -44,6 +44,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "xsltApplyStylesheet", xsltApplyStylesheet);
             NODE_SET_PROTOTYPE_METHOD(t, "parseXmlString", parseXmlString);
             NODE_SET_PROTOTYPE_METHOD(t, "compile", compile);
+            NODE_SET_PROTOTYPE_METHOD(t, "compileString", compileString);
             //        Local<Function> f=t->GetFunction();
             // append this function to the target object
             target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XsltProcessor"), t->GetFunction());
@@ -296,7 +297,19 @@ namespace saxon_node {
         };
 
         static void compileString(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            if (args.Length() != 1 || !args[0]->IsString()) {
+
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected stylesheet as string")));
+                args.GetReturnValue().SetUndefined();
+                return;
+
+            }
+            // the stylesheet
+            String::Utf8Value stylesheet(args[0]->ToString());
+            //std::cout<<(*stylesheet)<<std::endl;
+            // unwrap xsltProcessor object
+            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            xp->xsltProcessor->compileString(*stylesheet);
             args.GetReturnValue().SetUndefined();
         };
 
