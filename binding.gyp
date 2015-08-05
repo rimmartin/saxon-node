@@ -20,7 +20,6 @@
                 ],
                 'link_settings': {
                     'libraries': [
-                        '-lsaxon'
                     ],
                     'ldflags': [
                         '-L$(SAXON_HOME)'

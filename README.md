@@ -12,11 +12,12 @@ export SAXON_HOME=/home/user/Software/Saxonica/Saxon-HEC0.3.1
 
 ####Prebuilts
 
- linux-x64, darwin-x64 and win32-ia32. More are being made.
+ linux-x64,linux-ia32, darwin-x64 and win32-ia32.
 
 ```bash
 npm install --fallback-to-build
 ```
+will first try to find a compatible native prebuilt.  If it works you won't need development tools and compilers.
 
 ####Building (only if needed; contact me if there is a particular prebuild you would use)
 If a compatible prebuilt is not found, a number of environment variables are needed.
