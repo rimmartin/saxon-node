@@ -67,9 +67,9 @@
                 }
             }],
             ['OS=="mac"', {
-                'cflags': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions", "-Wl,--allow-multiple-definition"],
+                'cflags': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-stdlib=libc++", "-fexceptions", "-Wl,--allow-multiple-definition"],
                 'xcode_settings': {
-                    'OTHER_CFLAGS': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions"]
+                    'OTHER_CFLAGS': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-stdlib=libc++", "-fexceptions", "-mmacosx-version-min=10.7"],
                 },
                 'include_dirs': [
                     '$(SAXON_HOME)/include',
