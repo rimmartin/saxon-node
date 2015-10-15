@@ -32,6 +32,6 @@ try
             }
 }
 catch (err) {
-console.dir(err.message);
+console.dir("caught "+err.message);
 }
 });

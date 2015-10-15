@@ -102,10 +102,28 @@ var saxon = require('saxonXslt');
             xsltProcessor.parameters[ "elements-of-interest" ]="Na, O, C, H";
             var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/sodium-icosanoate.xml", "./test/examples/xsl/IsSpecies.xsl");
             pdbContent.toString().should.equal("true");
+            console.dir(pdbContent);
         }
         catch (err) {
         console.dir(err.message);
         }
+    });
+
+    it("should throw exception for bad function", function*(done) {
+        try
+        {
+            var xsltProcessor = saxonProcessor.newTransformer();
+            console.dir('compile...');
+            xsltProcessor.compile("/home/roger/NodeProjects/saxon-node/test/examples/xsl/badbaz.xsl");
+            console.dir("shouldn't see this");
+//            xsltProcessor.parseXmlString(content);
+//            var pdbContent = xsltProcessor.xsltApplyStylesheet();
+//            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
+        }
+        catch (err) {
+        console.dir(err.message);
+        }
+        done();
     });
 
     after(function*() {

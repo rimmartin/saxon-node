@@ -199,7 +199,15 @@ namespace saxon_node {
                         // the source
                         String::Utf8Value source(args[0]->ToString());
                         const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*source), NULL);
-                        args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), buffer, std::strlen(buffer)));
+                        //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+                        if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                            std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                            args.GetReturnValue().SetUndefined();
+                            break;
+                            
+                        }
+                        args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
                     }
                     break;
                 case 2:
@@ -207,7 +215,7 @@ namespace saxon_node {
                     {
                         // unwrap xsltProcessor object
                         XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-                        if(args.This()->IsDirty())
+                        //if(args.This()->IsDirty())
                         {
                         for(uint32_t index=0;index<parameterNames->Length();index++)
                         {
@@ -232,7 +240,15 @@ namespace saxon_node {
                         String::Utf8Value sourceFile(args[0]->ToString());
                         String::Utf8Value stylesheetfile(args[1]->ToString());
                         const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*sourceFile), (*stylesheetfile));
-                        args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), buffer, std::strlen(buffer)));
+                        //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+                        if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                            std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                            args.GetReturnValue().SetUndefined();
+                            break;
+                            
+                        }
+                        args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
                     }
                     break;
                 default:
@@ -249,7 +265,15 @@ namespace saxon_node {
                         xp->xsltProcessor->setParameter(*pn, new XdmValue(*pnValue));
                     }
                     const char* buffer=xp->xsltProcessor->xsltApplyStylesheet(NULL, NULL);
-                    args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), buffer, std::strlen(buffer)));
+                    //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+                    if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                        std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
+                        v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                        args.GetReturnValue().SetUndefined();
+                        break;
+                        
+                    }
+                    args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
                     break;
             }
 //            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "arguments aren't strings")));
@@ -275,6 +299,14 @@ namespace saxon_node {
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
             xp->value=xp->xsltProcessor->parseXmlString(*source);
+            //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+            if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
             args.GetReturnValue().SetUndefined();
         };
 
@@ -288,10 +320,26 @@ namespace saxon_node {
             }
             // the stylesheet
             String::Utf8Value stylesheet(args[0]->ToString());
-            //std::cout<<(*stylesheet)<<std::endl;
+            std::cout<<(*stylesheet)<<std::endl;
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-            xp->xsltProcessor->compile(*stylesheet);
+            try{
+                xp->xsltProcessor->compile(*stylesheet);
+                //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+                if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                    std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
+                    v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                    args.GetReturnValue().SetUndefined();
+                    return;
+                    
+                }
+            }
+            catch(std::exception& ex){
+                std::cout<<"std::exception "<<ex.what()<<std::endl;
+            }
+            catch(...){
+                std::cout<<"compiled failed "<<std::endl;
+            }
             args.GetReturnValue().SetUndefined();
 
         };
@@ -309,7 +357,23 @@ namespace saxon_node {
             //std::cout<<(*stylesheet)<<std::endl;
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-            xp->xsltProcessor->compileString(*stylesheet);
+            try{
+                xp->xsltProcessor->compileString(*stylesheet);
+                //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+                if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                    std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
+                    v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                    args.GetReturnValue().SetUndefined();
+                    return;
+                    
+                }
+            }
+            catch(std::exception& ex){
+                std::cout<<"std::exception "<<ex.what()<<std::endl;
+            }
+            catch(...){
+                std::cout<<"compiled failed "<<std::endl;
+            }
             args.GetReturnValue().SetUndefined();
         };
 

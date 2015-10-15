@@ -1,16 +1,14 @@
 {
     "name": "saxon-node",
     "description": "An exploration of binding Saxon/C",
-    "version": "0.0.5",
+    "version": "0.1.0",
     "main": "./index.js",
     "author": {
         "name": "roger",
         "email": "mathmldashx@yahoo.com"
     },
     "keywords": [],
-    "license": {
-        "type": "mit"
-    },
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/rimmartin/saxon-node"
@@ -24,7 +22,7 @@
         "co-fs" : "1.2.0",
         "should" : "4.3.0",
         "mocha" : "2.2.5",
-        "co-mocha" : "1.1.0",
+        "co-mocha" : "1.1.2",
         "aws-sdk": "2.1.39"
     },
     "scripts": {

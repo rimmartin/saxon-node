@@ -1,7 +1,7 @@
 var fs = require('co-fs');
 var saxon = require('saxonXslt');
 
-  describe("Xslt foo", function() {
+  describe("Xquery foo", function() {
     var content;
     var saxonProcessor;
 
