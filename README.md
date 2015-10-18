@@ -2,7 +2,7 @@
 
 An exploration of binding Saxon/C http://www.saxonica.com/html/saxon-c/index.html (XSLT 2.0 and XQuery 1.0).  
 
-Note: release v0.1.0 s built with nodejs v4.1.1 [v4.2.x has Buffer acting like Uint8Array and currently is indistinguishable on the native side]. If you want v0.12.x compatible stay with v0.0.5. npm will continue with
+Note: release v0.1.0 s built with nodejs v4.1.1 and v4.2.x [v4.2.x has Buffer acting like Uint8Array and currently is indistinguishable on the native side yet seems to work for this project]. If you want v0.12.x compatible stay with v0.0.5. npm will continue with
 nodejs v4.x.x line and any fixes or features needed by prior versions will be from github branches.
 
 
@@ -26,7 +26,7 @@ If a compatible prebuilt is not found, a number of environment variables are nee
 For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; libsaxon that comes wth Saxon/C is laoded from it's home folder.
 The libsaxon.so seems to know where $SAXON_HOME/rt is during runtime.  rt is the runtime http://www.excelsiorjet.com/ that Saxon/C provides.
 
-To run it needs the harmony switch and at least nodejs v0.11.x http://blog.nodejs.org/2014/09/24/node-v0-11-14-unstable/
+To run it needs the harmony switch and at least nodejs v4.1.x
 
 ```bash
 export LD_LIBRARY_PATH=$SAXON_HOME:$LD_LIBRARY_PATH
