@@ -5,6 +5,7 @@ An exploration of binding Saxon/C http://www.saxonica.com/html/saxon-c/index.htm
 Note: release v0.1.0 s built with nodejs v4.1.1 and v4.2.x [v4.2.x has Buffer acting like Uint8Array and currently is indistinguishable on the native side yet seems to work for this project]. If you want v0.12.x compatible stay with v0.0.5. npm will continue with
 nodejs v4.x.x line and any fixes or features needed by prior versions will be from github branches.
 
+Documentation: http://rimmartin.github.io/saxon-node/
 
 To tell it where the Saxon/C is set the environment variable SAXON_HOME to path:
 
