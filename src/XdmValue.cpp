@@ -126,7 +126,7 @@
 		 		jclass xdmValueClass = proc->lookForClass(proc->env, "net/sf/saxon/option/cpp/XdmValueForCpp");
 				  mID = (jmethodID)(proc->env)->GetMethodID(xdmValueClass, methodName.c_str(), args.c_str());
 			          if (!mID) {
-				    cout<<"\nError: MyClassInDll "<<methodName<<"()"<<" not found"<<endl;
+				    //std::cout<<"\nError: MyClassInDll "<<methodName<<"()"<<" not found"<<std::endl;
 			            return string("ERROR: Method Not Found: "+methodName).c_str();
          			}
 				   jstring valueStr1 = (jstring)(proc->env)->CallObjectMethod(xdmValuei, mID);

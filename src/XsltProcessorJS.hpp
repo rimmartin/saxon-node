@@ -163,7 +163,7 @@ namespace saxon_node {
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                 String::Utf8Value pn(obj->ToString());
                 String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+                //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 xp->xsltProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }
             // the source
@@ -320,7 +320,7 @@ namespace saxon_node {
             }
             // the stylesheet
             String::Utf8Value stylesheet(args[0]->ToString());
-            std::cout<<(*stylesheet)<<std::endl;
+            //std::cout<<(*stylesheet)<<std::endl;
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
             try{
