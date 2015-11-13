@@ -163,7 +163,7 @@ namespace saxon_node {
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                 String::Utf8Value pn(obj->ToString());
                 String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+//                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 xp->xsltProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }
             // the source

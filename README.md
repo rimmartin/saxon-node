@@ -2,6 +2,7 @@
 
 An exploration of binding Saxon/C http://www.saxonica.com/html/saxon-c/index.html (XSLT 2.0 and XQuery 1.0).  
 
+Note: Compatible with nodejs v0.12.x
 Note: 'xsltApplyStylesheet' and 'executeQueryToString' now return a node::Buffer (http://nodejs.org/docs/v0.12.0/api/buffer.html) with the results. toString() is available.
 
 To tell it where the Saxon/C is set the environment variable SAXON_HOME to path:

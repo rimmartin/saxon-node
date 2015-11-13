@@ -172,7 +172,7 @@ namespace saxon_node {
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                 String::Utf8Value pn(obj->ToString());
                 String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+//                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }
             // the source
@@ -204,7 +204,7 @@ namespace saxon_node {
     //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                                 String::Utf8Value pn(obj->ToString());
                                 String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+//                                std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                                 xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                             }
                         }
@@ -226,7 +226,7 @@ namespace saxon_node {
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                             String::Utf8Value pn(obj->ToString());
                             String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+//                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                         }
                         for(uint32_t index=0;index<propertyNames->Length();index++)
@@ -234,7 +234,7 @@ namespace saxon_node {
                             Local<Object> obj=propertyNames->Get(index)->ToObject();
                             String::Utf8Value pn(obj->ToString());
                             String::Utf8Value pnValue(properties->Get(propertyNames->Get(index)->ToString())->ToString());
-                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+//                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             xp->xqueryProcessor->setProperty(*pn, *pnValue);
                         }
                         // the source
@@ -254,7 +254,7 @@ namespace saxon_node {
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                         String::Utf8Value pn(obj->ToString());
                         String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                        std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+//                        std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                         xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                     }
                     const char* buffer=xp->xqueryProcessor->executeQueryToString(NULL, NULL);

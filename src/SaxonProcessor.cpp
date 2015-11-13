@@ -313,12 +313,24 @@ SaxonProcessor::SaxonProcessor(bool l){
         dllName = "/usr/lib/libsaxon.so";
         resources_dir = "/usr/lib/saxon-data";
     }
+    #elif __APPLE__
+    if(getenv("SAXON_HOME")!=NULL)
+    {
+        dllName = std::string(getenv("SAXON_HOME"))+"/libsaxon.dylib";
+        resources_dir = std::string(getenv("SAXON_HOME"))+"/saxon-data";
+    }
+    else
+    {
+        dllName = "/usr/lib/libsaxon.dylib";
+        resources_dir = "/usr/lib/saxon-data";
+    }
+
     #else
     if(getenv("SAXON_HOME")!=NULL)
     {
         dllName = std::string(getenv("SAXON_HOME"))+"/libsaxon.dll";
         resources_dir = std::string(getenv("SAXON_HOME"))+"/saxon-data";
-        std::cout<<"dllName: "<<dllName<<std::endl;
+        //std::cout<<"dllName: "<<dllName<<std::endl;
     }
     else
     {
