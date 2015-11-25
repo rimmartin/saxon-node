@@ -180,6 +180,18 @@ namespace saxon_node {
             String::Utf8Value query(args[1]->ToString());
             String::Utf8Value outputfile(args[2]->ToString());
             xp->xqueryProcessor->executeQueryToFile((*sourceFile), (*outputfile), (*query));
+            if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){
+                if(xp->xqueryProcessor->exceptionCount()==0)xp->xqueryProcessor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->xqueryProcessor->exceptionCount())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
+                    ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
             args.GetReturnValue().SetUndefined();
         };
 
@@ -211,6 +223,18 @@ namespace saxon_node {
                         // the source
                         String::Utf8Value source(args[0]->ToString());
                         const char* buffer=xp->xqueryProcessor->executeQueryToString((*source), NULL);
+                        if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){
+                            if(xp->xqueryProcessor->exceptionCount()==0)xp->xqueryProcessor->checkException();
+                            std::ostringstream ss;
+                            ss<<"# of exceptions: "<<std::to_string(xp->xqueryProcessor->exceptionCount())<<std::endl;
+                            for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
+                                ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                            }
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                            args.GetReturnValue().SetUndefined();
+                            break;
+                            
+                        }
                         args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
                     }
                     break;
@@ -241,6 +265,18 @@ namespace saxon_node {
                         String::Utf8Value sourceFile(args[0]->ToString());
                         String::Utf8Value query(args[1]->ToString());
                         const char* buffer=xp->xqueryProcessor->executeQueryToString((*sourceFile), (*query));
+                        if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){
+                            if(xp->xqueryProcessor->exceptionCount()==0)xp->xqueryProcessor->checkException();
+                            std::ostringstream ss;
+                            ss<<"# of exceptions: "<<std::to_string(xp->xqueryProcessor->exceptionCount())<<std::endl;
+                            for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
+                                ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                            }
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                            args.GetReturnValue().SetUndefined();
+                            break;
+                            
+                        }
                         args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
                     }
                     break;
@@ -258,6 +294,18 @@ namespace saxon_node {
                         xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                     }
                     const char* buffer=xp->xqueryProcessor->executeQueryToString(NULL, NULL);
+                    if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){
+                        if(xp->xqueryProcessor->exceptionCount()==0)xp->xqueryProcessor->checkException();
+                        std::ostringstream ss;
+                        ss<<"# of exceptions: "<<std::to_string(xp->xqueryProcessor->exceptionCount())<<std::endl;
+                        for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
+                            ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                        }
+                        v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                        args.GetReturnValue().SetUndefined();
+                        break;
+                        
+                    }
                     args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
                     break;
             }

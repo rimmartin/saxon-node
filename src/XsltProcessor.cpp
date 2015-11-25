@@ -150,11 +150,11 @@ jmethodID mID = (jmethodID)proc->env->GetMethodID (cppClass,"xsltParseStylesheet
     } else {
       releaseStylesheet();	
       stylesheetObject = (jobject)(proc->env->CallObjectMethod(cpp, mID, proc->env->NewStringUTF(proc->cwd.c_str()), proc->env->NewStringUTF(stylesheet)));
-      if(!stylesheetObject) {
+      /*if(!stylesheetObject) {
 	checkException();
 	cout<<"Error in compile"<<endl;
 	exit(0);
-	}
+	}*/
   }
 
  }

@@ -14,6 +14,7 @@
 #include <stdlib.h>
         #include <string.h>
         #include <dlfcn.h>
+        #include <exception>
     
         #define HANDLE void*
         #define LoadLibrary(x) dlopen(x, RTLD_LAZY)
@@ -61,7 +62,7 @@ typedef struct {
 /*! <code>SaxonApiException</code>. An exception thrown by the Saxon s9api API (Java). This is always a C++ wrapper for some other underlying exception in Java
  * <p/>
  */
-class SaxonApiException {
+class SaxonApiException: public std::exception {
 
 public:
 

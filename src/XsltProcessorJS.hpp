@@ -201,8 +201,13 @@ namespace saxon_node {
                         const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*source), NULL);
                         //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
                         if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
-                            std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
-                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                            if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                            std::ostringstream ss;
+                            ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                            for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                                ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                            }
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
                             args.GetReturnValue().SetUndefined();
                             break;
                             
@@ -242,8 +247,13 @@ namespace saxon_node {
                         const char* buffer=xp->xsltProcessor->xsltApplyStylesheet((*sourceFile), (*stylesheetfile));
                         //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
                         if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
-                            std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
-                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                            if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                            std::ostringstream ss;
+                            ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                            for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                                ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                            }
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
                             args.GetReturnValue().SetUndefined();
                             break;
                             
@@ -267,8 +277,13 @@ namespace saxon_node {
                     const char* buffer=xp->xsltProcessor->xsltApplyStylesheet(NULL, NULL);
                     //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
                     if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
-                        std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
-                        v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                        if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                        std::ostringstream ss;
+                        ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                        for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                            ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                        }
+                        v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
                         args.GetReturnValue().SetUndefined();
                         break;
                         
@@ -301,8 +316,13 @@ namespace saxon_node {
             xp->value=xp->xsltProcessor->parseXmlString(*source);
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
-                std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                    ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
                 args.GetReturnValue().SetUndefined();
                 return;
                 
@@ -327,12 +347,22 @@ namespace saxon_node {
                 xp->xsltProcessor->compile(*stylesheet);
                 //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
                 if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
-                    std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
-                    v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                    if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                    std::ostringstream ss;
+                    ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                    for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                        ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                    }
+                    v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
                     args.GetReturnValue().SetUndefined();
                     return;
                     
                 }
+            }
+            catch(SaxonApiException& ex){
+ 	            for(unsigned int i =0; i< ex.count();i++) {
+ 	                std::cout<<"std::exception "<<ex.getErrorCode(i)<<std::endl;
+ 	            }
             }
             catch(std::exception& ex){
                 std::cout<<"std::exception "<<ex.what()<<std::endl;
@@ -361,12 +391,22 @@ namespace saxon_node {
                 xp->xsltProcessor->compileString(*stylesheet);
                 //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
                 if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
-                    std::string errorMessage="# of "+std::to_string(xp->xsltProcessor->exceptionCount());
-                    v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), errorMessage.c_str())));
+                    if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                    std::ostringstream ss;
+                    ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                    for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                        ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                    }
+                    v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
                     args.GetReturnValue().SetUndefined();
                     return;
                     
                 }
+            }
+            catch(SaxonApiException& ex){
+ 	            for(unsigned int i =0; i< ex.count();i++) {
+ 	                std::cout<<"std::exception "<<ex.getErrorCode(i)<<std::endl;
+ 	            }
             }
             catch(std::exception& ex){
                 std::cout<<"std::exception "<<ex.what()<<std::endl;
