@@ -23,7 +23,7 @@ will first try to find a compatible native prebuilt.  If it works you won't need
 ####Building (only if needed; contact me if there is a particular prebuild you would use)
 If a compatible prebuilt is not found, a number of environment variables are needed.
 For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; libsaxon that comes wth Saxon/C is loaded from it's home folder.
-The libsaxon.so depends on $SAXON_HOME/rt during runtime an it needs library paths $SAXON_HOME:$SAXON_HOME/rt/lib/amd64/jetvm:$SAXON_HOME/rt/lib/amd64.  rt is the runtime http://www.excelsiorjet.com/ that Saxon/C provides.
+The libsaxon.so depends on $SAXON_HOME/rt during runtime and it needs library paths $SAXON_HOME:$SAXON_HOME/rt/lib/amd64/jetvm:$SAXON_HOME/rt/lib/amd64.  rt is the runtime http://www.excelsiorjet.com/ that Saxon/C provides.
 
 To run it needs the harmony switch and at least nodejs v4.2.x. Make sure there isn't a java path to jvm in front of the Excelsior JET tool in rt folder:
 
