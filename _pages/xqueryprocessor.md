@@ -1,1 +1,0 @@
-../_posts/2015-08-08-xqueryprocessor.md
