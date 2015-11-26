@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Saxon Node Docs"
+title: "Saxon Node Documentation"
 ---
 
 ### Get Started
