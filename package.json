@@ -27,7 +27,9 @@
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
-        "prebuild": "node-pre-gyp rebuild && node-pre-gyp package"
+        "prebuild": "node-pre-gyp rebuild && node-pre-gyp package",
+        "test": "mocha --harmony --require should --require co-mocha "
+  
     },
     "binary": {
         "module_name": "saxonXslt",
