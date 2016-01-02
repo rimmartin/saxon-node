@@ -14,21 +14,21 @@
         "url": "https://github.com/rimmartin/saxon-node"
     },
     "dependencies" : {
-      "node-pre-gyp": "0.6.13"
+      "node-pre-gyp": "0.6.18"
     },
     "bundledDependencies":["node-pre-gyp"],
     "devDependencies" : {
         "co" : "4.6.0",
         "co-fs" : "1.2.0",
-        "should" : "7.1.1",
-        "mocha" : "2.3.3",
+        "should" : "8.0.2",
+        "mocha" : "2.3.4",
         "co-mocha" : "1.1.2",
-        "aws-sdk": "2.2.11"
+        "aws-sdk": "2.2.26"
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
         "prebuild": "node-pre-gyp rebuild && node-pre-gyp package",
-        "test": "export NODE_PATH=`pwd`/build/Release:$NODE_PATH && mocha --harmony --require should --require co-mocha --timeout 7000 "
+        "test": "export PATH=$JET_HOME/bin:$PATH && export LD_LIBRARY_PATH=$JET_HOME/lib/x86/shared:$LD_LIBRARY_PATH && export NODE_PATH=`pwd`/build/Release:$NODE_PATH && mocha --harmony --require should --require co-mocha --timeout 7000 "
   
     },
     "binary": {
