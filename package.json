@@ -28,7 +28,7 @@
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
         "prebuild": "node-pre-gyp rebuild && node-pre-gyp package",
-        "test": "mocha --harmony --require should --require co-mocha "
+        "test": "export NODE_PATH=`pwd`/build/Release:$NODE_PATH && mocha --harmony --require should --require co-mocha --timeout 7000 "
   
     },
     "binary": {

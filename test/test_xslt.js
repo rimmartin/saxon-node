@@ -44,7 +44,7 @@ var saxon = require('saxonXslt');
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
-            var xslt = yield fs.readFile("./test/examples/xml/baz.xsl", "utf8");
+            var xslt = yield fs.readFile("./test/examples/xsl/baz.xsl", "utf8");
             xsltProcessor.compileString(xslt);
             var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
             pdbContent.toString().should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
@@ -109,12 +109,12 @@ var saxon = require('saxonXslt');
         }
     });
 
-    it("should throw exception for bad function", function*(done) {
+    it("should throw exception for bad function", function*() {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
             console.dir('compile...');
-            xsltProcessor.compile("/home/roger/NodeProjects/saxon-node/test/examples/xsl/badbaz.xsl");
+            xsltProcessor.compile("./test/examples/xsl/badbaz.xsl").should.throw();
             console.dir("shouldn't see this");
 //            xsltProcessor.parseXmlString(content);
 //            var pdbContent = xsltProcessor.xsltApplyStylesheet();
@@ -123,7 +123,6 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
-        done();
     });
 
     after(function*() {
