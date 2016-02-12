@@ -6,6 +6,8 @@
 #include "SaxonProcessorJS.hpp"
 #include "XsltProcessorJS.hpp"
 #include "XQueryProcessorJS.hpp"
+#include "XPathProcessorJS.hpp"
+#include "SchemaValidatorJS.hpp"
 
 using namespace v8;
 
@@ -17,6 +19,8 @@ extern "C" {
         saxon_node::SaxonProcessorJS::Initialize(target);
         saxon_node::XsltProcessorJS::Initialize(target);
         saxon_node::XQueryProcessorJS::Initialize(target);
+        saxon_node::XPathProcessorJS::Initialize(target);
+        saxon_node::SchemaValidatorJS::Initialize(target);
         
     }
     

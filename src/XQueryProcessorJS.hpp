@@ -31,7 +31,7 @@ namespace saxon_node {
             Constructor.Reset(v8::Isolate::GetCurrent(), t);
             // member method prototypes
             NODE_SET_PROTOTYPE_METHOD(t, "setSourceValue", setSourceValue);
-            NODE_SET_PROTOTYPE_METHOD(t, "setSourceFile", setSourceFile);
+            NODE_SET_PROTOTYPE_METHOD(t, "setContextItemFromFile", setContextItemFromFile);
             NODE_SET_PROTOTYPE_METHOD(t, "setOutputfile", setOutputfile);
             NODE_SET_PROTOTYPE_METHOD(t, "setParameter", setParameter);
             NODE_SET_PROTOTYPE_METHOD(t, "getParameter", getParameter);
@@ -97,7 +97,7 @@ namespace saxon_node {
             args.GetReturnValue().SetUndefined();
         };
 
-        static void setSourceFile(const v8::FunctionCallbackInfo<Value>& args) {
+        static void setContextItemFromFile(const v8::FunctionCallbackInfo<Value>& args) {
             if (args.Length() != 1 || !args[0]->IsString()) {
 
                 v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml source as string")));
@@ -110,7 +110,7 @@ namespace saxon_node {
             //std::cout<<(*source)<<std::endl;
             // unwrap xqueryProcessor object
             XQueryProcessorJS* xp = ObjectWrap::Unwrap<XQueryProcessorJS>(args.This());
-            xp->xqueryProcessor->setSourceFile(*source);
+            xp->xqueryProcessor->setContextItemFromFile(*source);
             args.GetReturnValue().SetUndefined();
 
         };
@@ -173,7 +173,7 @@ namespace saxon_node {
                 String::Utf8Value pn(obj->ToString());
                 String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
-                xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }
             // the source
             String::Utf8Value sourceFile(args[0]->ToString());
@@ -217,7 +217,7 @@ namespace saxon_node {
                                 String::Utf8Value pn(obj->ToString());
                                 String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
                                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
-                                xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                                //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                             }
                         }
                         // the source
@@ -251,7 +251,7 @@ namespace saxon_node {
                             String::Utf8Value pn(obj->ToString());
                             String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
                             //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
-                            xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                            //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                         }
                         for(uint32_t index=0;index<propertyNames->Length();index++)
                         {
@@ -291,7 +291,7 @@ namespace saxon_node {
                         String::Utf8Value pn(obj->ToString());
                         String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
                         //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
-                        xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
+                        //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                     }
                     const char* buffer=xp->xqueryProcessor->executeQueryToString(NULL, NULL);
                     if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){

@@ -18,10 +18,14 @@ namespace saxon_node {
 
     class XsltProcessorJS;
     class XQueryProcessorJS;
+    class XPathProcessorJS;
+    class SchemaValidatorJS;
 
     class SaxonProcessorJS : public node::ObjectWrap {
         friend class XsltProcessorJS;
         friend class XQueryProcessorJS;
+        friend class XPathProcessorJS;
+        friend class SchemaValidatorJS;
     protected:
         std::string cwd;
         std::shared_ptr<SaxonProcessor> processor;
@@ -88,6 +92,10 @@ namespace saxon_node {
         static void newTransformer(const v8::FunctionCallbackInfo<Value>& args);
 
         static void newXQueryProcessor(const v8::FunctionCallbackInfo<Value>& args);
+
+        static void newXPathProcessor(const v8::FunctionCallbackInfo<Value>& args);
+
+        static void newSchemaValidator(const v8::FunctionCallbackInfo<Value>& args);
 
         static void parseFile(const v8::FunctionCallbackInfo<Value>& args) {
             v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));

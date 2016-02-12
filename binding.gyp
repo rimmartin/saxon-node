@@ -8,13 +8,21 @@
                 'cflags_cc!': [ '-fno-exceptions' ],
                 'cflags': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions", "-Wl,--allow-multiple-definition"],
                 'include_dirs': [
-                    '$(SAXON_HOME)/include',
+                    '../$(SAXONC_HOME)/Saxon.C.API',
                     '$(JAVA_HOME)/include',
                     '$(JAVA_HOME)/include/linux',
                     'src/'
                 ],
                 'sources': [
-                    'src/SaxonProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/SaxonCGlue.c',
+                    '$(SAXONC_HOME)/Saxon.C.API/SaxonCXPath.c',
+                    '$(SAXONC_HOME)/Saxon.C.API/SaxonProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XsltProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XQueryProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmItem.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmValue.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmNode.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmAtomicValue.cpp',
                     'src/SaxonProcessorJS.cxx',
                     'src/saxonXslt.cxx'
                 ],
@@ -22,13 +30,13 @@
                     'libraries': [
                     ],
                     'ldflags': [
-                        '-L$(SAXON_HOME)'
+                        '-L$(SAXONC_HOME)'
                     ]
                 }
             }],
             ['OS=="win"', {
                 'include_dirs': [
-                    "<!(echo %SAXON_HOME%)/Saxon-C-API",
+                    "<!(echo %SAXONC_HOME%)/Saxon-C-API",
                     "<!(echo %JAVA_HOME%)/include",
                     "<!(echo %JAVA_HOME%)/include/win32",
                     "./src",
@@ -72,7 +80,7 @@
                     'OTHER_CFLAGS': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions"]
                 },
                 'include_dirs': [
-                    '$(SAXON_HOME)/include',
+                    '$(SAXONC_HOME)/include',
                     '$(JAVA_HOME)/include',
                     '$(JAVA_HOME)/include/darwin',
                     'src/'
@@ -86,7 +94,7 @@
                     'libraries': [
                     ],
                     'ldflags': [
-                        '-L$(SAXON_HOME)'
+                        '-L$(SAXONC_HOME)'
                     ]
                 }
             }]

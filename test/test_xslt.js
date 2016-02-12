@@ -17,7 +17,7 @@ var saxon = require('saxonXslt');
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
-            xsltProcessor.compile("./test/examples/xsl/baz.xsl");
+            xsltProcessor.compileFromFile("./test/examples/xsl/baz.xsl");
 //            xsltProcessor.parseXmlString(content);
 //            var pdbContent = xsltProcessor.xsltApplyStylesheet();
 //            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
@@ -31,8 +31,8 @@ var saxon = require('saxonXslt');
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
-            xsltProcessor.compile("./test/examples/xsl/baz.xsl");
-            var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
+            xsltProcessor.compileFromFile("./test/examples/xsl/baz.xsl");
+            var pdbContent = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml");
             pdbContent.toString().should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
         }
         catch (err) {
@@ -45,8 +45,8 @@ var saxon = require('saxonXslt');
         {
             var xsltProcessor = saxonProcessor.newTransformer();
             var xslt = yield fs.readFile("./test/examples/xsl/baz.xsl", "utf8");
-            xsltProcessor.compileString(xslt);
-            var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
+            xsltProcessor.compileFromString(xslt);
+            var pdbContent = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml");
             pdbContent.toString().should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
         }
         catch (err) {
@@ -58,7 +58,7 @@ var saxon = require('saxonXslt');
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
-            var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
+            var pdbContent = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
 //            pdbContent.should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
         }
         catch (err) {
@@ -73,7 +73,7 @@ var saxon = require('saxonXslt');
 //            xsltProcessor.compile("./test/examples/xsl/baz.xsl");
             for(var i=0;i<10;i++)
             {
-                var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
+                var pdbContent = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
                 pdbContent.toString().should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
             }
         }
@@ -87,7 +87,7 @@ var saxon = require('saxonXslt');
         {
             var xsltProcessor = saxonProcessor.newTransformer();
             xsltProcessor.parameters[ "elements-of-interest" ]="C,H";
-            var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/sodium-icosanoate.xml", "./test/examples/xsl/IsSpecies.xsl");
+            var pdbContent = xsltProcessor.transformFileToString("./test/examples/xml/sodium-icosanoate.xml", "./test/examples/xsl/IsSpecies.xsl");
             pdbContent.toString().should.equal("false");
         }
         catch (err) {
@@ -100,7 +100,7 @@ var saxon = require('saxonXslt');
         {
             var xsltProcessor = saxonProcessor.newTransformer();
             xsltProcessor.parameters[ "elements-of-interest" ]="Na, O, C, H";
-            var pdbContent = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/sodium-icosanoate.xml", "./test/examples/xsl/IsSpecies.xsl");
+            var pdbContent = xsltProcessor.transformFileToString("./test/examples/xml/sodium-icosanoate.xml", "./test/examples/xsl/IsSpecies.xsl");
             pdbContent.toString().should.equal("true");
             console.dir(pdbContent);
         }
@@ -114,7 +114,7 @@ var saxon = require('saxonXslt');
         {
             var xsltProcessor = saxonProcessor.newTransformer();
             console.dir('compile...');
-            xsltProcessor.compile("./test/examples/xsl/badbaz.xsl").should.throw();
+            xsltProcessor.compileFromFile("./test/examples/xsl/badbaz.xsl").should.throw();
             console.dir("shouldn't see this");
 //            xsltProcessor.parseXmlString(content);
 //            var pdbContent = xsltProcessor.xsltApplyStylesheet();

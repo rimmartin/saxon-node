@@ -23,11 +23,11 @@ try
             xsltProcessor.parameters[pair[0]]=pair[1];
         }
     }
-    xsltProcessor.compile(global.xslPath);
+    xsltProcessor.compileFromFile(global.xslPath);
             for(var i=0;i<10;i++)
             {
-    xsltProcessor.parseXmlString(content);
-    var pdbContent = xsltProcessor.xsltApplyStylesheet();
+    xsltProcessor.setSourceFromString(content);
+    var pdbContent = xsltProcessor.transformToString();
     console.dir(pdbContent.toString());
             }
 }
