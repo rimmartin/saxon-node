@@ -15,7 +15,7 @@ For a single transform or if the stylesheet is changing
 try{
     var saxonProcessor = new saxon.SaxonProcessor(false);
     var xsltProcessor = saxonProcessor.newTransformer();
-    var results = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
+    var results = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
     console.dir(results.toString());
 }
 catch (err) {
@@ -29,8 +29,8 @@ The stylesheet can be compiled from its file path before applying to an xml docu
 try{
     var saxonProcessor = new saxon.SaxonProcessor(false);
     var xsltProcessor = saxonProcessor.newTransformer();
-    xsltProcessor.compile("./test/examples/xsl/baz.xsl");
-    var results = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
+    xsltProcessor.compileFromFile("./test/examples/xsl/baz.xsl");
+    var results = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml");
     console.dir(results.toString());
 }
 catch (err) {
@@ -44,8 +44,8 @@ or if the styesheet is hauled into memory first
 try{
     var xsltProcessor = saxonProcessor.newTransformer();
     var xslt = yield fs.readFile("./test/examples/xml/baz.xsl", "utf8");
-    xsltProcessor.compileString(xslt);
-    var results = xsltProcessor.xsltApplyStylesheet("./test/examples/xml/foo.xml");
+    xsltProcessor.compileFromString(xslt);
+    var results = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml");
     console.dir(results.toString());
 }
 catch (err) {
@@ -58,9 +58,9 @@ try{
     var saxonProcessor = new saxon.SaxonProcessor(false);
     var xsltProcessor = saxonProcessor.newTransformer();
     var xslt = yield fs.readFile("./test/examples/xml/baz.xsl", "utf8");
-    xsltProcessor.compileString(xslt);
+    xsltProcessor.compileFromString(xslt);
     xsltProcessor.parseXmlString(content);
-    var results = xsltProcessor.xsltApplyStylesheet();
+    var results = xsltProcessor.transformToString();
     console.dir(results.toString());
 }
 catch (err) {

@@ -28,3 +28,7 @@ saxon.SaxonProcessor.prototype.**newXQueryProcessor**()
 > * return &larr; a saxon.[XQueryProcessor]({{ site.baseurl }}/ref/xqueryprocessor.html)
 
 
+saxon.SaxonProcessor.prototype.**newSchemaValidator**()
+>
+> * return &larr; a saxon.[SchemaValidator]({{ site.baseurl }}/ref/schemavalidator.html)
+
