@@ -25,9 +25,9 @@ will first try to find a compatible native prebuilt.  If it works you won't need
 
 ####Building (only if needed; contact me if there is a particular prebuild you would use)
 If a compatible prebuilt is not found, a number of environment variables are needed.
-For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; libsaxon that comes wth Saxon/C is loaded from it's home folder.
+For the build phase, as with integrating Saxon/C interface code in c/c++ applications the jni.h is needed.  Set JAVA_HOME and the binding.gyp locates the jni.h from there. Only the headers are used; libsaxon.so that comes wth Saxon/C is loaded from it's home folder.
 The libsaxon.so depends on $SAXONC_HOME/rt during runtime and it needs library paths $SAXONC_HOME:$SAXONC_HOME/rt/lib/amd64/jetvm:$SAXONC_HOME/rt/lib/amd64.  rt is the runtime <a href="http://www.excelsiorjet.com/">http://www.excelsiorjet.com/</a> that Saxon/C provides.
-
+![Caution!](http://wiki.flightgear.org/images/thumb/5/53/Caution-white_exclamation_in_amber_circle-48px.png/40px-Caution-white_exclamation_in_amber_circle-48px.png)Note: The SAXONC_HOME needs to  
 To run it needs the harmony switch and at least nodejs v4.2.x. Make sure there isn't a java path to jvm in front of the Excelsior JET tool in rt folder:
 
 ```bash
@@ -42,5 +42,5 @@ export LD_LIBRARY_PATH=$SAXONC_HOME:$SAXONC_HOME/rt/lib/amd64/jetvm:$SAXONC_HOME
 mocha --harmony --require should
 ```
 
-Documentation: <a href="http://rimmartin.github.io/saxon-node/">Saxon Node API(yet to be upgraded)</a>
+Documentation: <a href="http://rimmartin.github.io/saxon-node/">Saxon Node API</a>
 

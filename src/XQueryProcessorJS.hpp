@@ -33,9 +33,6 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "setSourceValue", setSourceValue);
             NODE_SET_PROTOTYPE_METHOD(t, "setContextItemFromFile", setContextItemFromFile);
             NODE_SET_PROTOTYPE_METHOD(t, "setOutputfile", setOutputfile);
-            NODE_SET_PROTOTYPE_METHOD(t, "setParameter", setParameter);
-            NODE_SET_PROTOTYPE_METHOD(t, "getParameter", getParameter);
-            NODE_SET_PROTOTYPE_METHOD(t, "removeParameter", removeParameter);
             NODE_SET_PROTOTYPE_METHOD(t, "setProperty", setProperty);
             NODE_SET_PROTOTYPE_METHOD(t, "getProperty", getProperty);
             NODE_SET_PROTOTYPE_METHOD(t, "clearParameters", clearParameters);
@@ -116,21 +113,6 @@ namespace saxon_node {
         };
 
         static void setOutputfile(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
-        };
-
-        static void setParameter(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
-        };
-
-        static void getParameter(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
-        };
-
-        static void removeParameter(const v8::FunctionCallbackInfo<Value>& args) {
             v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
             args.GetReturnValue().SetUndefined();
         };
