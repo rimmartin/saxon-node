@@ -19,6 +19,8 @@
                     '$(SAXONC_HOME)/Saxon.C.API/SaxonProcessor.cpp',
                     '$(SAXONC_HOME)/Saxon.C.API/XsltProcessor.cpp',
                     '$(SAXONC_HOME)/Saxon.C.API/XQueryProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XPathProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/SchemaValidator.cpp',
                     '$(SAXONC_HOME)/Saxon.C.API/XdmItem.cpp',
                     '$(SAXONC_HOME)/Saxon.C.API/XdmValue.cpp',
                     '$(SAXONC_HOME)/Saxon.C.API/XdmNode.cpp',

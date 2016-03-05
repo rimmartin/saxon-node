@@ -14,16 +14,16 @@
         "url": "https://github.com/rimmartin/saxon-node"
     },
     "dependencies" : {
-      "node-pre-gyp": "0.6.18"
+      "node-pre-gyp": "0.6.23"
     },
     "bundledDependencies":["node-pre-gyp"],
     "devDependencies" : {
         "co" : "4.6.0",
         "co-fs" : "1.2.0",
-        "should" : "8.0.2",
-        "mocha" : "2.3.4",
+        "should" : "8.2.2",
+        "mocha" : "2.4.5",
         "co-mocha" : "1.1.2",
-        "aws-sdk": "2.2.26"
+        "aws-sdk": "2.2.41"
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",

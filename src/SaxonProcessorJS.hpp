@@ -40,6 +40,8 @@ namespace saxon_node {
             // member method prototypes
             NODE_SET_PROTOTYPE_METHOD(t, "newTransformer", newTransformer);
             NODE_SET_PROTOTYPE_METHOD(t, "newXQueryProcessor", newXQueryProcessor);
+            NODE_SET_PROTOTYPE_METHOD(t, "newXPathProcessor", newXPathProcessor);
+            NODE_SET_PROTOTYPE_METHOD(t, "newSchemaValidator", newSchemaValidator);
             NODE_SET_PROTOTYPE_METHOD(t, "parseFile", parseFile);
             NODE_SET_PROTOTYPE_METHOD(t, "parseURI", parseURI);
             NODE_SET_PROTOTYPE_METHOD(t, "setSourceValue", setSourceValue);

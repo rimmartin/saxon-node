@@ -1,6 +1,6 @@
 <cml:cml xmlns:cml="http://www.xml-cml.org/schema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.xml-cml.org/schema file:///home/roger/NetBeansProjects/OOBackbone/schemas/cml/schema.xsd">
+        xsi:schemaLocation="http://www.xml-cml.org/schema ./xsd/cml/schema.xsd">
     <cml:molecule title="C20H39NaO2
 ">
             <cml:molecule title="1"

@@ -11,7 +11,10 @@
 #include <jni.h>
 
 #include "XdmItem.h"
+#include "XdmValue.h"
 #include "XPathProcessor.h"
+
+#include "XdmValueJS.hpp"
 
 namespace saxon_node {
 
@@ -41,6 +44,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "getParameter", getParameter);
             NODE_SET_PROTOTYPE_METHOD(t, "removeParameter", removeParameter);
             NODE_SET_PROTOTYPE_METHOD(t, "setProperty", setProperty);
+            NODE_SET_PROTOTYPE_METHOD(t, "declareNamespace", declareNamespace);
             NODE_SET_PROTOTYPE_METHOD(t, "getProperty", getProperty);
             NODE_SET_PROTOTYPE_METHOD(t, "clearParameters", clearParameters);
             //        Local<Function> f=t->GetFunction();
@@ -197,14 +201,14 @@ namespace saxon_node {
         };
 
         static void evaluate(const v8::FunctionCallbackInfo<Value>& args) {
-            if(args.Length()!=3 || !args[0]->IsString() || !args[1]->IsString() || !args[2]->IsString())
+            if(args.Length()!=1 || !args[0]->IsString())
             {
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "not correct arguments")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xpath string")));
                 args.GetReturnValue().SetUndefined();
             }
             // unwrap xpathProcessor object
             XPathProcessorJS* xp = ObjectWrap::Unwrap<XPathProcessorJS>(args.This());
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
+            /*Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames();
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
@@ -215,12 +219,10 @@ namespace saxon_node {
                 String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 //@todo xp->xpathProcessor->setParameter(*pn, new XdmValue(*pnValue));
-            }
+            }*/
             // the source
-            String::Utf8Value sourceFile(args[0]->ToString());
-            String::Utf8Value query(args[1]->ToString());
-            String::Utf8Value outputfile(args[2]->ToString());
-            xp->xpathProcessor->evaluate((*query));
+            String::Utf8Value xpath(args[0]->ToString());
+            XdmValue * results=xp->xpathProcessor->evaluate((*xpath));
             if(xp->xpathProcessor->exceptionOccurred() || xp->xpathProcessor->exceptionCount()>0){
                 if(xp->xpathProcessor->exceptionCount()==0)xp->xpathProcessor->checkException();
                 std::ostringstream ss;
@@ -233,7 +235,12 @@ namespace saxon_node {
                 return;
                 
             }
-            args.GetReturnValue().SetUndefined();
+            
+            Local<Object> instance=XdmValueJS::Instantiate(args.This());
+            XdmValueJS* xdmValue = new XdmValueJS();
+            xdmValue->value=results;
+            xdmValue->Wrap(instance);
+            args.GetReturnValue().Set(instance);
         };
 
         static void evaluateSingle(const v8::FunctionCallbackInfo<Value>& args) {
@@ -309,6 +316,46 @@ namespace saxon_node {
                 
             }
             args.GetReturnValue().Set(effective);
+        };
+
+        static void declareNamespace(const v8::FunctionCallbackInfo<Value>& args) {
+            if(args.Length()!=2 || !args[0]->IsString()|| !args[1]->IsString())
+            {
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected prefix and uri strings")));
+                args.GetReturnValue().SetUndefined();
+            }
+            // unwrap xpathProcessor object
+            XPathProcessorJS* xp = ObjectWrap::Unwrap<XPathProcessorJS>(args.This());
+            /*Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
+            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
+            for(uint32_t index=0;index<parameterNames->Length();index++)
+            {
+//                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
+                Local<Object> obj=parameterNames->Get(index)->ToObject();
+//                            std::cout<<"obj "<<obj->IsString()<<std::endl;
+                String::Utf8Value pn(obj->ToString());
+                String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+                //@todo xp->xpathProcessor->setParameter(*pn, new XdmValue(*pnValue));
+            }*/
+            // the source
+            String::Utf8Value prefix(args[0]->ToString());
+            String::Utf8Value uri(args[0]->ToString());
+            xp->xpathProcessor->declareNamespace((*prefix), (*uri));
+            if(xp->xpathProcessor->exceptionOccurred() || xp->xpathProcessor->exceptionCount()>0){
+                if(xp->xpathProcessor->exceptionCount()==0)xp->xpathProcessor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->xpathProcessor->exceptionCount())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->xpathProcessor->exceptionCount();exceptionIndex++){
+                    ss<<xp->xpathProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
+            
+            args.GetReturnValue().SetUndefined();
         };
 
         static void exceptionOccurred(const v8::FunctionCallbackInfo<Value>& args) {
