@@ -131,7 +131,7 @@ namespace saxon_node {
             }
             // the source
             String::Utf8Value contextFile(args[0]->ToString());
-            //std::cout<<(*source)<<std::endl;
+            //std::cout<<(*contextFile)<<std::endl;
             // unwrap xpathProcessor object
             XPathProcessorJS* xp = ObjectWrap::Unwrap<XPathProcessorJS>(args.This());
             xp->xpathProcessor->setContextFile(*contextFile);
@@ -222,6 +222,7 @@ namespace saxon_node {
             }*/
             // the source
             String::Utf8Value xpath(args[0]->ToString());
+            //std::cout<<(*xpath)<<std::endl;
             XdmValue * results=xp->xpathProcessor->evaluate((*xpath));
             if(xp->xpathProcessor->exceptionOccurred() || xp->xpathProcessor->exceptionCount()>0){
                 if(xp->xpathProcessor->exceptionCount()==0)xp->xpathProcessor->checkException();

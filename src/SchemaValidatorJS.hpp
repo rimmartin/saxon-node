@@ -14,6 +14,8 @@
 #include "XdmNode.h"
 #include "SchemaValidator.h"
 
+#include "XdmNodeJS.hpp"
+
 namespace saxon_node {
 
     using namespace v8;
@@ -171,7 +173,7 @@ namespace saxon_node {
         };
 
         static void validate(const v8::FunctionCallbackInfo<Value>& args) {
-            if(args.Length()!=3 || !args[0]->IsString() || !args[1]->IsString() || !args[2]->IsString())
+            if(args.Length()>1 || (args.Length()==1 && !args[0]->IsString()))
             {
                 v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "not correct arguments")));
                 args.GetReturnValue().SetUndefined();
@@ -192,9 +194,11 @@ namespace saxon_node {
             }
             // the source
             String::Utf8Value sourceFile(args[0]->ToString());
-            String::Utf8Value query(args[1]->ToString());
-            String::Utf8Value outputfile(args[2]->ToString());
-            xp->schemaValidator->validate((*query));
+            //String::Utf8Value query(args[1]->ToString());
+            //String::Utf8Value outputfile(args[2]->ToString());
+            std::cout<<(*sourceFile)<<std::endl;
+            xp->schemaValidator->validate((*sourceFile));
+            std::cout<<"after "<<std::endl;
             if(xp->schemaValidator->exceptionOccurred() || xp->schemaValidator->exceptionCount()>0){
                 if(xp->schemaValidator->exceptionCount()==0)xp->schemaValidator->checkException();
                 std::ostringstream ss;
@@ -211,65 +215,30 @@ namespace saxon_node {
         };
 
         static void validateToNode(const v8::FunctionCallbackInfo<Value>& args) {
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
-            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"))->ToObject();
-            Local<Array> propertyNames=properties->GetOwnPropertyNames();
-            switch(args.Length())
+            if(args.Length()<=1 || !args[0]->IsString())
             {
-                case 1:
-                    if(args[0]->IsString())
-                    {
-                        // unwrap schemaValidator object
-                        SchemaValidatorJS* xp = ObjectWrap::Unwrap<SchemaValidatorJS>(args.This());
-                        //if(args.This()->IsDirty())
-                        {
-                            for(uint32_t index=0;index<parameterNames->Length();index++)
-                            {
-    //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                                Local<Object> obj=parameterNames->Get(index)->ToObject();
-    //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
-                                String::Utf8Value pn(obj->ToString());
-                                String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
-                                //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
-                                //@todo xp->schemaValidator->setParameter(*pn, new XdmValue(*pnValue));
-                            }
-                        }
-                        // the source
-                        String::Utf8Value source(args[0]->ToString());
-                        XdmNode* buffer=xp->schemaValidator->validateToNode((*source));
-                        if(xp->schemaValidator->exceptionOccurred() || xp->schemaValidator->exceptionCount()>0){
-                            if(xp->schemaValidator->exceptionCount()==0)xp->schemaValidator->checkException();
-                            std::ostringstream ss;
-                            ss<<"# of exceptions: "<<std::to_string(xp->schemaValidator->exceptionCount())<<std::endl;
-                            for(unsigned int exceptionIndex=0;exceptionIndex<xp->schemaValidator->exceptionCount();exceptionIndex++){
-                                ss<<xp->schemaValidator->getErrorMessage(exceptionIndex)<<std::endl;
-                            }
-                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
-                            args.GetReturnValue().SetUndefined();
-                            break;
-                            
-                        }
-                        args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer->getStringValue(), std::strlen((char*)buffer->getStringValue())).ToLocalChecked());
-                    }
-                    break;
-            }
-//            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "arguments aren't strings")));
-//            args.GetReturnValue().SetUndefined();
-//            return;
-        };
-
-        static void getValidationReport(const v8::FunctionCallbackInfo<Value>& args) {
-            if(args.Length()!=0 || !args[0]->IsString() )
-            {
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected base uri as string")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "not correct arguments")));
                 args.GetReturnValue().SetUndefined();
             }
             // unwrap schemaValidator object
             SchemaValidatorJS* xp = ObjectWrap::Unwrap<SchemaValidatorJS>(args.This());
-            // the base uri
-            String::Utf8Value xPathStr(args[0]->ToString());
-            XdmNode* report=xp->schemaValidator->getValidationReport();
+            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
+            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
+            for(uint32_t index=0;index<parameterNames->Length();index++)
+            {
+//                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
+                Local<Object> obj=parameterNames->Get(index)->ToObject();
+//                            std::cout<<"obj "<<obj->IsString()<<std::endl;
+                String::Utf8Value pn(obj->ToString());
+                String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
+                //@todo xp->schemaValidator->setParameter(*pn, new XdmValue(*pnValue));
+            }
+            // the source
+            String::Utf8Value sourceFile(args[0]->ToString());
+            //String::Utf8Value query(args[1]->ToString());
+            //String::Utf8Value outputfile(args[2]->ToString());
+            XdmNode* xdmNode=xp->schemaValidator->validateToNode((*sourceFile));
             if(xp->schemaValidator->exceptionOccurred() || xp->schemaValidator->exceptionCount()>0){
                 if(xp->schemaValidator->exceptionCount()==0)xp->schemaValidator->checkException();
                 std::ostringstream ss;
@@ -282,6 +251,40 @@ namespace saxon_node {
                 return;
                 
             }
+            Local<Object> instance=XdmNodeJS::Instantiate(args.This());
+            //XdmNodeJS* xv = node::ObjectWrap::Unwrap<XdmNodeJS>(instance);
+            XdmNodeJS* xv = new XdmNodeJS();
+            xv->value=xdmNode;
+            xv->Wrap(instance);
+            std::cout<<"set ret "<<std::endl;
+            args.GetReturnValue().Set(instance);
+        };
+
+        static void getValidationReport(const v8::FunctionCallbackInfo<Value>& args) {
+            if(args.Length()!=0)
+            {
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected base uri as string")));
+                args.GetReturnValue().SetUndefined();
+            }
+            // unwrap schemaValidator object
+            SchemaValidatorJS* xp = ObjectWrap::Unwrap<SchemaValidatorJS>(args.This());
+            // the base uri
+            //String::Utf8Value xPathStr(args[0]->ToString());
+            XdmNode* report=xp->schemaValidator->getValidationReport();
+            std::cout<<"after getValidationReport"<<std::endl;
+            if(xp->schemaValidator->exceptionOccurred() || xp->schemaValidator->exceptionCount()>0){
+                if(xp->schemaValidator->exceptionCount()==0)xp->schemaValidator->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->schemaValidator->exceptionCount())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->schemaValidator->exceptionCount();exceptionIndex++){
+                    ss<<xp->schemaValidator->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
+            std::cout<<"after getValidationReport"<<std::endl;
             args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), (const char *)report->getStringValue()));
         };
 

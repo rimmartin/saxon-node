@@ -22,6 +22,9 @@ extern "C" {
         saxon_node::XPathProcessorJS::Initialize(target);
         saxon_node::SchemaValidatorJS::Initialize(target);
         saxon_node::XdmValueJS::Initialize(target);
+        saxon_node::XdmItemJS::Initialize(target);
+        saxon_node::XdmNodeJS::Initialize(target);
+        saxon_node::XdmAtomicValueJS::Initialize(target);
         
     }
     

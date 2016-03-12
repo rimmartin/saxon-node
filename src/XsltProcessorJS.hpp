@@ -12,7 +12,11 @@
 #include <vector>
 #include <jni.h>
 
+#include "XdmItem.h"
+#include "XdmValue.h"
 #include "XsltProcessor.h"
+
+#include "XdmValueJS.hpp"
 
 namespace saxon_node {
 
@@ -44,6 +48,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "transformFileToFile", transformFileToFile);
             NODE_SET_PROTOTYPE_METHOD(t, "transformFileToString", transformFileToString);
             NODE_SET_PROTOTYPE_METHOD(t, "transformToString", transformToString);
+            NODE_SET_PROTOTYPE_METHOD(t, "transformToValue", transformToValue);
             NODE_SET_PROTOTYPE_METHOD(t, "compileFromFile", compileFromFile);
             NODE_SET_PROTOTYPE_METHOD(t, "compileFromString", compileFromString);
             //        Local<Function> f=t->GetFunction();
@@ -278,46 +283,6 @@ namespace saxon_node {
             }
         };
 
-        static void transformToString(const v8::FunctionCallbackInfo<Value>& args) {
-            if (args.Length() != 0) {
-
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "no arg(s) expected")));
-                args.GetReturnValue().SetUndefined();
-                return;
-
-            }
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
-            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"))->ToObject();
-            Local<Array> propertyNames=properties->GetOwnPropertyNames();
-            // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-            for(uint32_t index=0;index<parameterNames->Length();index++)
-            {
-                String::Utf8Value pn(parameterNames->Get(index)->ToObject());
-                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString())));
-            }
-            const char* buffer=xp->xsltProcessor->transformToString();
-            //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
-            if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
-                if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
-                std::ostringstream ss;
-                ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
-                for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
-                    ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
-                }
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
-                args.GetReturnValue().SetUndefined();
-                return;
-                
-            }
-            args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
-        };
-
-        static void parseXmlFile(const v8::FunctionCallbackInfo<Value>& args) {
-
-        };
-
         static void setSourceFromFile(const v8::FunctionCallbackInfo<Value>& args) {
             if (args.Length() != 1 || !args[0]->IsString()) {
 
@@ -435,9 +400,80 @@ namespace saxon_node {
             args.GetReturnValue().SetUndefined();
         };
 
+        static void transformToString(const v8::FunctionCallbackInfo<Value>& args) {
+            if (args.Length() != 0) {
+
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "no arg(s) expected")));
+                args.GetReturnValue().SetUndefined();
+                return;
+
+            }
+            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
+            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
+            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"))->ToObject();
+            Local<Array> propertyNames=properties->GetOwnPropertyNames();
+            // unwrap xsltProcessor object
+            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            for(uint32_t index=0;index<parameterNames->Length();index++)
+            {
+                String::Utf8Value pn(parameterNames->Get(index)->ToObject());
+                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString())));
+            }
+            const char* buffer=xp->xsltProcessor->transformToString();
+            //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+            if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                    ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
+            args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
+        };
+
         static void transformToValue(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
+            if (args.Length() != 0) {
+
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "no arg(s) expected")));
+                args.GetReturnValue().SetUndefined();
+                return;
+
+            }
+            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
+            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
+            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"))->ToObject();
+            Local<Array> propertyNames=properties->GetOwnPropertyNames();
+            // unwrap xsltProcessor object
+            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            for(uint32_t index=0;index<parameterNames->Length();index++)
+            {
+                String::Utf8Value pn(parameterNames->Get(index)->ToObject());
+                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString())));
+            }
+            XdmValue* buffer=xp->xsltProcessor->transformToValue();
+            //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+            if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
+                if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->xsltProcessor->exceptionCount())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->xsltProcessor->exceptionCount();exceptionIndex++){
+                    ss<<xp->xsltProcessor->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
+            Local<Object> instance=XdmValueJS::Instantiate(args.This());
+            XdmValueJS* xdmValue = new XdmValueJS();
+            xdmValue->value=buffer;
+            xdmValue->Wrap(instance);
+            args.GetReturnValue().Set(instance);
         };
 
         static void exceptionOccurred(const v8::FunctionCallbackInfo<Value>& args) {

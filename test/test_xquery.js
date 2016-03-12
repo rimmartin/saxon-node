@@ -8,7 +8,7 @@ var saxon = require('saxonXslt');
     before(function*() {
 //      yield setup();
         content = yield fs.readFile("./test/examples/query/books.xml", "utf8");
-        saxonProcessor = new saxon.SaxonProcessor(false);
+        saxonProcessor = new saxon.SaxonProcessor(true);
         console.dir("saxonProcessor "+saxonProcessor.version());
         saxonProcessor.setcwd(".");
     });

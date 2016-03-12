@@ -48,4 +48,7 @@ v8::Persistent<v8::FunctionTemplate> saxon_node::XQueryProcessorJS::Constructor;
 v8::Persistent<v8::FunctionTemplate> saxon_node::XPathProcessorJS::Constructor;
 v8::Persistent<v8::FunctionTemplate> saxon_node::SchemaValidatorJS::Constructor;
 v8::Persistent<v8::FunctionTemplate> saxon_node::XdmValueJS::Constructor;
+v8::Persistent<v8::FunctionTemplate> saxon_node::XdmItemJS::Constructor;
+v8::Persistent<v8::FunctionTemplate> saxon_node::XdmNodeJS::Constructor;
+v8::Persistent<v8::FunctionTemplate> saxon_node::XdmAtomicValueJS::Constructor;
 
