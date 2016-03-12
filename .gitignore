@@ -3,6 +3,7 @@
 *.sh
 *.txt
 *.cmd
+*.lic
 /node_modules/
 /private/
 /lib/binding/
