@@ -153,7 +153,20 @@ namespace saxon_node {
         };
 
         static void setProperty(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            if (args.Length() != 2 || !args[0]->IsString() || !args[1]->IsString()) {
+
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected property name an value as strings")));
+                args.GetReturnValue().SetUndefined();
+                return;
+
+            }
+            // the source
+            String::Utf8Value properyName(args[0]->ToString());
+            String::Utf8Value properyValue(args[1]->ToString());
+            //std::cout<<(*source)<<std::endl;
+            // unwrap schemaValidator object
+            SchemaValidatorJS* xp = ObjectWrap::Unwrap<SchemaValidatorJS>(args.This());
+            xp->schemaValidator->setProperty(*properyName, *properyValue);
             args.GetReturnValue().SetUndefined();
         };
 
@@ -271,7 +284,6 @@ namespace saxon_node {
             // the base uri
             //String::Utf8Value xPathStr(args[0]->ToString());
             XdmNode* report=xp->schemaValidator->getValidationReport();
-            std::cout<<"after getValidationReport"<<std::endl;
             if(xp->schemaValidator->exceptionOccurred() || xp->schemaValidator->exceptionCount()>0){
                 if(xp->schemaValidator->exceptionCount()==0)xp->schemaValidator->checkException();
                 std::ostringstream ss;
@@ -284,8 +296,12 @@ namespace saxon_node {
                 return;
                 
             }
-            std::cout<<"after getValidationReport"<<std::endl;
-            args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), (const char *)report->getStringValue()));
+            Local<Object> instance=XdmNodeJS::Instantiate(args.This());
+            //XdmNodeJS* xv = node::ObjectWrap::Unwrap<XdmNodeJS>(instance);
+            XdmNodeJS* xv = new XdmNodeJS();
+            xv->value=report;
+            xv->Wrap(instance);
+            args.GetReturnValue().Set(instance);
         };
 
         static void exceptionOccurred(const v8::FunctionCallbackInfo<Value>& args) {
