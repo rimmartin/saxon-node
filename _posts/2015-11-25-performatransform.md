@@ -17,6 +17,7 @@ try{
     var xsltProcessor = saxonProcessor.newTransformer();
     var results = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml", "./test/examples/xsl/baz.xsl");
     console.dir(results.toString());
+    saxonProcessor.release();
 }
 catch (err) {
 console.dir(err.message);
@@ -32,6 +33,7 @@ try{
     xsltProcessor.compileFromFile("./test/examples/xsl/baz.xsl");
     var results = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml");
     console.dir(results.toString());
+    saxonProcessor.release();
 }
 catch (err) {
 console.dir(err.message);
@@ -47,6 +49,7 @@ or if the styesheet is hauled into memory first
         xsltProcessor.compileFromString(xslt);
         var results = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml");
         console.dir(results.toString());
+        saxonProcessor.release();
     }
     catch (err) {
     console.dir(err.message);
@@ -62,6 +65,7 @@ or if the styesheet is hauled into memory first
         xsltProcessor.parseXmlString(content);
         var results = xsltProcessor.transformToString();
         console.dir(results.toString());
+        saxonProcessor.release();
     }
     catch (err) {
     console.dir(err.message);

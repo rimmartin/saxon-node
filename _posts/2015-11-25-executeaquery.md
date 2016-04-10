@@ -14,6 +14,7 @@ date: 2015-11-25 22:14:32
         var htmlContent = xqueryProcessor.executeQueryToString("./test/examples/query/books.xml", query);
         console.dir(htmlContent.toString());
         //send htmlContent on its way to browser
+        saxonProcessor.release();
     }
     catch (err) {
     console.dir(err.message);
