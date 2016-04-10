@@ -15,14 +15,14 @@ saxon.XPathProcessor.prototype.**evaluate**(xPath);
 > Evaluates the xpath. 
 >
 > *  xPath &rarr; the xpath
-> *  return &larr; XdmValue
+> *  return &larr; [XdmValue]({{ site.baseurl }}/ref/xdmvalue.html)
 
 saxon.XPathProcessor.prototype.**evaluateSingle**(xPath);
 
 > Evaluates the xpath. 
 >
 > *  xPath &rarr; the xpath
-> *  return &larr; XdmValue
+> *  return &larr; [XdmValue]({{ site.baseurl }}/ref/xdmvalue.html)
 
 saxon.XPathProcessor.prototype.**setContextFile**(xmlFilePath);
 
