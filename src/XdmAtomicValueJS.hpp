@@ -15,17 +15,16 @@
 #include "XdmAtomicValue.h"
 
 #include "XdmItemJS.hpp"
-#include "XdmValueJS.hpp"
 
 namespace saxon_node {
 
     class SaxonProcessorJS;
-    class XdmValueJS;
-    class XdmItemJS;
+    //class XdmValueJS;
+    //class XdmItemJS;
     
-    class XdmAtomicValueJS : public node::ObjectWrap {
-        friend class XdmValueJS;
-        friend class XdmItemJS;
+    class XdmAtomicValueJS : public XdmItemJS {
+        //friend class XdmValueJS;
+        //friend class XdmItemJS;
         friend class XsltProcessorJS;
         friend class XPathProcessorJS;
         friend class SaxonProcessorJS;
@@ -60,7 +59,7 @@ namespace saxon_node {
             return v8::Local<v8::FunctionTemplate>::New(v8::Isolate::GetCurrent(), Constructor)->GetFunction()->NewInstance(1, argv);
 
         };
-    private:
+    protected:
 
         XdmAtomicValueJS() : XdmAtomicValueJS(false) {
 
@@ -72,6 +71,8 @@ namespace saxon_node {
 
         ~XdmAtomicValueJS() {
         };
+    private:
+
         static v8::Persistent<v8::FunctionTemplate> Constructor;
 
         static void New(const v8::FunctionCallbackInfo<v8::Value>& args) {
@@ -95,35 +96,15 @@ namespace saxon_node {
             //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"), Object::New(v8::Isolate::GetCurrent()));
         };
 
-        static void getStringValue(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            XdmAtomicValueJS* xdmValue = node::ObjectWrap::Unwrap<XdmAtomicValueJS>(args.This());
-            const char* buffer=xdmValue->value->getStringValue();
-            args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(),(char*)buffer));
-        };
+        static void getStringValue(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-        static void getHead(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            XdmAtomicValueJS* xdmValue = node::ObjectWrap::Unwrap<XdmAtomicValueJS>(args.This());
-            XdmItem* xdmItem=xdmValue->value->getHead();
-            v8::Local<v8::Object> instance=XdmItemJS::Instantiate(args.This());
-            //XdmItemJS* xv = node::ObjectWrap::Unwrap<XdmItemJS>(instance);
-            XdmItemJS* xv = new XdmItemJS();
-            xv->value=xdmItem;
-            xv->Wrap(instance);
-            args.GetReturnValue().Set(instance);
-        };
+        static void getHead(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-        static void itemAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
-        };
+        static void itemAt(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-        static void size(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            XdmAtomicValueJS* xdmValue = node::ObjectWrap::Unwrap<XdmAtomicValueJS>(args.This());
-            int num=xdmValue->value->size();
-            args.GetReturnValue().Set(v8::Uint32::New(v8::Isolate::GetCurrent(), num));
-        };
+        static void size(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-    private:
+    protected:
         //Local<Object> procJS;
         SaxonProcessorJS* proc;
         std::shared_ptr<XdmAtomicValue> xdmAtomicValue;

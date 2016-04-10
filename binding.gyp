@@ -25,6 +25,10 @@
                     '$(SAXONC_HOME)/Saxon.C.API/XdmValue.cpp',
                     '$(SAXONC_HOME)/Saxon.C.API/XdmNode.cpp',
                     '$(SAXONC_HOME)/Saxon.C.API/XdmAtomicValue.cpp',
+                    'src/XdmValueJS.cxx',
+                    'src/XdmItemJS.cxx',
+                    'src/XdmNodeJS.cxx',
+                    'src/XdmAtomicValueJS.cxx',
                     'src/SaxonProcessorJS.cxx',
                     'src/saxonXslt.cxx'
                 ],

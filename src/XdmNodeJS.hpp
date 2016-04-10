@@ -14,16 +14,16 @@
 #include "XdmValue.h"
 #include "XdmNode.h"
 
-#include "XdmValueJS.hpp"
+#include "XdmItemJS.hpp"
 
 namespace saxon_node {
 
     class SaxonProcessorJS;
-    class XdmValueJS;
-    class XdmItemJS;
+    //class XdmValueJS;
+    //class XdmItemJS;
     
-    class XdmNodeJS : public node::ObjectWrap {
-        friend class XdmValueJS;
+    class XdmNodeJS : public XdmItemJS {
+        //friend class XdmValueJS;
         friend class XdmItemJS;
         friend class XsltProcessorJS;
         friend class XPathProcessorJS;
@@ -73,6 +73,8 @@ namespace saxon_node {
 
         ~XdmNodeJS() {
         };
+    private:
+
         static v8::Persistent<v8::FunctionTemplate> Constructor;
 
         static void New(const v8::FunctionCallbackInfo<v8::Value>& args) {
@@ -103,21 +105,9 @@ namespace saxon_node {
             args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(),(char*)buffer));
         };
 
-        static void getHead(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            XdmNodeJS* xdmValue = node::ObjectWrap::Unwrap<XdmNodeJS>(args.This());
-            XdmItem* xdmItem=xdmValue->value->getHead();
-            v8::Local<v8::Object> instance=XdmItemJS::Instantiate(args.This());
-            //XdmItemJS* xv = node::ObjectWrap::Unwrap<XdmItemJS>(instance);
-            XdmItemJS* xv = new XdmItemJS();
-            xv->value=xdmItem;
-            xv->Wrap(instance);
-            args.GetReturnValue().Set(instance);
-        };
+        static void getHead(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-        static void itemAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
-        };
+        static void itemAt(const v8::FunctionCallbackInfo<v8::Value>& args);
 
         static void size(const v8::FunctionCallbackInfo<v8::Value>& args) {
             XdmNodeJS* xdmValue = node::ObjectWrap::Unwrap<XdmNodeJS>(args.This());
@@ -125,7 +115,7 @@ namespace saxon_node {
             args.GetReturnValue().Set(v8::Uint32::New(v8::Isolate::GetCurrent(), num));
         };
 
-    private:
+    protected:
         XdmNode* value;
 
     };

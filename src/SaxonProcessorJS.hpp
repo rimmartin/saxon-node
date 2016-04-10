@@ -34,9 +34,9 @@ namespace saxon_node {
         std::shared_ptr<SaxonProcessor> processor;
     public:
 
-        static void Initialize(Handle<Object> target) {
+        static void Initialize(v8::Handle<v8::Object> target) {
             // instantiate constructor function template
-            Local<FunctionTemplate> t = FunctionTemplate::New(v8::Isolate::GetCurrent(), New);
+            v8::Local<v8::FunctionTemplate> t = FunctionTemplate::New(v8::Isolate::GetCurrent(), New);
             t->SetClassName(String::NewFromUtf8(v8::Isolate::GetCurrent(), "SaxonProcessor"));
             t->InstanceTemplate()->SetInternalFieldCount(1);
             Constructor.Reset(v8::Isolate::GetCurrent(), t);
@@ -169,9 +169,9 @@ namespace saxon_node {
             // unwrap xsltProcessor object
             SaxonProcessorJS* xp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
 
-                String::Utf8Value str(args[0]->ToString());
-//                std::cout<<"makeQNameValue "<<(*str)<<std::endl;
-            XdmAtomicValue* xmlNode=xp->processor->makeQNameValue(*str);
+                std::string  str(*v8::String::Utf8Value(args[0]->ToString()));
+                std::cout<<"makeQNameValue "<<(str)<<std::endl;
+            XdmAtomicValue* xmlNode=xp->processor->makeQNameValue(str);
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->processor->exceptionOccurred() && xp->processor->getException()->count()>0){
                 //if(xp->processor->getException()->count()==0)xp->processor->checkException();
@@ -203,9 +203,21 @@ namespace saxon_node {
             // unwrap xsltProcessor object
             SaxonProcessorJS* xp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
 
-            XdmItemJS* xi = ObjectWrap::Unwrap<XdmItemJS>(args[0]->ToObject());
             
-            const char* str=xp->processor->getStringValue(xi->value);
+            std::string cn(*v8::String::Utf8Value(args[0]->ToObject()->GetConstructorName()));
+            const char* str;
+            if(cn.compare("XdmAtomicValue")==0){
+                XdmAtomicValueJS* xi = ObjectWrap::Unwrap<XdmAtomicValueJS>(args[0]->ToObject());
+                str=xp->processor->getStringValue(xi->value);
+            }
+            else if(cn.compare("XdmNode")==0){
+                XdmNodeJS* xi = ObjectWrap::Unwrap<XdmNodeJS>(args[0]->ToObject());
+                str=xp->processor->getStringValue(xi->value);
+            }
+            else{
+                XdmItemJS* xi = ObjectWrap::Unwrap<XdmItemJS>(args[0]->ToObject());
+                str=xp->processor->getStringValue(xi->value);
+            }
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->processor->exceptionOccurred() && xp->processor->getException()->count()>0){
                 //if(xp->processor->getException()->count()==0)xp->processor->checkException();

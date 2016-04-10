@@ -6,6 +6,8 @@ Professional and enterprise features can be accessed with your license from Saxo
 ![Caution!](http://wiki.flightgear.org/images/thumb/5/53/Caution-white_exclamation_in_amber_circle-48px.png/40px-Caution-white_exclamation_in_amber_circle-48px.png)Note: A major API change is in progress. The method names are being upgraded to mirror http://www.saxonica.com/saxon-c/doc/html/index.html.
 New functionality is being exposed.
 
+Note: release v0.2.0 is linux only pending the release of mac and windows versions of Saxon/C 1.0.1
+
 Note: release v0.1.1 is built with nodejs v4.2.x [v4.2.x has Buffer acting like Uint8Array and currently is indistinguishable on the native side yet seems to work for this project]. If you want v0.12.x compatibility stay with v0.0.5. npm will continue with
 nodejs v4.2.x line and any fixes or features needed by prior versions will be from github branches.
 

@@ -13,15 +13,13 @@
 #include "XdmItem.h"
 #include "XdmValue.h"
 
-#include "XdmItemJS.hpp"
+#include "XdmValueJS.hpp"
 
 namespace saxon_node {
 
     class SaxonProcessorJS;
 
     class XdmValueJS : public node::ObjectWrap {
-        friend class XdmItemJS;
-        friend class XdmNodeJS;
         friend class XsltProcessorJS;
         friend class XPathProcessorJS;
     protected:
@@ -56,7 +54,7 @@ namespace saxon_node {
             return v8::Local<v8::FunctionTemplate>::New(v8::Isolate::GetCurrent(), Constructor)->GetFunction()->NewInstance(1, argv);
 
         };
-    private:
+    protected:
 
         XdmValueJS() : XdmValueJS(false) {
 
@@ -68,6 +66,9 @@ namespace saxon_node {
 
         ~XdmValueJS() {
         };
+        
+    private:
+
         static v8::Persistent<v8::FunctionTemplate> Constructor;
 
         static void New(const v8::FunctionCallbackInfo<v8::Value>& args) {
@@ -101,29 +102,13 @@ namespace saxon_node {
             args.GetReturnValue().SetUndefined();
         };
 
-        static void getHead(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            XdmValueJS* xdmValue = node::ObjectWrap::Unwrap<XdmValueJS>(args.This());
-            XdmItem* xdmItem=xdmValue->value->getHead();
-            v8::Local<v8::Object> instance=XdmItemJS::Instantiate(args.This());
-            //XdmItemJS* xv = node::ObjectWrap::Unwrap<XdmItemJS>(instance);
-            XdmItemJS* xv = new XdmItemJS();
-            xv->value=xdmItem;
-            xv->Wrap(instance);
-            args.GetReturnValue().Set(instance);
-        };
+        static void getHead(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-        static void itemAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
-            args.GetReturnValue().SetUndefined();
-        };
+        static void itemAt(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-        static void size(const v8::FunctionCallbackInfo<v8::Value>& args) {
-            XdmValueJS* xdmValue = node::ObjectWrap::Unwrap<XdmValueJS>(args.This());
-            int num=xdmValue->value->size();
-            args.GetReturnValue().Set(v8::Uint32::New(v8::Isolate::GetCurrent(), num));
-        };
+        static void size(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-    private:
+    protected:
         //Local<Object> procJS;
         SaxonProcessorJS* proc;
         std::shared_ptr<XdmValue> xdmValue;

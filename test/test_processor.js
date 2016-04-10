@@ -35,8 +35,6 @@ var saxon = require('saxonXslt');
         try
         {
             var xdmAtomicValue = saxonProcessor.makeValue("2theta");
-            //xpathProcessor.declareNamespace("cml", "http://www.xml-cml.org/schema");
-            //xpathProcessor.setContextFile("./test/examples/xml/foo.xml");
             var vp=saxonProcessor.getStringValue(xdmAtomicValue);
             vp.should.equal("2theta");
             xdmAtomicValue = saxonProcessor.makeValue(20);
