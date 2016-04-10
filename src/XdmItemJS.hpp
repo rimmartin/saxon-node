@@ -12,6 +12,7 @@
 
 #include "XdmItem.h"
 #include "XdmValue.h"
+#include "XdmAtomicValue.h"
 
 #include "XdmValueJS.hpp"
 #include "XdmNodeJS.hpp"
@@ -21,12 +22,15 @@ namespace saxon_node {
     class SaxonProcessorJS;
     class XdmValueJS;
     class XdmNodeJS;
+    class XdmAtomicValueJS;
     
     class XdmItemJS : public node::ObjectWrap {
         friend class XdmValueJS;
         friend class XdmNodeJS;
+        friend class XdmAtomicValueJS;
         friend class XsltProcessorJS;
         friend class XPathProcessorJS;
+        friend class SaxonProcessorJS;
     protected:
 
     public:

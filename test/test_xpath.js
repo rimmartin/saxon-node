@@ -47,6 +47,7 @@ var saxon = require('saxonXslt');
     });
 
     after(function*() {
+        saxonProcessor.release();
 //      yield teardown();
     });
   });

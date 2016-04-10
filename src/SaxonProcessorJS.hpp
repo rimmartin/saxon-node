@@ -45,6 +45,9 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "newXQueryProcessor", newXQueryProcessor);
             NODE_SET_PROTOTYPE_METHOD(t, "newXPathProcessor", newXPathProcessor);
             NODE_SET_PROTOTYPE_METHOD(t, "newSchemaValidator", newSchemaValidator);
+            NODE_SET_PROTOTYPE_METHOD(t, "makeValue", makeValue);
+            NODE_SET_PROTOTYPE_METHOD(t, "makeQNameValue", makeQNameValue);
+            NODE_SET_PROTOTYPE_METHOD(t, "getStringValue", getStringValue);
             NODE_SET_PROTOTYPE_METHOD(t, "parseXmlFromString", parseXmlFromString);
             NODE_SET_PROTOTYPE_METHOD(t, "parseXmlFromFile", parseXmlFromFile);
             NODE_SET_PROTOTYPE_METHOD(t, "parseXmlFromUri", parseXmlFromUri);
@@ -54,6 +57,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "setResourcesDirectory", setResourcesDirectory);
             NODE_SET_PROTOTYPE_METHOD(t, "isSchemaAware", isSchemaAware);
             NODE_SET_PROTOTYPE_METHOD(t, "version", version);
+            NODE_SET_PROTOTYPE_METHOD(t, "release", release);
             //        Local<Function> f=t->GetFunction();
             // append this function to the target object
             target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "SaxonProcessor"), t->GetFunction());
@@ -100,6 +104,123 @@ namespace saxon_node {
         static void newXPathProcessor(const v8::FunctionCallbackInfo<Value>& args);
 
         static void newSchemaValidator(const v8::FunctionCallbackInfo<Value>& args);
+
+        static void makeValue(const v8::FunctionCallbackInfo<Value>& args) {
+            if (args.Length() != 1) {
+
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected a value")));
+                args.GetReturnValue().SetUndefined();
+                return;
+
+            }
+            // unwrap xsltProcessor object
+            SaxonProcessorJS* xp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
+
+            XdmAtomicValue* xmlNode;
+            if(args[0]->IsString()){
+                String::Utf8Value str(args[0]->ToString());
+                xmlNode=xp->processor->makeStringValue(*str);
+            }
+            else if(args[0]->IsBoolean()){
+                xmlNode=xp->processor->makeBooleanValue(args[0]->BooleanValue());
+            }
+            else if(args[0]->IsInt32() ){
+                xmlNode=xp->processor->makeIntegerValue(args[0]->Int32Value());
+            }
+            else if(args[0]->IsUint32()){
+                xmlNode=xp->processor->makeIntegerValue(args[0]->Uint32Value());
+            }
+            else if(args[0]->IsNumber()){
+                xmlNode=xp->processor->makeDoubleValue(args[0]->NumberValue());
+            }
+            else{
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "Type unspported")));
+                args.GetReturnValue().SetUndefined();
+                return;
+            }
+            //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+            if(xp->processor->exceptionOccurred() && xp->processor->getException()->count()>0){
+                //if(xp->processor->getException()->count()==0)xp->processor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->processor->getException()->count())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->processor->getException()->count();exceptionIndex++){
+                    ss<<xp->processor->getException()->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
+            Local<Object> instance=XdmAtomicValueJS::Instantiate(args.This());
+            XdmAtomicValueJS* xv = node::ObjectWrap::Unwrap<XdmAtomicValueJS>(instance);
+            xv->value=xmlNode;
+            //xdmValue->Wrap(instance);
+            args.GetReturnValue().Set(instance);
+        };
+
+        static void makeQNameValue(const v8::FunctionCallbackInfo<Value>& args) {
+            if (args.Length() != 1 || !args[0]->IsString()) {
+
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected a qname string")));
+                args.GetReturnValue().SetUndefined();
+                return;
+
+            }
+            // unwrap xsltProcessor object
+            SaxonProcessorJS* xp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
+
+                String::Utf8Value str(args[0]->ToString());
+//                std::cout<<"makeQNameValue "<<(*str)<<std::endl;
+            XdmAtomicValue* xmlNode=xp->processor->makeQNameValue(*str);
+            //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+            if(xp->processor->exceptionOccurred() && xp->processor->getException()->count()>0){
+                //if(xp->processor->getException()->count()==0)xp->processor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->processor->getException()->count())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->processor->getException()->count();exceptionIndex++){
+                    ss<<xp->processor->getException()->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
+            Local<Object> instance=XdmAtomicValueJS::Instantiate(args.This());
+            XdmAtomicValueJS* xv = node::ObjectWrap::Unwrap<XdmAtomicValueJS>(instance);
+            xv->value=xmlNode;
+            //xdmValue->Wrap(instance);
+            args.GetReturnValue().Set(instance);
+        };
+
+        static void getStringValue(const v8::FunctionCallbackInfo<Value>& args) {
+            if (args.Length() != 1 || !args[0]->IsObject()) {
+
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected an XdmItem")));
+                args.GetReturnValue().SetUndefined();
+                return;
+
+            }
+            // unwrap xsltProcessor object
+            SaxonProcessorJS* xp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
+
+            XdmItemJS* xi = ObjectWrap::Unwrap<XdmItemJS>(args[0]->ToObject());
+            
+            const char* str=xp->processor->getStringValue(xi->value);
+            //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
+            if(xp->processor->exceptionOccurred() && xp->processor->getException()->count()>0){
+                //if(xp->processor->getException()->count()==0)xp->processor->checkException();
+                std::ostringstream ss;
+                ss<<"# of exceptions: "<<std::to_string(xp->processor->getException()->count())<<std::endl;
+                for(unsigned int exceptionIndex=0;exceptionIndex<xp->processor->getException()->count();exceptionIndex++){
+                    ss<<xp->processor->getException()->getErrorMessage(exceptionIndex)<<std::endl;
+                }
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                args.GetReturnValue().SetUndefined();
+                return;
+                
+            }
+            args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), str));
+        };
 
         static void parseXmlFromString(const v8::FunctionCallbackInfo<Value>& args) {
             if (args.Length() != 1 || !args[0]->IsString()) {
@@ -248,6 +369,12 @@ namespace saxon_node {
                 SaxonProcessorJS* sp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
                 const char* buffer=sp->processor->version();
                 args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+        };
+
+        static void release(const v8::FunctionCallbackInfo<Value>& args) {
+                SaxonProcessorJS* sp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
+                sp->processor->release();
+                args.GetReturnValue().SetUndefined();
         };
 
     protected:

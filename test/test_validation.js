@@ -25,8 +25,12 @@ var saxon = require('saxonXslt');
             //var vp=schemaValidator.validateToNode("./test/examples/xml/sodium-icosanoate.xml");
             var vp=schemaValidator.getValidationReport();
             //htmlContent.toString().should.equal("<html>\n   <head>\n      <title>A list of books</title>\n   </head>\n   <body>\n      <h1>A list of books</h1>\n      <p>Here are some interesting books:</p>\n      <ul>\n         <li>\n            <i>Jude the Obscure</i> by Thomas Hardy</li>\n         <li>\n            <i>Pride and Prejudice</i> by Jane Austen</li>\n         <li>\n            <i>Tess of the d\'Urbervilles</i> by Thomas Hardy</li>\n         <li>\n            <i>The Big Over Easy</i> by Jasper Fforde</li>\n         <li>\n            <i>The Eyre Affair</i> by Jasper Fforde</li>\n         <li>\n            <i>Wuthering Heights</i> by Charlotte Brontë</li>\n      </ul>\n   </body>\n</html>");
-             console.dir(vp.size());
-             console.dir("vp getValidationReport");
+            vp.size().should.equal(1);
+            console.dir(vp.size());
+            var vi=vp.getHead();
+            console.dir(vi.size());
+            var title=vi.getHead();
+            console.dir(title.getStringValue());
         }
         catch (err) {
         console.dir(err.message);
@@ -34,6 +38,7 @@ var saxon = require('saxonXslt');
     });
 
     after(function*() {
+        saxonProcessor.release();
 //      yield teardown();
     });
   });

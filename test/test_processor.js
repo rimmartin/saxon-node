@@ -19,11 +19,11 @@ var saxon = require('saxonXslt');
             var xml = saxonProcessor.parseXmlFromString(content);
             //console.dir("xml:\n"+xml.getStringValue());
             xml.size().should.equal(1);
-            saxonProcessor.setcwd(__dirname+"/..");
-            var xml2 = saxonProcessor.parseXmlFromFile(__dirname+"/examples/xml/foo.xml");
+            saxonProcessor.setcwd(__dirname);
+            var xml2 = saxonProcessor.parseXmlFromFile("./examples/xml/foo.xml");
             //xml2.size().should.equal(1);
             //console.dir("xml:\n"+xml2.getStringValue());
-            //var xml3 = saxonProcessor.parseXmlFromUri("file://"+__dirname+"/test/examples/query/books.xml");
+            //var xml3 = saxonProcessor.parseXmlFromUri("file://"+__dirname+"/examples/query/books.xml");
             //xml3.size().should.equal(1);
         }
         catch (err) {
@@ -31,14 +31,28 @@ var saxon = require('saxonXslt');
         }
     });
 
-    it("string value", function*() {
+    it("making atomic values", function*() {
         try
         {
-            //var xpathProcessor = saxonProcessor.newXPathProcessor();
+            var xdmAtomicValue = saxonProcessor.makeValue("2theta");
             //xpathProcessor.declareNamespace("cml", "http://www.xml-cml.org/schema");
             //xpathProcessor.setContextFile("./test/examples/xml/foo.xml");
-            //var vp=xpathProcessor.evaluate("/document/element");
-            //console.dir(vp);
+            var vp=saxonProcessor.getStringValue(xdmAtomicValue);
+            vp.should.equal("2theta");
+            xdmAtomicValue = saxonProcessor.makeValue(20);
+            vp=saxonProcessor.getStringValue(xdmAtomicValue);
+            vp.should.equal("20");
+            xdmAtomicValue = saxonProcessor.makeValue(1.46);
+            vp=saxonProcessor.getStringValue(xdmAtomicValue);
+            vp.should.equal("1.46");
+            //xdmAtomicValue = saxonProcessor.makeQNameValue("{http://www.xml-cml.org/schema}cml");
+            //console.dir(xdmAtomicValue.size());
+            //var vi=xdmAtomicValue.getHead();
+            //console.dir(vi.size());
+            //var title=vi.getHead();
+            //console.dir(title.getStringValue());
+            //vp=saxonProcessor.getStringValue(xdmAtomicValue);
+            //vp.should.equal("pmc");
         }
         catch (err) {
         console.dir(err.message);
@@ -46,6 +60,7 @@ var saxon = require('saxonXslt');
     });
 
     after(function*() {
+        saxonProcessor.release();
 //      yield teardown();
     });
   });

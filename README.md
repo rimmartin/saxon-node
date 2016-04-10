@@ -1,6 +1,7 @@
 # saxon-node
 
-An exploration of binding Saxon/C <a href="http://www.saxonica.com/saxon-c/index.xml">http://www.saxonica.com/html/saxon-c/index.html</a> (XSLT 2.0/3.0, XQuery 1.0/3.0, Schema Validation 1.0/1.1 and XPath 2.0/3.0).  
+An exploration of binding Saxon/C <a href="http://www.saxonica.com/saxon-c/index.xml">http://www.saxonica.com/html/saxon-c/index.html</a> (XSLT 2.0/3.0, XQuery 1.0/3.0, Schema Validation 1.0/1.1 and XPath 2.0/3.0).
+Professional and enterprise features can be accessed with your license from Saxonica.
 
 ![Caution!](http://wiki.flightgear.org/images/thumb/5/53/Caution-white_exclamation_in_amber_circle-48px.png/40px-Caution-white_exclamation_in_amber_circle-48px.png)Note: A major API change is in progress. The method names are being upgraded to mirror http://www.saxonica.com/saxon-c/doc/html/index.html.
 New functionality is being exposed.
@@ -11,7 +12,7 @@ nodejs v4.2.x line and any fixes or features needed by prior versions will be fr
 To tell it where the Saxon/C is set the environment variable SAXONC_HOME to path:
 
 ```bash
-export SAXONC_HOME=/home/user/Software/Saxonica/Saxon-HEC1.0.0
+export SAXONC_HOME=/home/user/Software/Saxonica/Saxon-HEC1.0.1
 ```
 
 ####Prebuilts
