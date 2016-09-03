@@ -86,13 +86,27 @@
                     'OTHER_CFLAGS': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions"]
                 },
                 'include_dirs': [
-                    '$(SAXONC_HOME)/include',
+                    '../$(SAXONC_HOME)/Saxon.C.API',
                     '$(JAVA_HOME)/include',
                     '$(JAVA_HOME)/include/darwin',
                     'src/'
                 ],
                 'sources': [
-                    'src/SaxonProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/SaxonCGlue.c',
+                    '$(SAXONC_HOME)/Saxon.C.API/SaxonCXPath.c',
+                    '$(SAXONC_HOME)/Saxon.C.API/SaxonProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XsltProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XQueryProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XPathProcessor.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/SchemaValidator.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmItem.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmValue.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmNode.cpp',
+                    '$(SAXONC_HOME)/Saxon.C.API/XdmAtomicValue.cpp',
+                    'src/XdmValueJS.cxx',
+                    'src/XdmItemJS.cxx',
+                    'src/XdmNodeJS.cxx',
+                    'src/XdmAtomicValueJS.cxx',
                     'src/SaxonProcessorJS.cxx',
                     'src/saxonXslt.cxx'
                 ],
