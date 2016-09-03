@@ -81,9 +81,10 @@
                 }
             }],
             ['OS=="mac"', {
-                'cflags': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions", "-Wl,--allow-multiple-definition"],
                 'xcode_settings': {
-                    'OTHER_CFLAGS': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions"]
+                    'OTHER_CPLUSPLUSFLAGS': ["-fPIC", "-O3", "-std=c++14", "-fexceptions","-v", "-stdlib=libc++", "-Werror"],
+                    'OTHER_LDFLAGS': [],
+                    'MACOSX_DEPLOYMENT_TARGET': '10.10'
                 },
                 'include_dirs': [
                     '../$(SAXONC_HOME)/Saxon.C.API',
