@@ -1,7 +1,7 @@
 {
     "name": "saxon-node",
     "description": "An exploration of binding Saxon/C",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "main": "./index.js",
     "author": {
         "name": "roger",
@@ -14,16 +14,16 @@
         "url": "https://github.com/rimmartin/saxon-node"
     },
     "dependencies" : {
-      "node-pre-gyp": "0.6.26"
+      "node-pre-gyp": "0.6.30"
     },
     "bundledDependencies":["node-pre-gyp"],
     "devDependencies" : {
         "co" : "4.6.0",
         "co-fs" : "1.2.0",
-        "should" : "8.3.0",
-        "mocha" : "2.4.5",
-        "co-mocha" : "1.1.2",
-        "aws-sdk": "2.3.2"
+        "should" : "11.1.0",
+        "mocha" : "3.0.2",
+        "co-mocha" : "1.1.3",
+        "aws-sdk": "2.5.5"
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
