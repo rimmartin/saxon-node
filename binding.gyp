@@ -83,8 +83,7 @@
             ['OS=="mac"', {
                 'xcode_settings': {
                     'OTHER_CPLUSPLUSFLAGS': ["-fPIC", "-O3", "-DCPP_ONLY", "-std=c++11", "-fexceptions","-v"],
-                    'OTHER_LDFLAGS': [],
-                    'MACOSX_DEPLOYMENT_TARGET': '10.10'
+                    'OTHER_LDFLAGS': []
                 },
                 'include_dirs': [
                     '../$(SAXONC_HOME)/Saxon.C.API',
