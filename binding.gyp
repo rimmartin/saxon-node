@@ -82,7 +82,7 @@
             }],
             ['OS=="mac"', {
                 'xcode_settings': {
-                    'OTHER_CPLUSPLUSFLAGS': ["-fPIC", "-O3", "-std=c++11", "-fexceptions","-v", "-Werror"],
+                    'OTHER_CPLUSPLUSFLAGS': ["-fPIC", "-O3", "-std=c++11", "-fexceptions","-v"],
                     'OTHER_LDFLAGS': [],
                     'MACOSX_DEPLOYMENT_TARGET': '10.10'
                 },
