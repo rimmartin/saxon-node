@@ -33,8 +33,9 @@ before_install:
   - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
   
 install:
-  - export SAXONC_HOME=../Saxonica/Saxon-HEC1.1.0
+  - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
   - ls `pwd`/../Saxonica
+  - npm install -g node-gyp
   - npm install --build-from-source
 
 before-scripte:
