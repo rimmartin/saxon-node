@@ -1,7 +1,7 @@
 {
     "name": "saxon-node",
     "description": "An exploration of binding Saxon/C",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "main": "./index.js",
     "author": {
         "name": "roger",
@@ -13,30 +13,31 @@
         "type": "git",
         "url": "https://github.com/rimmartin/saxon-node"
     },
-    "dependencies" : {
-      "node-pre-gyp": "0.6.30"
+    "dependencies": {
+        "node-pre-gyp": "0.10.2"
     },
-    "bundledDependencies":["node-pre-gyp"],
-    "devDependencies" : {
-        "co" : "4.6.0",
-        "co-fs" : "1.2.0",
-        "should" : "11.1.0",
-        "mocha" : "3.0.2",
-        "co-mocha" : "1.1.3",
-        "aws-sdk": "2.5.5"
+    "bundledDependencies": [
+        "node-pre-gyp"
+    ],
+    "devDependencies": {
+        "co": "4.6.0",
+        "co-fs": "1.2.0",
+        "should": "13.2.1",
+        "mocha": "5.2.0",
+        "co-mocha": "1.2.2",
+        "aws-sdk": "2.268.1"
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
         "prebuild": "node-pre-gyp rebuild && node-pre-gyp package",
         "test": "export PATH=$JET_HOME/bin:$PATH && export LD_LIBRARY_PATH=$JET_HOME/lib/x86/shared:$LD_LIBRARY_PATH && export NODE_PATH=`pwd`/build/Release:$NODE_PATH && mocha --harmony --require should --require co-mocha --timeout 7000 "
-  
     },
     "binary": {
         "module_name": "saxonXslt",
         "module_path": "./lib/binding/",
         "host": "https://saxon-node.s3-us-west-2.amazonaws.com",
         "remote_path": "./v{version}"
-    },    
+    },
     "bugs": {
         "url": "https://github.com/rimmartin/saxon-node/issues"
     }

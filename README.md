@@ -1,3 +1,8 @@
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][npm-url]
+[![Node.js Version][node-version-image]][node-version-url]
+[![Build Status][travis-ci-build-image]][travis-ci-build-url]
+
 # saxon-node
 
 An exploration of binding Saxon/C <a href="http://www.saxonica.com/saxon-c/index.xml">http://www.saxonica.com/html/saxon-c/index.html</a> (XSLT 2.0/3.0, XQuery 1.0/3.0, Schema Validation 1.0/1.1 and XPath 2.0/3.0).
@@ -47,3 +52,10 @@ mocha --harmony --require should
 
 Documentation: <a href="http://rimmartin.github.io/saxon-node/">Saxon Node API</a>
 
+[npm-image]: https://badge.fury.io/js/saxon-node.svg
+[npm-url]: https://www.npmjs.com/package/saxon-node
+[downloads-image]: https://img.shields.io/npm/dm/saxon-node.svg
+[node-version-image]: https://img.shields.io/node/v/saxon-node.svg
+[node-version-url]: https://nodejs.org/en/download/
+[travis-ci-build-image]: https://travis-ci.org/saxon-node.svg?branch=master
+[travis-ci-build-url]: https://travis-ci.org/saxon-node
