@@ -8,7 +8,7 @@
 An exploration of binding Saxon/C <a href="http://www.saxonica.com/saxon-c/index.xml">http://www.saxonica.com/html/saxon-c/index.html</a> (XSLT 2.0/3.0, XQuery 1.0/3.0, Schema Validation 1.0/1.1 and XPath 2.0/3.0).
 Professional and enterprise features can be accessed with your license from Saxonica.
 
-Upgraded to 1.0.2 API. The method names mirror http://www.saxonica.com/saxon-c/doc/html/index.html.
+Note: release v0.2.2 Upgraded to 1.1.0 API. The method names mirror http://www.saxonica.com/saxon-c/doc/html/index.html.
 
 Note: release v0.2.1 is linux and mac and pending windows version of Saxon/C 1.0.2
 
