@@ -34,6 +34,7 @@ before_install:
   
 install:
   - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
+  - ls `pwd`/../Saxonica
   - npm install --build-from-source
 
 before-scripte:
@@ -43,6 +44,7 @@ script:
   - export PATH=`pwd`/node_modules/.bin:${PATH}
   - export LD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.0:${LD_LIBRARY_PATH}
   - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.0:${DYLD_LIBRARY_PATH}
+  - ls `pwd`/../Saxonica
   - echo ${PATH}
   - ls `pwd`/node_modules/.bin
   - mocha --harmony --require should --require co-mocha --timeout 7000
