@@ -61,5 +61,5 @@ Documentation: <a href="http://rimmartin.github.io/saxon-node/">Saxon Node API</
 [downloads-image]: https://img.shields.io/npm/dm/saxon-node.svg
 [node-version-image]: https://img.shields.io/node/v/saxon-node.svg
 [node-version-url]: https://nodejs.org/en/download/
-[travis-ci-build-image]: https://travis-ci.org/saxon-node.svg?branch=master
+[travis-ci-build-image]: https://travis-ci.org/rimmartin/saxon-node.svg?branch=master
 [travis-ci-build-url]: https://travis-ci.org/rimmartin/saxon-node
