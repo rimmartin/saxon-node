@@ -44,6 +44,7 @@ before-scripte:
   
 script:
   - export PATH=`pwd`/node_modules/.bin:${PATH}
+  - export NODE_PATH=`pwd`/build/Release:$NODE_PATH
   - export LD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.0:${LD_LIBRARY_PATH}
   - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.0:${DYLD_LIBRARY_PATH}
   - ls `pwd`/../Saxonica
