@@ -1,7 +1,7 @@
 var fs = require('co-fs');
 var saxon = require('saxonXslt');
 
-  describe("Schema Validator foo", function() {
+  describe.skip("Schema Validator foo", function() {
     var content;
     var saxonProcessor;
 
