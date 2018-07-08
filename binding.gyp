@@ -1,6 +1,6 @@
 {
     "variables": {
-        "saxonc_home%": "../../Software/Saxonica/Saxon-HEC1.1.0",
+        "saxonc_home%": "../Saxonica/Saxon-HEC1.1.0",
     },
     'targets': [
         {
