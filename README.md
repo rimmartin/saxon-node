@@ -8,7 +8,11 @@
 An exploration of binding Saxon/C <a href="http://www.saxonica.com/saxon-c/index.xml">http://www.saxonica.com/html/saxon-c/index.html</a> (XSLT 2.0/3.0, XQuery 1.0/3.0, Schema Validation 1.0/1.1 and XPath 2.0/3.0).
 Professional and enterprise features can be accessed with your license from Saxonica.
 
-Note: release v0.2.2 Upgraded to 1.1.0 API. The method names mirror http://www.saxonica.com/saxon-c/doc/html/index.html.
+Note: release v0.2.2 Upgraded to 1.1.0 API. The method names mirror http://www.saxonica.com/saxon-c/doc/html/index.html. There is now a
+command line switch for setting the Saxon/C home: --saxonc-home=<YOUR_SAXONC_HOME> for building
+```
+npm install --build-from-source --saxonc-home=<YOUR_SAXONC_HOME>
+```
 
 Note: release v0.2.1 is linux and mac and pending windows version of Saxon/C 1.0.2
 
