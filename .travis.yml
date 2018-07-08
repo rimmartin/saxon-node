@@ -50,4 +50,4 @@ script:
   - ls `pwd`/../Saxonica
   - echo ${PATH}
   - ls `pwd`/node_modules/.bin
-  - mocha --harmony --require should --require co-mocha --timeout 7000
+  - mocha --harmony --require should --timeout 7000
