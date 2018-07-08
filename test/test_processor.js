@@ -1,19 +1,20 @@
-var fs = require('co-fs');
+var fs = require('fs');
 var saxon = require('saxonXslt');
 
   describe("Saxon Processor foo", function() {
     var content;
     var saxonProcessor;
 
-    before(function*() {
+    before(function(done) {
 //      yield setup();
-        content = yield fs.readFile("./test/examples/query/books.xml", "utf8");
+        content = fs.readFileSync("./test/examples/query/books.xml", "utf8");
         saxonProcessor = new saxon.SaxonProcessor(true);
         console.dir("saxonProcessor "+saxonProcessor.version());
         saxonProcessor.setcwd(".");
+        done();
     });
 
-    it("parse xml different ways", function*() {
+    it("parse xml different ways", function(done) {
         try
         {
             var xml = saxonProcessor.parseXmlFromString(content);
@@ -29,9 +30,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("making atomic values", function*() {
+    it("making atomic values", function(done) {
         try
         {
             var xdmAtomicValue = saxonProcessor.makeValue("2theta");
@@ -55,10 +57,12 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    after(function*() {
+    after(function(done) {
         saxonProcessor.release();
 //      yield teardown();
+        done();
     });
   });

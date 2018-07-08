@@ -1,4 +1,4 @@
-var fs = require('co-fs');
+var fs = require('fs');
 var saxon = require('saxonXslt');
 
   describe.skip("Schema Validator foo", function() {
@@ -7,7 +7,7 @@ var saxon = require('saxonXslt');
 
     before(function*() {
 //      yield setup();
-        content = yield fs.readFile("./test/examples/query/books.xml", "utf8");
+        content = fs.readFileSync("./test/examples/query/books.xml", "utf8");
         saxonProcessor = new saxon.SaxonProcessor(true);
         console.dir("saxonProcessor "+saxonProcessor.version());
         saxonProcessor.setcwd(".");

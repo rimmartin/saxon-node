@@ -1,19 +1,20 @@
-var fs = require('co-fs');
+var fs = require('fs');
 var saxon = require('saxonXslt');
 
   describe("Xslt foo", function() {
     var content;
     var saxonProcessor;
 
-    before(function*() {
+    before(function(done) {
 //      yield setup();
-        content = yield fs.readFile("./test/examples/xml/foo.xml", "utf8");
+        content = fs.readFileSync("./test/examples/xml/foo.xml", "utf8");
         saxonProcessor = new saxon.SaxonProcessor(true);
         console.dir("saxonProcessor "+saxonProcessor.version());
         saxonProcessor.setcwd(".");
+        done();
     });
 
-    it("should be from memory buffer", function*() {
+    it("should be from memory buffer", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
@@ -25,9 +26,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should use direct xml file", function*() {
+    it("should use direct xml file", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
@@ -38,13 +40,14 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should use direct xml file and an in memory xslt", function*() {
+    it("should use direct xml file and an in memory xslt", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
-            var xslt = yield fs.readFile("./test/examples/xsl/baz.xsl", "utf8");
+            var xslt = fs.readFileSync("./test/examples/xsl/baz.xsl", "utf8");
             xsltProcessor.compileFromString(xslt);
             var pdbContent = xsltProcessor.transformFileToString("./test/examples/xml/foo.xml");
             pdbContent.toString().should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
@@ -52,14 +55,15 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should use source from xml file and in memory xslt to string", function*() {
+    it("should use source from xml file and in memory xslt to string", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
             xsltProcessor.setSourceFromFile("./test/examples/xml/foo.xml");
-            var xslt = yield fs.readFile("./test/examples/xsl/baz.xsl", "utf8");
+            var xslt = fs.readFileSync("./test/examples/xsl/baz.xsl", "utf8");
             xsltProcessor.compileFromString(xslt);
             var pdbContent = xsltProcessor.transformToString();
             pdbContent.toString().should.equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><?xml-stylesheet type=\"text/xsl\" href=\"../xsl/foo.xsl\" title=\"default-stylesheet\"?><foo:document xmlns:foo=\"http://apache.org/foo\" xmlns:bar=\"http://apache.org/bar\" file-name=\"test\" file-path=\"work\" creation-date=\"971255692078\">\n<bar:element>MyBar</bar:element>\n</foo:document></out>");
@@ -67,14 +71,15 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should use source from xml file and in memory xslt to value", function*() {
+    it("should use source from xml file and in memory xslt to value", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
             xsltProcessor.setSourceFromFile("./test/examples/xml/foo.xml");
-            var xslt = yield fs.readFile("./test/examples/xsl/baz.xsl", "utf8");
+            var xslt = fs.readFileSync("./test/examples/xsl/baz.xsl", "utf8");
             xsltProcessor.compileFromString(xslt);
             var pdbContent = xsltProcessor.transformToValue();
             pdbContent.size().should.equal(1);
@@ -85,9 +90,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should use direct xml and xsl files", function*() {
+    it("should use direct xml and xsl files", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
@@ -97,9 +103,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should be compiled and applied to file multiple times", function*() {
+    it("should be compiled and applied to file multiple times", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
@@ -113,9 +120,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should set xslt parameter to check if al elements are in the list", function*() {
+    it("should set xslt parameter to check if al elements are in the list", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
@@ -126,9 +134,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should set xslt parameter elements-of-interests to all the elements in the molecule", function*() {
+    it("should set xslt parameter elements-of-interests to all the elements in the molecule", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
@@ -140,9 +149,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("should throw exception for bad function", function*() {
+    it("should throw exception for bad function", function(done) {
         try
         {
             var xsltProcessor = saxonProcessor.newTransformer();
@@ -156,10 +166,12 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    after(function*() {
+    after(function(done) {
         saxonProcessor.release();
 //      yield teardown();
+        done();
     });
   });

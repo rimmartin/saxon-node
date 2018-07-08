@@ -1,19 +1,20 @@
-var fs = require('co-fs');
+var fs = require('fs');
 var saxon = require('saxonXslt');
 
   describe("XPath Processor foo", function() {
     var content;
     var saxonProcessor;
 
-    before(function*() {
+    before(function(done) {
 //      yield setup();
-        content = yield fs.readFile("./test/examples/query/books.xml", "utf8");
+        content = fs.readFileSync("./test/examples/query/books.xml", "utf8");
         saxonProcessor = new saxon.SaxonProcessor(true);
         console.dir("saxonProcessor "+saxonProcessor.version());
         saxonProcessor.setcwd(".");
+        done();
     });
 
-    it("xpath without namespace declaration", function*() {
+    it("xpath without namespace declaration", function(done) {
         try
         {
             var xpathProcessor = saxonProcessor.newXPathProcessor();
@@ -30,9 +31,10 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    it("xpath with namespace declaration", function*() {
+    it("xpath with namespace declaration", function(done) {
         try
         {
             var xpathProcessor = saxonProcessor.newXPathProcessor();
@@ -44,10 +46,12 @@ var saxon = require('saxonXslt');
         catch (err) {
         console.dir(err.message);
         }
+        done();
     });
 
-    after(function*() {
+    after(function(done) {
         saxonProcessor.release();
 //      yield teardown();
+        done();
     });
   });
