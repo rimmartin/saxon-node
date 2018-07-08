@@ -1,6 +1,6 @@
 {
     "variables": {
-        "saxonc-home%": "../../Software/Saxonica/Saxon-HEC1.1.0",
+        "saxonc_home%": "../../Software/Saxonica/Saxon-HEC1.1.0",
     },
     'targets': [
         {
@@ -11,23 +11,23 @@
                 'cflags_cc!': [ '-fno-exceptions' ],
                 'cflags': ["-fPIC", "-O4", "-DCPP_ONLY", "-std=c++11", "-fexceptions", "-Wl,--allow-multiple-definition"],
                 'include_dirs': [
-                    '<(saxonc-home)/Saxon.C.API',
+                    '<(saxonc_home)/Saxon.C.API',
                     '$(JAVA_HOME)/include',
                     '$(JAVA_HOME)/include/linux',
                     'src/'
                 ],
                 'sources': [
-                    '<(saxonc-home)/Saxon.C.API/SaxonCGlue.c',
-                    '<(saxonc-home)/Saxon.C.API/SaxonCXPath.c',
-                    '<(saxonc-home)/Saxon.C.API/SaxonProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XsltProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XQueryProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XPathProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/SchemaValidator.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmItem.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmValue.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmNode.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmAtomicValue.cpp',
+                    '<(saxonc_home)/Saxon.C.API/SaxonCGlue.c',
+                    '<(saxonc_home)/Saxon.C.API/SaxonCXPath.c',
+                    '<(saxonc_home)/Saxon.C.API/SaxonProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XsltProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XQueryProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XPathProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/SchemaValidator.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmItem.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmValue.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmNode.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmAtomicValue.cpp',
                     'src/XdmValueJS.cxx',
                     'src/XdmItemJS.cxx',
                     'src/XdmNodeJS.cxx',
@@ -39,7 +39,7 @@
                     'libraries': [
                     ],
                     'ldflags': [
-                        '-L<(saxonc-home)'
+                        '-L<(saxonc_home)'
                     ]
                 }
             }],
@@ -87,23 +87,23 @@
                     'OTHER_LDFLAGS': []
                 },
                 'include_dirs': [
-                    '<(saxonc-home)/Saxon.C.API',
+                    '<(saxonc_home)/Saxon.C.API',
                     '$(JAVA_HOME)/include',
                     '$(JAVA_HOME)/include/darwin',
                     'src/'
                 ],
                 'sources': [
-                    '<(saxonc-home)/Saxon.C.API/SaxonCGlue.c',
-                    '<(saxonc-home)/Saxon.C.API/SaxonCXPath.c',
-                    '<(saxonc-home)/Saxon.C.API/SaxonProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XsltProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XQueryProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XPathProcessor.cpp',
-                    '<(saxonc-home)/Saxon.C.API/SchemaValidator.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmItem.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmValue.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmNode.cpp',
-                    '<(saxonc-home)/Saxon.C.API/XdmAtomicValue.cpp',
+                    '<(saxonc_home)/Saxon.C.API/SaxonCGlue.c',
+                    '<(saxonc_home)/Saxon.C.API/SaxonCXPath.c',
+                    '<(saxonc_home)/Saxon.C.API/SaxonProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XsltProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XQueryProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XPathProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/SchemaValidator.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmItem.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmValue.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmNode.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmAtomicValue.cpp',
                     'src/XdmValueJS.cxx',
                     'src/XdmItemJS.cxx',
                     'src/XdmNodeJS.cxx',
@@ -115,7 +115,7 @@
                     'libraries': [
                     ],
                     'ldflags': [
-                        '-L<(saxonc-home)'
+                        '-L<(saxonc_home)'
                     ]
                 }
             }]
