@@ -50,7 +50,7 @@ var saxon = require('saxonXslt');
     });
 
     after(function(done) {
-        saxonProcessor.release();
+        //saxonProcessor.release();
 //      yield teardown();
         done();
     });
