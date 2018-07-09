@@ -30,6 +30,8 @@ before_install:
       wget http://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.1.0.zip -O /tmp/libsaxon-HEC-setup64-v1.1.0.zip;
       printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.1.0.zip -d /tmp;
       mkdir -p `pwd`/../Saxonica/Saxon-HEC1.1.0;
+      ls `pwd`/../Saxonica/Saxon-HEC1.1.0;
+      ls -lastr /tmp/libsaxon-HEC-setup64-v1.1.0;
       printf "`pwd`/../Saxonica/Saxon-HEC1.1.0\n" | /tmp/libsaxon-HEC-setup64-v1.1.0 ;
     fi
   - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
