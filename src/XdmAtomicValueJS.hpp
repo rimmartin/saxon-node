@@ -49,14 +49,16 @@ namespace saxon_node {
         };
 
         static v8::Local<v8::Object> Instantiate(v8::Local<v8::Object> proc) {
-            v8::Local<v8::Value> argv[1] = {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            const unsigned        argc       = 1;
+              v8::Local<v8::Value> argv[1] = {
 
                 proc
 
             };
 
             // return new group instance
-            return v8::Local<v8::FunctionTemplate>::New(v8::Isolate::GetCurrent(), Constructor)->GetFunction()->NewInstance(1, argv);
+            return v8::Local<v8::FunctionTemplate>::New(isolate, Constructor)->GetFunction()->NewInstance(isolate->GetCurrentContext(), argc, argv).ToLocalChecked();
 
         };
     protected:

@@ -44,6 +44,8 @@ namespace saxon_node {
         };
 
         static Local<Object> Instantiate(Local<Object> proc) {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            const unsigned        argc       = 1;
             Local<Value> argv[1] = {
 
                 proc
@@ -51,7 +53,7 @@ namespace saxon_node {
             };
 
             // return new group instance
-            return Local<FunctionTemplate>::New(v8::Isolate::GetCurrent(), Constructor)->GetFunction()->NewInstance(1, argv);
+            return Local<FunctionTemplate>::New(isolate, Constructor)->GetFunction()->NewInstance(isolate->GetCurrentContext(), argc, argv).ToLocalChecked();
 
         };
     private:
