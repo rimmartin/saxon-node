@@ -42,7 +42,11 @@ install:
   - echo ${JAVA_HOME}
   - which javac
   - javac -version
-  - export JAVA_HOME=/usr
+  - ls /Library/Java/JavaVirtualMachines
+  - find /Library/Java/JavaVirtualMachines -name jni.h
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
+      export JAVA_HOME=/usr;
+    fi
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/Saxon-HEC1.1.0
 
