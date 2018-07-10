@@ -42,6 +42,8 @@ before_install:
 install:
   - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
   - ls `pwd`/../Saxonica
+  - echo ${JAVA_HOME}
+  - which javac
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/Saxon-HEC1.1.0
 
