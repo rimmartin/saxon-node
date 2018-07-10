@@ -38,14 +38,10 @@ before_install:
   
 install:
   - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
-  - ls `pwd`/../Saxonica
-  - echo ${JAVA_HOME}
-  - which javac
-  - javac -version
-  - ls /Library/Java/JavaVirtualMachines
-  - find /Library/Java/JavaVirtualMachines -name jni.h
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
-      export JAVA_HOME=/usr;
+      ls /Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/*;
+      find /Library/Java/JavaVirtualMachines -name jni.h;
+      export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     fi
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/Saxon-HEC1.1.0
