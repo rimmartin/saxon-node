@@ -19,6 +19,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-7
+      - oraclejdk8
       
 osx_image: xcode8
 
