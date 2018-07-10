@@ -13,6 +13,9 @@
         "type": "git",
         "url": "https://github.com/rimmartin/saxon-node"
     },
+    "engines": {
+      "node": ">=6.0.0"
+    },
     "dependencies": {
         "node-pre-gyp": "0.10.2"
     },
