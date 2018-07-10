@@ -13,9 +13,6 @@ os:
   - linux
   - osx
 
-jdk:
-  - oraclejdk8
-  
 addons:
   apt:
     sources:
@@ -44,6 +41,8 @@ install:
   - ls `pwd`/../Saxonica
   - echo ${JAVA_HOME}
   - which javac
+  - javac -version
+  - export JAVA_HOME=/usr
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/Saxon-HEC1.1.0
 
