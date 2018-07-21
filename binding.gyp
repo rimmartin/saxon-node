@@ -83,6 +83,7 @@
             }],
             ['OS=="mac"', {
                 'xcode_settings': {
+                    'OTHER_CFLAGS': ["-x c++", "-DCPP_ONLY", "-fexceptions","-v"],
                     'OTHER_CPLUSPLUSFLAGS': ["-fPIC", "-O3", "-x c++", "-DCPP_ONLY", "-std=c++11", "-fexceptions","-v"],
                     'OTHER_LDFLAGS': []
                 },
