@@ -14,7 +14,7 @@
         "url": "https://github.com/rimmartin/saxon-node"
     },
     "engines": {
-      "node": ">=6.0.0"
+        "node": ">=6.0.0"
     },
     "dependencies": {
         "node-pre-gyp": "0.10.2"
@@ -29,7 +29,7 @@
         "aws-sdk": "2.268.1"
     },
     "scripts": {
-        "install": "node-pre-gyp install --fallback-to-build ",
+        "install": "node-pre-gyp install --fallback-to-build --jobs max ",
         "prebuild": "node-pre-gyp rebuild && node-pre-gyp package",
         "test": "export PATH=$JET_HOME/bin:$PATH && export LD_LIBRARY_PATH=$JET_HOME/lib/x86/shared:$LD_LIBRARY_PATH && export NODE_PATH=`pwd`/build/Release:$NODE_PATH && mocha --harmony --require should --timeout 7000 "
     },
