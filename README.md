@@ -13,6 +13,13 @@ command line switch for setting the Saxon/C home: --saxonc_home=<YOUR_SAXONC_HOM
 ```
 npm install --build-from-source --saxonc_home=<YOUR_SAXONC_HOME>
 ```
+Note: release v0.2.2 is for Saxon/C 1.1.0.  For mac two native files need replaced.  Where you have Saxon-HEC1.1.0 installed:
+```
+      rm `pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API/SaxonCGlue.h;
+      wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/HEC/SaxonCGlue.h;
+      rm `pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API/SaxonCProcessor.c;
+      wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/SaxonCProcessor.c;
+```
 
 Note: release v0.2.1 is linux and mac and pending windows version of Saxon/C 1.0.2
 
