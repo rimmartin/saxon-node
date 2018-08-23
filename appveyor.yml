@@ -45,8 +45,8 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - node --version
   - npm --version
-  - ps: Invoke-WebRequest -Uri http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.1.0.exe -OutFile $env:temp\libsaxon.exe
-  - $env:temp\libsaxon.exe
+  - ps: Invoke-WebRequest -Uri 'http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.1.0.exe' -OutFile "$env:temp/libsaxon.exe"
+  - ps: Invoke-Command -ScriptBlock {& cmd /c "$env:temp/libsaxon.exe" /qn }
   - npm install
 
 test_script:
