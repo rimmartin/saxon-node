@@ -1,0 +1,54 @@
+skip_branch_with_pr: true
+skip_tags: true
+
+os: Visual Studio 2015
+
+configuration: testing
+
+platform:
+  - x64
+
+version: "{build}"
+
+build: off
+
+clone_folder: c:\projects\node_modules\saxon-node
+
+init:
+  - cmd: >-
+      subst s: c:\projects
+  - ps: set-location -path s:\node_modules\saxon-node
+
+cache:
+  - '%userprofile%\.node-gyp'
+  - '%AppData%\npm-cache'
+
+environment:
+  matrix:
+    - nodejs_version: 6
+      GYP_MSVS_VERSION: 2015
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    # - nodejs_version: 7
+    #   GYP_MSVS_VERSION: 2015
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    # - nodejs_version: 8
+    #   GYP_MSVS_VERSION: 2015
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    # - nodejs_version: 9
+    #   GYP_MSVS_VERSION: 2015
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    # - nodejs_version: 10
+    #   GYP_MSVS_VERSION: 2017
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+
+install:
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  - node --version
+  - npm --version
+  - ps: Invoke-WebRequest -Uri http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.1.0.exe -OutFile $env:temp\libsaxon.exe
+  - $env:temp\libsaxon.exe
+  - npm install
+
+test_script:
+  - ps: set-location -path c:\projects\node_modules\saxon-node
+  - npm test
