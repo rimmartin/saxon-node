@@ -24,6 +24,7 @@ cache:
   - '%AppData%\npm-cache'
 
 environment:
+  SAXONC_HOME: C:\Program Files\Saxonica\SaxonHEC1.1.0
   matrix:
     - nodejs_version: 6
       GYP_MSVS_VERSION: 2015
@@ -46,7 +47,7 @@ install:
   - node --version
   - npm --version
   - ps: Invoke-WebRequest -Uri 'http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.1.0.exe' -OutFile "$env:temp/libsaxon.exe"
-  - ps: Invoke-Command -ScriptBlock {& cmd /c "$env:temp/libsaxon.exe" /qn }
+  - ps: Invoke-Command -ScriptBlock {& cmd /c "$env:temp/libsaxon.exe" /batch}
   - npm install
 
 test_script:
