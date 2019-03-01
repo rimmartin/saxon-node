@@ -28,7 +28,7 @@ osx_image: xcode8
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
       wget http://www.saxonica.com/saxon-c/libsaxon-HEC-mac-setup-v1.1.2.zip -O /tmp/libsaxon-HEC-mac-setup-v1.1.2.zip;
-      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.1.2.zip -d /tmp;
+      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.1.2.zip -d /tmp/libsaxon-HEC-mac-setup-v1.1.2;
       mkdir -p `pwd`/../Saxonica/Saxon-HEC1.1.2;
       cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.1.2/* `pwd`/../Saxonica/Saxon-HEC1.1.2;
     else
