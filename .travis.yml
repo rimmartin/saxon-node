@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - "node"
+  - "910"
   - "9"
   - "8"
   - "6"
@@ -26,30 +27,30 @@ osx_image: xcode8
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
-      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-mac-setup-v1.1.0.zip -O /tmp/libsaxon-HEC-mac-setup-v1.1.0.zip;
-      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.1.0.zip -d /tmp;
-      mkdir -p `pwd`/../Saxonica/Saxon-HEC1.1.0;
-      cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.1.0/* `pwd`/../Saxonica/Saxon-HEC1.1.0;
-      rm `pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API/SaxonCGlue.h;
-      wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/HEC/SaxonCGlue.h;
-      rm `pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API/SaxonCProcessor.c;
-      wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/SaxonCProcessor.c;
+      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-mac-setup-v1.1.2.zip -O /tmp/libsaxon-HEC-mac-setup-v1.1.2.zip;
+      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.1.2.zip -d /tmp;
+      mkdir -p `pwd`/../Saxonica/Saxon-HEC1.1.2;
+      cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.1.2/* `pwd`/../Saxonica/Saxon-HEC1.1.2;
+      #rm `pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API/SaxonCGlue.h;
+      #wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/HEC/SaxonCGlue.h;
+      #rm `pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API/SaxonCProcessor.c;
+      #wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/SaxonCProcessor.c;
     else
-      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.1.0.zip -O /tmp/libsaxon-HEC-setup64-v1.1.0.zip;
-      printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.1.0.zip -d /tmp;
-      printf "`pwd`/../Saxonica/Saxon-HEC1.1.0\n" | /tmp/libsaxon-HEC-setup64-v1.1.0 ;
+      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.1.2.zip -O /tmp/libsaxon-HEC-setup64-v1.1.2.zip;
+      printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.1.2.zip -d /tmp;
+      printf "`pwd`/../Saxonica/Saxon-HEC1.1.2\n" | /tmp/libsaxon-HEC-setup64-v1.1.2 ;
     fi
-  - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
+  - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.2
   
 install:
-  - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.0
+  - export SAXONC_HOME=`pwd`/../Saxonica/Saxon-HEC1.1.2
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
       ls /Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/*;
       find /Library/Java/JavaVirtualMachines -name jni.h;
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     fi
   - npm install -g node-gyp
-  - npm install --build-from-source --saxonc_home=../Saxonica/Saxon-HEC1.1.0
+  - npm install --build-from-source --saxonc_home=../Saxonica/Saxon-HEC1.1.2
 
 before-scripte:
   - export PATH=`pwd`/node_modules/.bin:${PATH}
@@ -57,8 +58,8 @@ before-scripte:
 script:
   - export PATH=`pwd`/node_modules/.bin:${PATH}
   - export NODE_PATH=`pwd`/build/Release:$NODE_PATH
-  - export LD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.0:${LD_LIBRARY_PATH}
-  - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.0:${DYLD_LIBRARY_PATH}
+  - export LD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.2:${LD_LIBRARY_PATH}
+  - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/Saxon-HEC1.1.2:${DYLD_LIBRARY_PATH}
   - ls `pwd`/../Saxonica
   - echo ${PATH}
   - ls `pwd`/node_modules/.bin
