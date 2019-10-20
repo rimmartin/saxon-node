@@ -28,13 +28,13 @@ osx_image: xcode8
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
       wget https://www.saxonica.com/saxon-c/libsaxon-HEC-mac-setup-v1.2.0.zip -O /tmp/libsaxon-HEC-mac-setup-v1.2.0.zip;
-      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.1.2.zip -d /tmp/libsaxon-HEC-mac-setup-v1.1.2;
-      mkdir -p `pwd`/../Saxonica/Saxon-HEC1.1.2;
-      cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.1.2/* `pwd`/../Saxonica/SaxonHEC1.2.0;
+      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.2.0.zip -d /tmp/libsaxon-HEC-mac-setup-v1.2.0;
+      mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
+      cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
     else
       wget https://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.2.0.zip -O /tmp/libsaxon-HEC-setup64-v1.2.0.zip;
       printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.2.0.zip -d /tmp;
-      printf "`pwd`/../Saxonica/Saxon-HEC1.2.0\n" | /tmp/libsaxon-HEC-setup64-v1.2.0 ;
+      printf "`pwd`/../Saxonica/SaxonHEC1.2.0\n" | /tmp/libsaxon-HEC-setup64-v1.2.0 ;
     fi
   - export SAXONC_HOME=`pwd`/../Saxonica/SaxonHEC1.2.0
   
