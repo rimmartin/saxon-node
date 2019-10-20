@@ -24,7 +24,7 @@ namespace saxon_node {
 
     class SaxonProcessorJS;
 
-    class XsltProcessorJS : public node::ObjectWrap {
+    class Xslt30ProcessorJS : public node::ObjectWrap {
     protected:
 
     public:
@@ -32,12 +32,12 @@ namespace saxon_node {
         static void Initialize(Handle<Object> target) {
             // instantiate constructor function template
             Local<FunctionTemplate> t = FunctionTemplate::New(v8::Isolate::GetCurrent(), New);
-            t->SetClassName(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XsltProcessor"));
+            t->SetClassName(String::NewFromUtf8(v8::Isolate::GetCurrent(), "Xslt30Processor"));
             t->InstanceTemplate()->SetInternalFieldCount(1);
             Constructor.Reset(v8::Isolate::GetCurrent(), t);
             // member method prototypes
             NODE_SET_PROTOTYPE_METHOD(t, "setSourceFromString", setSourceFromString);
-            NODE_SET_PROTOTYPE_METHOD(t, "setSourceFromFile", setSourceFromFile);
+            NODE_SET_PROTOTYPE_METHOD(t, "setGlobalContextFromFile", setGlobalContextFromFile);
             NODE_SET_PROTOTYPE_METHOD(t, "setOutputfile", setOutputfile);
             NODE_SET_PROTOTYPE_METHOD(t, "setParameter", setParameter);
             NODE_SET_PROTOTYPE_METHOD(t, "getParameter", getParameter);
@@ -53,7 +53,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "compileFromString", compileFromString);
             //        Local<Function> f=t->GetFunction();
             // append this function to the target object
-            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XsltProcessor"), t->GetFunction());
+            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "Xslt30Processor"), t->GetFunction());
         };
 
         static Local<Object> Instantiate(Local<Object> proc) {
@@ -71,31 +71,31 @@ namespace saxon_node {
         };
     private:
 
-        XsltProcessorJS() : XsltProcessorJS(false) {
+        Xslt30ProcessorJS() : Xslt30ProcessorJS(false) {
 
         };
 
-        XsltProcessorJS(bool l) {
+        Xslt30ProcessorJS(bool l) {
 
         };
 
-        ~XsltProcessorJS() {
+        ~Xslt30ProcessorJS() {
         };
         static Persistent<FunctionTemplate> Constructor;
 
         static void New(const v8::FunctionCallbackInfo<Value>& args) {
             // create hdf file object
-            XsltProcessorJS* xp;
+            Xslt30ProcessorJS* xp;
             if (args.Length() < 1)
-                xp = new XsltProcessorJS();
+                xp = new Xslt30ProcessorJS();
             else
-                xp = new XsltProcessorJS(args[1]->ToBoolean()->BooleanValue());
+                xp = new Xslt30ProcessorJS(args[1]->ToBoolean()->BooleanValue());
 
             xp->procJS = args[0]->ToObject();
             // unwrap processor object
             xp->proc = ObjectWrap::Unwrap<SaxonProcessorJS>(args[0]->ToObject());
 
-            xp->xsltProcessor.reset(xp->proc->processor->newXsltProcessor());
+            xp->xsltProcessor.reset(xp->proc->processor->newXslt30Processor());
             // extend target object with processor
             xp->Wrap(args.This());
 
@@ -116,9 +116,9 @@ namespace saxon_node {
             String::Utf8Value source(args[0]->ToString());
             //std::cout<<(*source)<<std::endl;
             // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
 
-            xp->xsltProcessor->setSourceFromXdmNode(xp->xsltProcessor->getSaxonProcessor()->parseXmlFromString(*source));
+            //xp->xsltProcessor->setSourceFromXdmNode(xp->xsltProcessor->getSaxonProcessor()->parseXmlFromString(*source));
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
                 if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
@@ -182,7 +182,7 @@ namespace saxon_node {
                 args.GetReturnValue().SetUndefined();
             }
             // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
             Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames();
             for(uint32_t index=0;index<parameterNames->Length();index++)
@@ -216,7 +216,7 @@ namespace saxon_node {
                     if(args[0]->IsString())
                     {
                         // unwrap xsltProcessor object
-                        XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                        Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
                         for(uint32_t index=0;index<parameterNames->Length();index++)
                         {
                             String::Utf8Value pn(parameterNames->Get(index)->ToObject());
@@ -245,7 +245,7 @@ namespace saxon_node {
                     if(args[0]->IsString() && args[1]->IsString())
                     {
                         // unwrap xsltProcessor object
-                        XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+                        Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
                         //if(args.This()->IsDirty())
                         {
                         for(uint32_t index=0;index<parameterNames->Length();index++)
@@ -285,7 +285,7 @@ namespace saxon_node {
             }
         };
 
-        static void setSourceFromFile(const v8::FunctionCallbackInfo<Value>& args) {
+        static void setGlobalContextFromFile(const v8::FunctionCallbackInfo<Value>& args) {
             if (args.Length() != 1 || !args[0]->IsString()) {
 
                 v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml source as string")));
@@ -297,8 +297,8 @@ namespace saxon_node {
             String::Utf8Value source(args[0]->ToString());
             //std::cout<<(*source)<<std::endl;
             // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-            xp->xsltProcessor->setSourceFromFile(*source);
+            Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
+            xp->xsltProcessor->setGlobalContextFromFile(*source);
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
                 if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
@@ -327,7 +327,7 @@ namespace saxon_node {
             String::Utf8Value stylesheet(args[0]->ToString());
             //std::cout<<(*stylesheet)<<std::endl;
             // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
             try{
                 xp->xsltProcessor->compileFromFile(*stylesheet);
                 //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
@@ -371,7 +371,7 @@ namespace saxon_node {
             String::Utf8Value stylesheet(args[0]->ToString());
             //std::cout<<(*stylesheet)<<std::endl;
             // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
             try{
                 xp->xsltProcessor->compileFromString(*stylesheet);
                 //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
@@ -403,9 +403,9 @@ namespace saxon_node {
         };
 
         static void transformToString(const v8::FunctionCallbackInfo<Value>& args) {
-            if (args.Length() != 0) {
+            if (args.Length() != 1) {
 
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "no arg(s) expected")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "source expected")));
                 args.GetReturnValue().SetUndefined();
                 return;
 
@@ -415,14 +415,14 @@ namespace saxon_node {
             Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"))->ToObject();
             Local<Array> propertyNames=properties->GetOwnPropertyNames();
             // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
                 String::Utf8Value pn(parameterNames->Get(index)->ToObject());
                 xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString())));
             }
-            //XdmNodeJS* source = ObjectWrap::Unwrap<XdmNodeJS>(args[0]->ToObject());
-            const char* buffer=xp->xsltProcessor->transformToString();
+            XdmNodeJS* source = ObjectWrap::Unwrap<XdmNodeJS>(args[0]->ToObject());
+            const char* buffer=xp->xsltProcessor->transformToString(source->value);
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
                 if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
@@ -440,9 +440,9 @@ namespace saxon_node {
         };
 
         static void transformToValue(const v8::FunctionCallbackInfo<Value>& args) {
-            if (args.Length() != 0) {
+            if (args.Length() != 1) {
 
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "no arg(s) expected")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "source expected")));
                 args.GetReturnValue().SetUndefined();
                 return;
 
@@ -452,14 +452,14 @@ namespace saxon_node {
             Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"))->ToObject();
             Local<Array> propertyNames=properties->GetOwnPropertyNames();
             // unwrap xsltProcessor object
-            XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
+            Xslt30ProcessorJS* xp = ObjectWrap::Unwrap<Xslt30ProcessorJS>(args.This());
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
                 String::Utf8Value pn(parameterNames->Get(index)->ToObject());
                 xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString())));
             }
-            //XdmNodeJS* source = ObjectWrap::Unwrap<XdmNodeJS>(args[0]->ToObject());
-            XdmValue* buffer=xp->xsltProcessor->transformToValue();
+            XdmNodeJS* source = ObjectWrap::Unwrap<XdmNodeJS>(args[0]->ToObject());
+            XdmValue* buffer=xp->xsltProcessor->transformToValue(source->value);
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->xsltProcessor->exceptionOccurred() || xp->xsltProcessor->exceptionCount()>0){
                 if(xp->xsltProcessor->exceptionCount()==0)xp->xsltProcessor->checkException();
@@ -485,7 +485,7 @@ namespace saxon_node {
             args.GetReturnValue().SetUndefined();
         };
 
-    inline XdmAtomicValue* makeParameter(XsltProcessorJS* xp, v8::Local<v8::Value> p){
+    inline XdmAtomicValue* makeParameter(Xslt30ProcessorJS* xp, v8::Local<v8::Value> p){
         if(p->IsBoolean()){
             return xp->xsltProcessor->getSaxonProcessor()->makeBooleanValue(p->BooleanValue());
         }
@@ -505,7 +505,7 @@ namespace saxon_node {
     private:
         Local<Object> procJS;
         SaxonProcessorJS* proc;
-        std::shared_ptr<XsltProcessor> xsltProcessor;
+        std::shared_ptr<Xslt30Processor> xsltProcessor;
         XdmValue* value;
 
     };

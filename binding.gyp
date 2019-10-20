@@ -1,6 +1,6 @@
 {
     "variables": {
-        "saxonc_home%": "../Saxonica/Saxon-HEC1.1.0",
+        "saxonc_home%": "../Saxonica/SaxonHEC1.2.0"
     },
     'targets': [
         {
@@ -20,6 +20,7 @@
                     '<(saxonc_home)/Saxon.C.API/SaxonCGlue.c',
                     '<(saxonc_home)/Saxon.C.API/SaxonCXPath.c',
                     '<(saxonc_home)/Saxon.C.API/SaxonProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/Xslt30Processor.cpp',
                     '<(saxonc_home)/Saxon.C.API/XsltProcessor.cpp',
                     '<(saxonc_home)/Saxon.C.API/XQueryProcessor.cpp',
                     '<(saxonc_home)/Saxon.C.API/XPathProcessor.cpp',
@@ -97,6 +98,7 @@
                     '<(saxonc_home)/Saxon.C.API/SaxonCGlue.c',
                     '<(saxonc_home)/Saxon.C.API/SaxonCXPath.c',
                     '<(saxonc_home)/Saxon.C.API/SaxonProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/Xslt30Processor.cpp',
                     '<(saxonc_home)/Saxon.C.API/XsltProcessor.cpp',
                     '<(saxonc_home)/Saxon.C.API/XQueryProcessor.cpp',
                     '<(saxonc_home)/Saxon.C.API/XPathProcessor.cpp',

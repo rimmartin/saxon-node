@@ -27,6 +27,7 @@ namespace saxon_node {
         friend class XdmValueJS;
         friend class XdmNodeJS;
         friend class XdmAtomicValueJS;
+        friend class Xslt30ProcessorJS;
         friend class XsltProcessorJS;
         friend class XPathProcessorJS;
         friend class SaxonProcessorJS;

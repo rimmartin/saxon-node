@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "SaxonProcessorJS.hpp"
+#include "Xslt30ProcessorJS.hpp"
 #include "XsltProcessorJS.hpp"
 #include "XQueryProcessorJS.hpp"
 #include "XPathProcessorJS.hpp"
@@ -12,6 +13,14 @@
 
 
 v8::Persistent<v8::FunctionTemplate> saxon_node::SaxonProcessorJS::Constructor;
+
+void saxon_node::SaxonProcessorJS::new30Transformer(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    
+    v8::Local<v8::Object> instance = saxon_node::Xslt30ProcessorJS::Instantiate(args.This());
+
+    args.GetReturnValue().Set(instance);
+
+};
 
 void saxon_node::SaxonProcessorJS::newTransformer(const v8::FunctionCallbackInfo<v8::Value>& args) {
     
@@ -43,6 +52,7 @@ void saxon_node::SaxonProcessorJS::newSchemaValidator(const v8::FunctionCallback
 };
 
 
+v8::Persistent<v8::FunctionTemplate> saxon_node::Xslt30ProcessorJS::Constructor;
 v8::Persistent<v8::FunctionTemplate> saxon_node::XsltProcessorJS::Constructor;
 v8::Persistent<v8::FunctionTemplate> saxon_node::XQueryProcessorJS::Constructor;
 v8::Persistent<v8::FunctionTemplate> saxon_node::XPathProcessorJS::Constructor;

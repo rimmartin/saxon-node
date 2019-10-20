@@ -3,19 +3,29 @@
 [![Node.js Version][node-version-image]][node-version-url]
 [![Build Status][travis-ci-build-image]][travis-ci-build-url]
 
+## Documentation
+
+API documentation is available at<a href="http://rimmartin.github.io/saxon-node/">Saxon Node API</a>
+
 # saxon-node
 
 An exploration of binding Saxon/C <a href="http://www.saxonica.com/saxon-c/index.xml">http://www.saxonica.com/html/saxon-c/index.html</a> (XSLT 2.0/3.0, XQuery 1.0/3.0, Schema Validation 1.0/1.1 and XPath 2.0/3.0).
 Professional and enterprise features can be accessed with your license from Saxonica.
 
-Note: release v0.2.3 Upgraded to 1.1.2 API. 
+### Notes on Recent Releases
 
-Note: release v0.2.2 Upgraded to 1.1.0 API. The method names mirror http://www.saxonica.com/saxon-c/doc/html/index.html. There is now a
-command line switch for setting the Saxon/C home: --saxonc_home=<YOUR_SAXONC_HOME> for building
+*Note: release v0.3.0 Upgraded to 1.2.0 API. Work in progress to mirror the 3.0 xslt methods
+
+### Notes on older Releases
+
+*Note: release v0.2.3 Upgraded to 1.1.2 API. 
+
+*Note: release v0.2.2 Upgraded to 1.1.0 API. The method names mirror http://www.saxonica.com/saxon-c/doc/html/index.html. There is now a
+  *command line switch for setting the Saxon/C home: --saxonc_home=<YOUR_SAXONC_HOME> for building
 ```
 npm install --build-from-source --saxonc_home=<YOUR_SAXONC_HOME>
 ```
-Note: release v0.2.2 is for Saxon/C 1.1.0.  For mac two native files need replaced.  Where you have Saxon-HEC1.1.0 installed:
+*Note: release v0.2.2 is for Saxon/C 1.1.0.  For mac two native files need replaced.  Where you have Saxon-HEC1.1.0 installed:
 ```
       rm `pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API/SaxonCGlue.h;
       wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/HEC/SaxonCGlue.h;
@@ -23,17 +33,17 @@ Note: release v0.2.2 is for Saxon/C 1.1.0.  For mac two native files need replac
       wget --directory-prefix=`pwd`/../Saxonica/Saxon-HEC1.1.0/Saxon.C.API https://dev.saxonica.com/repos/archive/opensource/latest9.8/hec/Saxon.C.API/SaxonCProcessor.c;
 ```
 
-Note: release v0.2.1 is linux and mac and pending windows version of Saxon/C 1.0.2
+*Note: release v0.2.1 is linux and mac and pending windows version of Saxon/C 1.0.2
 
-Note: release v0.2.0 is linux only pending the release of mac and windows versions of Saxon/C 1.0.1
+*Note: release v0.2.0 is linux only pending the release of mac and windows versions of Saxon/C 1.0.1
 
-Note: release v0.1.1 is built with nodejs v4.2.x [v4.2.x has Buffer acting like Uint8Array and currently is indistinguishable on the native side yet seems to work for this project]. If you want v0.12.x compatibility stay with v0.0.5. npm will continue with
-nodejs v4.2.x line and any fixes or features needed by prior versions will be from github branches.
+*Note: release v0.1.1 is built with nodejs v4.2.x [v4.2.x has Buffer acting like Uint8Array and currently is indistinguishable on the native side yet seems to work for this project]. If you want v0.12.x compatibility stay with v0.0.5. npm will continue with
+  *nodejs v4.2.x line and any fixes or features needed by prior versions will be from github branches.
 
 To tell it where the Saxon/C is set the environment variable SAXONC_HOME to path:
 
 ```bash
-export SAXONC_HOME=/home/user/Software/Saxonica/Saxon-HEC1.0.2
+export SAXONC_HOME=/home/user/Software/Saxonica/SaxonHEC1.2.0
 ```
 
 ####Prebuilts
@@ -62,8 +72,6 @@ Yet this isn't the purpose to run xslt as this small app.  The intention is the 
 export LD_LIBRARY_PATH=$SAXONC_HOME:$SAXONC_HOME/rt/lib/amd64/jetvm:$SAXONC_HOME/rt/lib/amd64:$LD_LIBRARY_PATH
 mocha --harmony --require should
 ```
-
-Documentation: <a href="http://rimmartin.github.io/saxon-node/">Saxon Node API</a>
 
 [npm-image]: https://badge.fury.io/js/saxon-node.svg
 [npm-url]: https://www.npmjs.com/package/saxon-node

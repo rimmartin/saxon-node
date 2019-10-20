@@ -25,6 +25,7 @@ namespace saxon_node {
     class XdmNodeJS : public XdmItemJS {
         //friend class XdmValueJS;
         friend class XdmItemJS;
+        friend class Xslt30ProcessorJS;
         friend class XsltProcessorJS;
         friend class XPathProcessorJS;
         friend class SaxonProcessorJS;

@@ -20,6 +20,7 @@ namespace saxon_node {
     class SaxonProcessorJS;
 
     class XdmValueJS : public node::ObjectWrap {
+        friend class Xslt30ProcessorJS;
         friend class XsltProcessorJS;
         friend class XPathProcessorJS;
     protected:

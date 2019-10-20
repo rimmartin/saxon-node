@@ -19,12 +19,14 @@ namespace saxon_node {
     using namespace v8;
     //using namespace node;
 
+    class Xslt30ProcessorJS;
     class XsltProcessorJS;
     class XQueryProcessorJS;
     class XPathProcessorJS;
     class SchemaValidatorJS;
 
     class SaxonProcessorJS : public node::ObjectWrap {
+        friend class Xslt30ProcessorJS;
         friend class XsltProcessorJS;
         friend class XQueryProcessorJS;
         friend class XPathProcessorJS;
@@ -41,6 +43,7 @@ namespace saxon_node {
             t->InstanceTemplate()->SetInternalFieldCount(1);
             Constructor.Reset(v8::Isolate::GetCurrent(), t);
             // member method prototypes
+            NODE_SET_PROTOTYPE_METHOD(t, "new30Transformer", new30Transformer);
             NODE_SET_PROTOTYPE_METHOD(t, "newTransformer", newTransformer);
             NODE_SET_PROTOTYPE_METHOD(t, "newXQueryProcessor", newXQueryProcessor);
             NODE_SET_PROTOTYPE_METHOD(t, "newXPathProcessor", newXPathProcessor);
@@ -97,6 +100,8 @@ namespace saxon_node {
             // attach various properties
             //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "path"), String::NewFromUtf8(v8::Isolate::GetCurrent(), f->m_file->getFileName().c_str()));
         };
+        static void new30Transformer(const v8::FunctionCallbackInfo<Value>& args);
+
         static void newTransformer(const v8::FunctionCallbackInfo<Value>& args);
 
         static void newXQueryProcessor(const v8::FunctionCallbackInfo<Value>& args);
@@ -171,7 +176,7 @@ namespace saxon_node {
 
                 std::string  str(*v8::String::Utf8Value(args[0]->ToString()));
                 std::cout<<"makeQNameValue "<<(str)<<std::endl;
-            XdmAtomicValue* xmlNode=xp->processor->makeQNameValue(str);
+            XdmAtomicValue* xmlNode=xp->processor->makeQNameValue(str.c_str());
             //std::cout<<"exceptionOccurred "<<xp->xsltProcessor->exceptionOccurred()<<std::endl;
             if(xp->processor->exceptionOccurred() && xp->processor->getException()->count()>0){
                 //if(xp->processor->getException()->count()==0)xp->processor->checkException();
