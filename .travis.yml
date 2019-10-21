@@ -15,6 +15,7 @@ env:
 os: 
   - linux
   - osx
+  - windows
 
 addons:
   apt:
@@ -31,6 +32,11 @@ before_install:
       printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.2.0.zip -d /tmp/libsaxon-HEC-mac-setup-v1.2.0;
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
       cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
+    elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
+      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe -O /tmp/libsaxon-HEC-win-setup-v1.2.0.exe;
+      printf "y/n" | unzip /tmp/libsaxon-HEC-win-setup-v1.2.0.exe -d /tmp/libsaxon-HEC-win-setup-v1.2.0;
+      mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
+      cp -r -p /tmp/ibsaxon-HEC-win-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
     else
       wget https://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.2.0.zip -O /tmp/libsaxon-HEC-setup64-v1.2.0.zip;
       printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.2.0.zip -d /tmp;
