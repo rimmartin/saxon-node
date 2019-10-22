@@ -35,7 +35,9 @@ before_install:
       echo "installing saxon...";
       ls /tmp;
       C:/Users/travis/AppData/Local/Temp/libsaxon-HEC-win-setup-v1.2.0.exe /batch /dest /tmp/libsaxon-HEC-win-setup-v1.2.0;
+      echo "mkdir...";
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
+      echo "cp...";
       cp -r -p /tmp/ibsaxon-HEC-win-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
     else
       wget https://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.2.0.zip -O /tmp/libsaxon-HEC-setup64-v1.2.0.zip;
