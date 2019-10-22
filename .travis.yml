@@ -31,7 +31,6 @@ before_install:
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
       echo "wget'ting saxon...";
       wget http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe;
-      #-O /tmp/libsaxon-HEC-win-setup-v1.2.0.exe;
       echo "installing saxon...";
       ls /tmp;
       C:/Users/travis/AppData/Local/Temp/libsaxon-HEC-win-setup-v1.2.0.exe /batch /dest /tmp/libsaxon-HEC-win-setup-v1.2.0;
