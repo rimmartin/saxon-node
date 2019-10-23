@@ -30,11 +30,11 @@ before_install:
       cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
       echo "wget'ting saxon...";
-      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe;
+      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe -O ../libsaxon-HEC-win-setup-v1.2.0.exe;
       echo "installing saxon...";
       ls ../;
       ls -lastr ./;
-      ./libsaxon-HEC-win-setup-v1.2.0.exe "/batch" "/no-reg" "/force" "/dest" ../tmp/libsaxon-HEC-win-setup-v1.2.0;
+      ../libsaxon-HEC-win-setup-v1.2.0.exe "/batch" "/no-reg" "/force" "/dest" ../tmp/libsaxon-HEC-win-setup-v1.2.0;
       echo "mkdir...";
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
       echo "cp...";
