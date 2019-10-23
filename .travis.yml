@@ -32,8 +32,8 @@ before_install:
       echo "wget'ting saxon...";
       wget http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe;
       echo "installing saxon...";
-      ls /tmp;
-      ./libsaxon-HEC-win-setup-v1.2.0.exe /batch /no-reg /force /dest ./tmp/libsaxon-HEC-win-setup-v1.2.0;
+      ls ./;
+      ./libsaxon-HEC-win-setup-v1.2.0.exe \/batch \/no-reg \/force \/dest ./tmp/libsaxon-HEC-win-setup-v1.2.0;
       echo "mkdir...";
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
       echo "cp...";
