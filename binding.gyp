@@ -49,7 +49,7 @@
                     "<(saxonc_home)/Saxon-C-API",
                     "<!(echo %JAVA_HOME%)/include",
                     "<!(echo %JAVA_HOME%)/include/win32",
-                    "./src"
+                    'src/'
                 ],
                 'sources': [
                     '<(saxonc_home)/Saxon.C.API/SaxonCGlue.c',
