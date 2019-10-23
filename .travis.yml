@@ -48,9 +48,10 @@ install:
       find /Library/Java/JavaVirtualMachines -name jni.h;
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
-      choco install openjdk --version=11.0;
+      choco install jdk11;
       ls /c/"Program Files";
       which java;
+      #export JAVA_HOME=
     fi
   - npm install -g node-gyp
   - which java
