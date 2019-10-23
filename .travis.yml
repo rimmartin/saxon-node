@@ -49,7 +49,6 @@ install:
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
       choco install ojdkbuild;
-      cat /C/ProgramData/chocolatey/logs/chocolatey.log;
       ls /c/"Program Files"/ojdkbuild;
     fi
   - npm install -g node-gyp
