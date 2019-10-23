@@ -50,7 +50,7 @@ install:
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
       choco install ojdkbuild;
       ls /c/"Program Files"/ojdkbuild/java-12-openjdk-12.0.2-1;
-      export JAvA_HOME=/c/"Program Files"/ojdkbuild/java-12-openjdk-12.0.2-1
+      export JAvA_HOME=/c/"Program Files"/ojdkbuild/java-12-openjdk-12.0.2-1;
     fi
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/SaxonHEC1.2.0
