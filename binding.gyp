@@ -93,7 +93,7 @@
               },
                 'link_settings': {
                     'library_dirs': [
-                        '<(saxonc_home)'
+                        './build/Release/<(saxonc_home)'
                     ],
                     'libraries': [
                     ]
