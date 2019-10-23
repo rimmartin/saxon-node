@@ -34,7 +34,9 @@ before_install:
       echo "installing saxon...";
       ls -lastr ../;
       ls ./;
-      ../"libsaxon-HEC-win-setup-v1.2.0.exe //batch /no-reg /force /dest ..\tmp\libsaxon-HEC-win-setup-v1.2.0";
+      mkdir -p ../tmp;
+      ../"libsaxon-HEC-win-setup-v1.2.0.exe //batch //no-reg //force //dest ..\tmp\libsaxon-HEC-win-setup-v1.2.0";
+      ls ../tmp;
       echo "mkdir...";
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
       echo "cp...";
