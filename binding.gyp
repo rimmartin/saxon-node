@@ -85,7 +85,8 @@
                         ],
                         'AdditionalOptions': 
                         [
-                            '/EHsc' # Enable unwind semantics for Exception Handling.  This one actually does the trick - and no warning either.
+                            '/EHsc', # Enable unwind semantics for Exception Handling.  This one actually does the trick - and no warning either.
+                            '/std:c++17'
                         ]
                     }
                 }
