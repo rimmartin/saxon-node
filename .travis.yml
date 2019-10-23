@@ -49,6 +49,7 @@ install:
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     fi
   - npm install -g node-gyp
+  - which java
   - npm install --build-from-source --saxonc_home=../Saxonica/SaxonHEC1.2.0
 
 before-scripte:
