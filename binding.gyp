@@ -46,7 +46,7 @@
             }],
             ['OS=="win"', {
                 'include_dirs': [
-                    "<(saxonc_home)/Saxon-C-API",
+                    "<(saxonc_home)/Saxon.C.API",
                     "<!(echo %JAVA_HOME%)/include",
                     "<!(echo %JAVA_HOME%)/include/win32",
                     'src/'
