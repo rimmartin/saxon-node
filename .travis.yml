@@ -51,7 +51,6 @@ install:
       choco install jdk11;
       ls /c/"Program Files";
       which java;
-      #export JAVA_HOME=
     fi
   - npm install -g node-gyp
   - which java
