@@ -43,8 +43,9 @@ namespace saxon_node {
             t->InstanceTemplate()->SetInternalFieldCount(1);
             Constructor.Reset(v8::Isolate::GetCurrent(), t);
             // member method prototypes
-            NODE_SET_PROTOTYPE_METHOD(t, "new30Transformer", new30Transformer);
             NODE_SET_PROTOTYPE_METHOD(t, "newTransformer", newTransformer);
+            NODE_SET_PROTOTYPE_METHOD(t, "newXslt30Processor", newXslt30Processor);
+            NODE_SET_PROTOTYPE_METHOD(t, "newXsltProcessor", newXsltProcessor);
             NODE_SET_PROTOTYPE_METHOD(t, "newXQueryProcessor", newXQueryProcessor);
             NODE_SET_PROTOTYPE_METHOD(t, "newXPathProcessor", newXPathProcessor);
             NODE_SET_PROTOTYPE_METHOD(t, "newSchemaValidator", newSchemaValidator);
@@ -100,11 +101,13 @@ namespace saxon_node {
             // attach various properties
             //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "path"), String::NewFromUtf8(v8::Isolate::GetCurrent(), f->m_file->getFileName().c_str()));
         };
-        static void new30Transformer(const v8::FunctionCallbackInfo<Value>& args);
-
         static void newTransformer(const v8::FunctionCallbackInfo<Value>& args);
 
         static void newXQueryProcessor(const v8::FunctionCallbackInfo<Value>& args);
+
+        static void newXslt30Processor(const v8::FunctionCallbackInfo<Value>& args);
+
+        static void newXsltProcessor(const v8::FunctionCallbackInfo<Value>& args);
 
         static void newXPathProcessor(const v8::FunctionCallbackInfo<Value>& args);
 
@@ -284,7 +287,6 @@ namespace saxon_node {
             }
             // the source
             String::Utf8Value source(args[0]->ToString());
-            std::cout<<(*source)<<std::endl;
             // unwrap xsltProcessor object
             SaxonProcessorJS* xp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
 
@@ -308,7 +310,6 @@ namespace saxon_node {
             XdmNodeJS* xv = new XdmNodeJS();
             xv->value=xmlNode;
             xv->Wrap(instance);
-            std::cout<<"set ret "<<std::endl;
             args.GetReturnValue().Set(instance);
         };
 

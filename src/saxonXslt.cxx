@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "SaxonProcessorJS.hpp"
+#include "Xslt30ProcessorJS.hpp"
 #include "XsltProcessorJS.hpp"
 #include "XQueryProcessorJS.hpp"
 #include "XPathProcessorJS.hpp"
@@ -17,6 +18,7 @@ extern "C" {
         
         // initialize wrapped objects
         saxon_node::SaxonProcessorJS::Initialize(target);
+        saxon_node::Xslt30ProcessorJS::Initialize(target);
         saxon_node::XsltProcessorJS::Initialize(target);
         saxon_node::XQueryProcessorJS::Initialize(target);
         saxon_node::XPathProcessorJS::Initialize(target);

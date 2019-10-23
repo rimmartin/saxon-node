@@ -93,7 +93,6 @@ namespace saxon_node {
             //xp->proc = ObjectWrap::Unwrap<SaxonProcessorJS>(args[0]->ToObject());
 
             //xp->xdmItem.reset(new XdmNode());
-            std::cout<<"extend target object with processor"<<std::endl;
             // extend target object with processor
             xp->Wrap(args.This());
 
