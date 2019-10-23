@@ -14,7 +14,15 @@
 
 v8::Persistent<v8::FunctionTemplate> saxon_node::SaxonProcessorJS::Constructor;
 
-void saxon_node::SaxonProcessorJS::new30Transformer(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void saxon_node::SaxonProcessorJS::newTransformer(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    
+    v8::Local<v8::Object> instance = saxon_node::XsltProcessorJS::Instantiate(args.This());
+
+    args.GetReturnValue().Set(instance);
+
+};
+
+void saxon_node::SaxonProcessorJS::newXslt30Processor(const v8::FunctionCallbackInfo<v8::Value>& args) {
     
     v8::Local<v8::Object> instance = saxon_node::Xslt30ProcessorJS::Instantiate(args.This());
 
@@ -22,7 +30,7 @@ void saxon_node::SaxonProcessorJS::new30Transformer(const v8::FunctionCallbackIn
 
 };
 
-void saxon_node::SaxonProcessorJS::newTransformer(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void saxon_node::SaxonProcessorJS::newXsltProcessor(const v8::FunctionCallbackInfo<v8::Value>& args) {
     
     v8::Local<v8::Object> instance = saxon_node::XsltProcessorJS::Instantiate(args.This());
 

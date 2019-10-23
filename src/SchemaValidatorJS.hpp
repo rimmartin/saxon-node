@@ -271,7 +271,6 @@ namespace saxon_node {
             XdmNodeJS* xv = new XdmNodeJS();
             xv->value=xdmNode;
             xv->Wrap(instance);
-            std::cout<<"set ret "<<std::endl;
             args.GetReturnValue().Set(instance);
         };
 
