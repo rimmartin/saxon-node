@@ -48,7 +48,7 @@ install:
       find /Library/Java/JavaVirtualMachines -name jni.h;
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
-      choco install jdk11;
+      choco install ojdkbuild;
       ls /c/"Program Files";
       which java;
     fi
