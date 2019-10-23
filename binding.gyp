@@ -85,14 +85,16 @@
                         ],
                         'AdditionalOptions': 
                         [
-                            '/EHsc', # Enable unwind semantics for Exception Handling.  This one actually does the trick - and no warning either.
-                            '/LIBPATH:<(saxonc_home)'
+                            '/EHsc' # Enable unwind semantics for Exception Handling.  This one actually does the trick - and no warning either.
                         ]
                     }
                 }
               }
               },
                 'link_settings': {
+                    'library_dirs': [
+                        '<(saxonc_home)'
+                    ],
                     'libraries': [
                     ]
                 }
