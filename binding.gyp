@@ -46,17 +46,31 @@
             }],
             ['OS=="win"', {
                 'include_dirs': [
-                    "<!(echo %SAXONC_HOME%)/Saxon-C-API",
+                    "<(saxonc_home)/Saxon.C.API",
                     "<!(echo %JAVA_HOME%)/include",
                     "<!(echo %JAVA_HOME%)/include/win32",
-                    "./src"
+                    'src/'
                 ],
                 'sources': [
-                    'src/SaxonProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/SaxonCGlue.c',
+                    '<(saxonc_home)/Saxon.C.API/SaxonCXPath.c',
+                    '<(saxonc_home)/Saxon.C.API/SaxonProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/Xslt30Processor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XsltProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XQueryProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XPathProcessor.cpp',
+                    '<(saxonc_home)/Saxon.C.API/SchemaValidator.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmItem.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmValue.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmNode.cpp',
+                    '<(saxonc_home)/Saxon.C.API/XdmAtomicValue.cpp',
+                    'src/XdmValueJS.cxx',
+                    'src/XdmItemJS.cxx',
+                    'src/XdmNodeJS.cxx',
+                    'src/XdmAtomicValueJS.cxx',
                     'src/SaxonProcessorJS.cxx',
                     'src/saxonXslt.cxx'
                 ],
-                'msbuild_toolset': 'v120',
                 "configurations": {
                             "Release": {
                 'msvs_settings':
@@ -71,13 +85,17 @@
                         ],
                         'AdditionalOptions': 
                         [
-                            '/EHsc' # Enable unwind semantics for Exception Handling.  This one actually does the trick - and no warning either.
+                            '/EHsc', # Enable unwind semantics for Exception Handling.  This one actually does the trick - and no warning either.
+                            '/std:c++17'
                         ]
                     }
                 }
               }
               },
                 'link_settings': {
+                    'library_dirs': [
+                        './build/Release/<(saxonc_home)'
+                    ],
                     'libraries': [
                     ]
                 }
