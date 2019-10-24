@@ -34,10 +34,11 @@ before_install:
       ../libsaxon-HEC-win-setup-v1.2.0.exe //batch //no-reg //force //dest "..\tmp\libsaxon-HEC-win-setup-v1.2.0";
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
       cp -r -p ../tmp/libsaxon-HEC-win-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
+      sed 's/bool isSchemaAware/\/\/bool isSchemaAware/' `pwd`/../Saxonica/SaxonHEC1.2.0/Saxon.C.API/SaxonProcessor.h;
     else
       wget https://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.2.0.zip -O /tmp/libsaxon-HEC-setup64-v1.2.0.zip;
       printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.2.0.zip -d /tmp;
-      printf "`pwd`/../Saxonica/SaxonHEC1.2.0\n" | /tmp/libsaxon-HEC-setup64-v1.2.0 ;
+      printf "`pwd`/../Saxonica/SaxonHEC1.2.0\n" | /tmp/libsaxon-HEC-setup64-v1.2.0;
     fi
   - export SAXONC_HOME=`pwd`/../Saxonica/SaxonHEC1.2.0
   
