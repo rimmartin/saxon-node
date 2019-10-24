@@ -61,11 +61,10 @@ before-scripte:
   - export PATH=`pwd`/node_modules/.bin:${PATH}
   
 script:
-  - export PATH=`pwd`/node_modules/.bin:`pwd`/../Saxonica/SaxonHEC1.2.0:${PATH}
+  - export PATH=`pwd`/node_modules/.bin:`pwd`/../Saxonica/SaxonHEC1.2.0:`pwd`/build/Release:${PATH}
   - export NODE_PATH=`pwd`/build/Release:$NODE_PATH
   - export LD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${LD_LIBRARY_PATH}
   - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${DYLD_LIBRARY_PATH}
-  - ls `pwd`/../Saxonica
+  - ls `pwd`/build/Release
   - echo ${PATH}
-  - ls `pwd`/node_modules/.bin
   - mocha --harmony --require should --timeout 7000
