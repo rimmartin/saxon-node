@@ -62,9 +62,10 @@ before-scripte:
   
 script:
   - export PATH=`pwd`/node_modules/.bin:`pwd`/../Saxonica/SaxonHEC1.2.0:`pwd`/build/Release:${PATH}
-  - export NODE_PATH=`pwd`/build/Release:${NODE_PATH}
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
-      set NODE_PATH=%CD%\build\Release;%NODE_PATH%;
+  - if [[ -z "$var" ]] ; then
+      export NODE_PATH=`pwd`/build/Release;
+    else
+      export NODE_PATH=`pwd`/build/Release:${NODE_PATH};
     fi
   - export LD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${LD_LIBRARY_PATH}
   - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${DYLD_LIBRARY_PATH}
