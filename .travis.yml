@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - "node"
   - "12"
-  - "11"
   
 env:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] ; then
