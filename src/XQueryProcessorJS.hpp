@@ -23,10 +23,12 @@ namespace saxon_node {
 
     public:
 
-        static void Initialize(Handle<Object> target) {
+        static void Initialize(v8::Local<v8::Object> target) {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             // instantiate constructor function template
             Local<FunctionTemplate> t = FunctionTemplate::New(v8::Isolate::GetCurrent(), New);
-            t->SetClassName(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XQueryProcessor"));
+            t->SetClassName(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XQueryProcessor", v8::NewStringType::kInternalized).ToLocalChecked());
             t->InstanceTemplate()->SetInternalFieldCount(1);
             Constructor.Reset(v8::Isolate::GetCurrent(), t);
             // member method prototypes
@@ -38,13 +40,13 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "clearParameters", clearParameters);
             NODE_SET_PROTOTYPE_METHOD(t, "executeQueryToFile", executeQueryToFile);
             NODE_SET_PROTOTYPE_METHOD(t, "executeQueryToString", executeQueryToString);
-            //        Local<Function> f=t->GetFunction();
             // append this function to the target object
-            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XQueryProcessor"), t->GetFunction());
+            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XQueryProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
         };
 
         static Local<Object> Instantiate(Local<Object> proc) {
             v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             const unsigned        argc       = 1;
             Local<Value> argv[1] = {
 
@@ -53,7 +55,7 @@ namespace saxon_node {
             };
 
             // return new group instance
-            return Local<FunctionTemplate>::New(isolate, Constructor)->GetFunction()->NewInstance(isolate->GetCurrentContext(), argc, argv).ToLocalChecked();
+            return Local<FunctionTemplate>::New(isolate, Constructor)->GetFunction(context).ToLocalChecked()->NewInstance(isolate->GetCurrentContext(), argc, argv).ToLocalChecked();
 
         };
     private:
@@ -71,41 +73,45 @@ namespace saxon_node {
         static Persistent<FunctionTemplate> Constructor;
 
         static void New(const v8::FunctionCallbackInfo<Value>& args) {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             // create hdf file object
             XQueryProcessorJS* xp;
             if (args.Length() < 1)
                 xp = new XQueryProcessorJS();
             else
-                xp = new XQueryProcessorJS(args[1]->ToBoolean()->BooleanValue());
+                xp = new XQueryProcessorJS(args[1]->ToBoolean(isolate)->Value());
 
-            xp->procJS = args[0]->ToObject();
+            xp->procJS = args[0]->ToObject(context).ToLocalChecked();
             // unwrap processor object
-            xp->proc = ObjectWrap::Unwrap<SaxonProcessorJS>(args[0]->ToObject());
+            xp->proc = ObjectWrap::Unwrap<SaxonProcessorJS>(args[0]->ToObject(context).ToLocalChecked());
 
             xp->xqueryProcessor.reset(xp->proc->processor->newXQueryProcessor());
             // extend target object with processor
             xp->Wrap(args.This());
 
             // attach various properties
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"), Object::New(v8::Isolate::GetCurrent()));
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
         };
 
         static void setSourceValue(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void setContextItemFromFile(const v8::FunctionCallbackInfo<Value>& args) {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             if (args.Length() != 1 || !args[0]->IsString()) {
 
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml source as string")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml source as string", v8::NewStringType::kInternalized).ToLocalChecked()));
                 args.GetReturnValue().SetUndefined();
                 return;
 
             }
             // the source
-            String::Utf8Value source(args[0]->ToString());
+            String::Utf8Value source(isolate, args[0]->ToString(context).ToLocalChecked());
             //std::cout<<(*source)<<std::endl;
             // unwrap xqueryProcessor object
             XQueryProcessorJS* xp = ObjectWrap::Unwrap<XQueryProcessorJS>(args.This());
@@ -115,54 +121,56 @@ namespace saxon_node {
         };
 
         static void setOutputfile(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void setProperty(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void getProperty(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void clearParameters(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void clearProperties(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void executeQueryToFile(const v8::FunctionCallbackInfo<Value>& args) {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             if(args.Length()!=3 || !args[0]->IsString() || !args[1]->IsString() || !args[2]->IsString())
             {
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "not correct arguments")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "not correct arguments", v8::NewStringType::kInternalized).ToLocalChecked()));
                 args.GetReturnValue().SetUndefined();
             }
             // unwrap xqueryProcessor object
             XQueryProcessorJS* xp = ObjectWrap::Unwrap<XQueryProcessorJS>(args.This());
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
-            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
+            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                Local<Object> obj=parameterNames->Get(index)->ToObject();
+                Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
-                String::Utf8Value pn(obj->ToString());
-                String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
+                String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }
             // the source
-            String::Utf8Value sourceFile(args[0]->ToString());
-            String::Utf8Value query(args[1]->ToString());
-            String::Utf8Value outputfile(args[2]->ToString());
+            String::Utf8Value sourceFile(isolate, args[0]->ToString(context).ToLocalChecked());
+            String::Utf8Value query(isolate, args[1]->ToString(context).ToLocalChecked());
+            String::Utf8Value outputfile(isolate, args[2]->ToString(context).ToLocalChecked());
             xp->xqueryProcessor->executeQueryToFile((*sourceFile), (*outputfile), (*query));
             if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){
                 if(xp->xqueryProcessor->exceptionCount()==0)xp->xqueryProcessor->checkException();
@@ -171,7 +179,7 @@ namespace saxon_node {
                 for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
                     ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
                 }
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str(), v8::NewStringType::kInternalized).ToLocalChecked()));
                 args.GetReturnValue().SetUndefined();
                 return;
                 
@@ -180,10 +188,12 @@ namespace saxon_node {
         };
 
         static void executeQueryToString(const v8::FunctionCallbackInfo<Value>& args) {
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"))->ToObject();
-            Local<Array> parameterNames=parameters->GetOwnPropertyNames();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"))->ToObject();
-            Local<Array> propertyNames=properties->GetOwnPropertyNames();
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
+            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
+            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Array> propertyNames=properties->GetOwnPropertyNames(context).ToLocalChecked();
             switch(args.Length())
             {
                 case 1:
@@ -196,16 +206,16 @@ namespace saxon_node {
                             for(uint32_t index=0;index<parameterNames->Length();index++)
                             {
     //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                                Local<Object> obj=parameterNames->Get(index)->ToObject();
+                                Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
     //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
-                                String::Utf8Value pn(obj->ToString());
-                                String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                                String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
+                                String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
                                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                                 //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                             }
                         }
                         // the source
-                        String::Utf8Value source(args[0]->ToString());
+                        String::Utf8Value source(isolate, args[0]->ToString(context).ToLocalChecked());
                         const char* buffer=xp->xqueryProcessor->executeQueryToString((*source), NULL);
                         if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){
                             if(xp->xqueryProcessor->exceptionCount()==0)xp->xqueryProcessor->checkException();
@@ -214,7 +224,7 @@ namespace saxon_node {
                             for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
                                 ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
                             }
-                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str(), v8::NewStringType::kInternalized).ToLocalChecked()));
                             args.GetReturnValue().SetUndefined();
                             break;
                             
@@ -230,24 +240,24 @@ namespace saxon_node {
                         for(uint32_t index=0;index<parameterNames->Length();index++)
                         {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                            Local<Object> obj=parameterNames->Get(index)->ToObject();
+                            Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
-                            String::Utf8Value pn(obj->ToString());
-                            String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                            String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
+                            String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
                             //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                         }
                         for(uint32_t index=0;index<propertyNames->Length();index++)
                         {
-                            Local<Object> obj=propertyNames->Get(index)->ToObject();
-                            String::Utf8Value pn(obj->ToString());
-                            String::Utf8Value pnValue(properties->Get(propertyNames->Get(index)->ToString())->ToString());
+                            Local<Object> obj=propertyNames->Get(index)->ToObject(context).ToLocalChecked();
+                            String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
+                            String::Utf8Value pnValue(isolate, properties->Get(propertyNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
                             //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             xp->xqueryProcessor->setProperty(*pn, *pnValue);
                         }
                         // the source
-                        String::Utf8Value sourceFile(args[0]->ToString());
-                        String::Utf8Value query(args[1]->ToString());
+                        String::Utf8Value sourceFile(isolate, args[0]->ToString(context).ToLocalChecked());
+                        String::Utf8Value query(isolate, args[1]->ToString(context).ToLocalChecked());
                         const char* buffer=xp->xqueryProcessor->executeQueryToString((*sourceFile), (*query));
                         if(xp->xqueryProcessor->exceptionOccurred() || xp->xqueryProcessor->exceptionCount()>0){
                             if(xp->xqueryProcessor->exceptionCount()==0)xp->xqueryProcessor->checkException();
@@ -256,7 +266,7 @@ namespace saxon_node {
                             for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
                                 ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
                             }
-                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str(), v8::NewStringType::kInternalized).ToLocalChecked()));
                             args.GetReturnValue().SetUndefined();
                             break;
                             
@@ -270,10 +280,10 @@ namespace saxon_node {
                     for(uint32_t index=0;index<parameterNames->Length();index++)
                     {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                        Local<Object> obj=parameterNames->Get(index)->ToObject();
+                        Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
-                        String::Utf8Value pn(obj->ToString());
-                        String::Utf8Value pnValue(parameters->Get(parameterNames->Get(index)->ToString())->ToString());
+                        String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
+                        String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
                         //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                         //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                     }
@@ -285,7 +295,7 @@ namespace saxon_node {
                         for(unsigned int exceptionIndex=0;exceptionIndex<xp->xqueryProcessor->exceptionCount();exceptionIndex++){
                             ss<<xp->xqueryProcessor->getErrorMessage(exceptionIndex)<<std::endl;
                         }
-                        v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                        v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str(), v8::NewStringType::kInternalized).ToLocalChecked()));
                         args.GetReturnValue().SetUndefined();
                         break;
                         
@@ -293,28 +303,28 @@ namespace saxon_node {
                     args.GetReturnValue().Set(node::Buffer::New(v8::Isolate::GetCurrent(), (char*)buffer, std::strlen(buffer)).ToLocalChecked());
                     break;
             }
-//            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "arguments aren't strings")));
+//            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "arguments aren't strings", v8::NewStringType::kInternalized).ToLocalChecked()));
 //            args.GetReturnValue().SetUndefined();
 //            return;
         };
 
         static void compileString(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void transformToString(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void transformToValue(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void exceptionOccurred(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::SyntaxError(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 

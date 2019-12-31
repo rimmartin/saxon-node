@@ -14,7 +14,7 @@ using namespace v8;
 
 extern "C" {
 
-    static void init (Handle<Object> target) {
+    static void init (v8::Local<v8::Object> target) {
         
         // initialize wrapped objects
         saxon_node::SaxonProcessorJS::Initialize(target);

@@ -35,10 +35,12 @@ namespace saxon_node {
 
     public:
 
-        static void Initialize(v8::Handle<v8::Object> target) {
+        static void Initialize(v8::Local<v8::Object> target) {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             // instantiate constructor function template
             v8::Local<v8::FunctionTemplate> t = v8::FunctionTemplate::New(v8::Isolate::GetCurrent(), New);
-            t->SetClassName(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "XdmNode"));
+            t->SetClassName(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "XdmNode", v8::NewStringType::kInternalized).ToLocalChecked());
             t->InstanceTemplate()->SetInternalFieldCount(1);
             Constructor.Reset(v8::Isolate::GetCurrent(), t);
             // member method prototypes
@@ -46,13 +48,13 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "getHead", getHead);
             NODE_SET_PROTOTYPE_METHOD(t, "itemAt", itemAt);
             NODE_SET_PROTOTYPE_METHOD(t, "size", size);
-            //        Local<Function> f=t->GetFunction();
             // append this function to the target object
-            target->Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "XdmNode"), t->GetFunction());
+            target->Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "XdmNode", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
         };
 
         static v8::Local<v8::Object> Instantiate(v8::Local<v8::Object> proc) {
             v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             const unsigned        argc       = 1;
             v8::Local<v8::Value> argv[1] = {
 
@@ -61,7 +63,7 @@ namespace saxon_node {
             };
 
             // return new group instance
-            return v8::Local<v8::FunctionTemplate>::New(isolate, Constructor)->GetFunction()->NewInstance(isolate->GetCurrentContext(), argc, argv).ToLocalChecked();
+            return v8::Local<v8::FunctionTemplate>::New(isolate, Constructor)->GetFunction(context).ToLocalChecked()->NewInstance(isolate->GetCurrentContext(), argc, argv).ToLocalChecked();
 
         };
     private:
@@ -81,30 +83,32 @@ namespace saxon_node {
         static v8::Persistent<v8::FunctionTemplate> Constructor;
 
         static void New(const v8::FunctionCallbackInfo<v8::Value>& args) {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> context = isolate->GetCurrentContext();
             // Xdm value object
             XdmNodeJS* xp;
             if (args.Length() < 1)
                 xp = new XdmNodeJS();
             else
-                xp = new XdmNodeJS(args[1]->ToBoolean()->BooleanValue());
+                xp = new XdmNodeJS(args[1]->ToBoolean(isolate)->Value());
 
-            //xp->procJS = args[0]->ToObject();
+            //xp->procJS = args[0]->ToObject(context).ToLocalChecked();
             // unwrap processor object
-            //xp->proc = ObjectWrap::Unwrap<SaxonProcessorJS>(args[0]->ToObject());
+            //xp->proc = ObjectWrap::Unwrap<SaxonProcessorJS>(args[0]->ToObject(context).ToLocalChecked());
 
             //xp->xdmItem.reset(new XdmNode());
             // extend target object with processor
             xp->Wrap(args.This());
 
             // attach various properties
-            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters"), Object::New(v8::Isolate::GetCurrent()));
-            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties"), Object::New(v8::Isolate::GetCurrent()));
+            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
         };
 
         static void getStringValue(const v8::FunctionCallbackInfo<v8::Value>& args) {
             XdmNodeJS* xdmValue = node::ObjectWrap::Unwrap<XdmNodeJS>(args.This());
             const char* buffer=xdmValue->value->getStringValue();
-            args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(),(char*)buffer));
+            args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(),(char*)buffer, v8::NewStringType::kInternalized).ToLocalChecked());
         };
 
         static void getHead(const v8::FunctionCallbackInfo<v8::Value>& args);
