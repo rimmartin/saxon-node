@@ -50,13 +50,12 @@ install:
       find /Library/Java/JavaVirtualMachines -name jni.h;
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
+      echo PATH=${PATH};
       echo ${JAVA_HOME};
       choco install ojdkbuild;
       refreshenv;
+      echo PATH=${PATH};
       ls /c/"Program Files"/ojdkbuild/*;
-      ls /c/"Program Files"/ojdkbuild/bin/*;
-      echo ${JAVA_HOME};
-      ls /c/"Program Files"/ojdkbuild/release/*;
       echo ${JAVA_HOME};
       ls /c/"Program Files"/ojdkbuild/java-13-openjdk-13.0.1.9-1/include;
       export JAVA_HOME=/c/"Program Files"/ojdkbuild/java-13-openjdk-13.0.1.9-1;
