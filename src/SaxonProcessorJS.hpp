@@ -380,7 +380,11 @@ namespace saxon_node {
 
         static void isSchemaAware(const v8::FunctionCallbackInfo<v8::Value>& args) {
                 SaxonProcessorJS* sp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
-            args.GetReturnValue().Set(sp->processor->isSchemaAware());
+#if !(defined (__linux__) || (defined (__APPLE__) && defined(__MACH__)))
+	    args.GetReturnValue().Set(false);
+#else
+            args.GetReturnValue().Set(sp->processor->isSchemaAwareProcessor());
+#endif                
         };
 
         static void version(const v8::FunctionCallbackInfo<Value>& args) {
