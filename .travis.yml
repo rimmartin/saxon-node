@@ -50,15 +50,12 @@ install:
       find /Library/Java/JavaVirtualMachines -name jni.h;
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
-      echo PATH=${PATH};
-      echo ${JAVA_HOME};
       choco install zulu12;
-      cat C:\ProgramData\chocolatey\logs\chocolatey.log;
-      ls -lastr /c/"Program Files"/*;
-      ls -lastr /c/"Program Files"/zulu12/*;
+      ls -lastr /c/"Program Files"/Zulu/*;
+      ls -lastr /c/"Program Files"/Zulu/zulu-12/*;
       echo JAVA_HOME=${JAVA_HOME};
-      ls /c/"Program Files"/zulu12/java-13-openjdk-13.0.1.9-1/include;
-      export JAVA_HOME=/c/"Program Files"/zulu12/release/java-13-openjdk-13.0.1.9-1;
+      ls /c/"Program Files"/Zulu/zulu-12/include;
+      export JAVA_HOME=/c/"Program Files"/Zulu/zulu-12;
     fi
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/SaxonHEC1.2.1
