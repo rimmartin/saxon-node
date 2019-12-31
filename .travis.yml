@@ -4,7 +4,6 @@ node_js:
   - "10"
   - "9"
   - "8"
-  - "6"
   
 env:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] ; then
@@ -33,14 +32,16 @@ before_install:
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
       cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
-      wget http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe -O /tmp/libsaxon-HEC-win-setup-v1.2.0.exe;
-      printf "y/n" | /tmp/libsaxon-HEC-win-setup-v1.2.0.exe -d /tmp/libsaxon-HEC-win-setup-v1.2.0;
+      wget –quiet http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe -O ../libsaxon-HEC-win-setup-v1.2.0.exe;
+      mkdir -p ../tmp/libsaxon-HEC-win-setup-v1.2.0;
+      ../libsaxon-HEC-win-setup-v1.2.0.exe //batch //no-reg //force //dest "..\tmp\libsaxon-HEC-win-setup-v1.2.0";
       mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
-      cp -r -p /tmp/ibsaxon-HEC-win-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
+      cp -r -p ../tmp/libsaxon-HEC-win-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
+      sed 's/bool isSchemaAware/\/\/bool isSchemaAware/' `pwd`/../Saxonica/SaxonHEC1.2.0/Saxon.C.API/SaxonProcessor.h;
     else
       wget https://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.2.0.zip -O /tmp/libsaxon-HEC-setup64-v1.2.0.zip;
       printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.2.0.zip -d /tmp;
-      printf "`pwd`/../Saxonica/SaxonHEC1.2.0\n" | /tmp/libsaxon-HEC-setup64-v1.2.0 ;
+      printf "`pwd`/../Saxonica/SaxonHEC1.2.0\n" | /tmp/libsaxon-HEC-setup64-v1.2.0;
     fi
   - export SAXONC_HOME=`pwd`/../Saxonica/SaxonHEC1.2.0
   
@@ -50,19 +51,28 @@ install:
       ls /Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/*;
       find /Library/Java/JavaVirtualMachines -name jni.h;
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
+    elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
+      choco install ojdkbuild;
+      ls /c/"Program Files"/ojdkbuild/java-12-openjdk-12.0.2-1/include;
+      export JAvA_HOME=/c/"Program Files"/ojdkbuild/java-12-openjdk-12.0.2-1;
     fi
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/SaxonHEC1.2.0
+  - ls ./build/Release
 
 before-scripte:
   - export PATH=`pwd`/node_modules/.bin:${PATH}
   
 script:
-  - export PATH=`pwd`/node_modules/.bin:${PATH}
-  - export NODE_PATH=`pwd`/build/Release:$NODE_PATH
+  - export PATH=`pwd`/node_modules/.bin:`pwd`/../Saxonica/SaxonHEC1.2.0:`pwd`/build/Release:${PATH}
+  - if [[ -z "$var" ]] ; then
+      export NODE_PATH=`pwd`/build/Release;
+    else
+      export NODE_PATH=`pwd`/build/Release:${NODE_PATH};
+    fi
   - export LD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${LD_LIBRARY_PATH}
   - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${DYLD_LIBRARY_PATH}
-  - ls `pwd`/../Saxonica
+  - ls `pwd`/build/Release
   - echo ${PATH}
-  - ls `pwd`/node_modules/.bin
+  - echo ${NODE_PATH}
   - mocha --harmony --require should --timeout 7000
