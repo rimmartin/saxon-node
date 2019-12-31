@@ -54,7 +54,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "compileFromFile", compileFromFile);
             NODE_SET_PROTOTYPE_METHOD(t, "compileFromString", compileFromString);
             // append this function to the target object
-            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XsltProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
+            target->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "XsltProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
         };
 
         static Local<Object> Instantiate(Local<Object> proc) {
@@ -104,8 +104,8 @@ namespace saxon_node {
             xp->Wrap(args.This());
 
             // attach various properties
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
         };
 
         static void setSourceFromString(const v8::FunctionCallbackInfo<Value>& args) {
@@ -191,12 +191,12 @@ namespace saxon_node {
             }
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
-                String::Utf8Value pn(isolate, parameterNames->Get(index)->ToObject(context).ToLocalChecked());
-                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())));
+                String::Utf8Value pn(isolate, parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked());
+                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()));
             }
             // the source
             String::Utf8Value sourceFile(isolate, args[0]->ToString(context).ToLocalChecked());
@@ -216,9 +216,9 @@ namespace saxon_node {
                 return;
 
             }
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> properties=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> propertyNames=properties->GetOwnPropertyNames(context).ToLocalChecked();
             switch(args.Length())
             {
@@ -229,8 +229,8 @@ namespace saxon_node {
                         XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
                         for(uint32_t index=0;index<parameterNames->Length();index++)
                         {
-                            String::Utf8Value pn(isolate, parameterNames->Get(index)->ToObject(context).ToLocalChecked());
-                            xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())));
+                            String::Utf8Value pn(isolate, parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked());
+                            xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()));
                         }
                         // the source
                         String::Utf8Value source(isolate, args[0]->ToString(context).ToLocalChecked());
@@ -260,14 +260,14 @@ namespace saxon_node {
                         {
                         for(uint32_t index=0;index<parameterNames->Length();index++)
                         {
-                            String::Utf8Value pn(isolate, parameterNames->Get(index)->ToObject(context).ToLocalChecked());
-                            xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())));
+                            String::Utf8Value pn(isolate, parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked());
+                            xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()));
                         }
                         for(uint32_t index=0;index<propertyNames->Length();index++)
                         {
-                            Local<Object> obj=propertyNames->Get(index)->ToObject(context).ToLocalChecked();
+                            Local<Object> obj=propertyNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked();
                             String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                            String::Utf8Value pnValue(isolate, properties->Get(propertyNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                            String::Utf8Value pnValue(isolate, properties->Get(context, propertyNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()->ToString(context).ToLocalChecked());
 //                            std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             xp->xsltProcessor->setProperty(*pn, *pnValue);
                         }
@@ -428,16 +428,16 @@ namespace saxon_node {
                 return;
 
             }
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> properties=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> propertyNames=properties->GetOwnPropertyNames(context).ToLocalChecked();
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
-                String::Utf8Value pn(isolate, parameterNames->Get(index)->ToObject(context).ToLocalChecked());
-                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())));
+                String::Utf8Value pn(isolate, parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked());
+                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()));
             }
             //XdmNodeJS* source = ObjectWrap::Unwrap<XdmNodeJS>(args[0]->ToObject(context).ToLocalChecked());
             const char* buffer=xp->xsltProcessor->transformToString();
@@ -467,16 +467,16 @@ namespace saxon_node {
                 return;
 
             }
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> properties=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> propertyNames=properties->GetOwnPropertyNames(context).ToLocalChecked();
             // unwrap xsltProcessor object
             XsltProcessorJS* xp = ObjectWrap::Unwrap<XsltProcessorJS>(args.This());
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
-                String::Utf8Value pn(isolate, parameterNames->Get(index)->ToObject(context).ToLocalChecked());
-                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())));
+                String::Utf8Value pn(isolate, parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked());
+                xp->xsltProcessor->setParameter(*pn, (XdmValue*)xp->makeParameter(xp, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()));
             }
             //XdmNodeJS* source = ObjectWrap::Unwrap<XdmNodeJS>(args[0]->ToObject(context).ToLocalChecked());
             XdmValue* buffer=xp->xsltProcessor->transformToValue();
@@ -509,7 +509,7 @@ namespace saxon_node {
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
         v8::Local<v8::Context> context = isolate->GetCurrentContext();
         if(p->IsBoolean()){
-            return xp->xsltProcessor->getSaxonProcessor()->makeBooleanValue(p->BooleanValue(context).ToChecked());
+            return xp->xsltProcessor->getSaxonProcessor()->makeBooleanValue(p->BooleanValue(isolate));
         }
         else if(p->IsInt32() || p->IsUint32()){
             return xp->xsltProcessor->getSaxonProcessor()->makeIntegerValue(p->IntegerValue(context).ToChecked());

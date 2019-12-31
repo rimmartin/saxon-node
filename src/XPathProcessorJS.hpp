@@ -50,7 +50,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "getProperty", getProperty);
             NODE_SET_PROTOTYPE_METHOD(t, "clearParameters", clearParameters);
             // append this function to the target object
-            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XPathProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
+            target->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "XPathProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
         };
 
         static Local<Object> Instantiate(Local<Object> proc) {
@@ -100,8 +100,8 @@ namespace saxon_node {
             xp->Wrap(args.This());
 
             // attach various properties
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
         };
 
         static void setSourceValue(const v8::FunctionCallbackInfo<Value>& args) {
@@ -222,15 +222,15 @@ namespace saxon_node {
             }
             // unwrap xpathProcessor object
             XPathProcessorJS* xp = ObjectWrap::Unwrap<XPathProcessorJS>(args.This());
-            /*Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            /*Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames();
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
+                Local<Object> obj=parameterNames->Get(context, index)->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                 String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                String::Utf8Value pnValue(isolate, parameters->Get(context, parameterNames->Get(context, index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 //@todo xp->xpathProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }*/
@@ -261,9 +261,9 @@ namespace saxon_node {
         static void evaluateSingle(const v8::FunctionCallbackInfo<Value>& args) {
             v8::Isolate* isolate = v8::Isolate::GetCurrent();
             v8::Local<v8::Context> context = isolate->GetCurrentContext();
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> properties=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> propertyNames=properties->GetOwnPropertyNames(context).ToLocalChecked();
             switch(args.Length())
             {
@@ -277,10 +277,10 @@ namespace saxon_node {
                             for(uint32_t index=0;index<parameterNames->Length();index++)
                             {
     //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                                Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
+                                Local<Object> obj=parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked();
     //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                                 String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                                String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                                String::Utf8Value pnValue(isolate, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()->ToString(context).ToLocalChecked());
                                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                                 //@todo xp->xpathProcessor->setParameter(*pn, new XdmValue(*pnValue));
                             }
@@ -347,15 +347,15 @@ namespace saxon_node {
             }
             // unwrap xpathProcessor object
             XPathProcessorJS* xp = ObjectWrap::Unwrap<XPathProcessorJS>(args.This());
-            /*Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            /*Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames();
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
+                Local<Object> obj=parameterNames->Get(context, index)->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                 String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                String::Utf8Value pnValue(isolate, parameters->Get(context, parameterNames->Get(context, index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 //@todo xp->xpathProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }*/

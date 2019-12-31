@@ -41,7 +41,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "executeQueryToFile", executeQueryToFile);
             NODE_SET_PROTOTYPE_METHOD(t, "executeQueryToString", executeQueryToString);
             // append this function to the target object
-            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "XQueryProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
+            target->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "XQueryProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
         };
 
         static Local<Object> Instantiate(Local<Object> proc) {
@@ -91,8 +91,8 @@ namespace saxon_node {
             xp->Wrap(args.This());
 
             // attach various properties
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
-            args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
         };
 
         static void setSourceValue(const v8::FunctionCallbackInfo<Value>& args) {
@@ -155,15 +155,15 @@ namespace saxon_node {
             }
             // unwrap xqueryProcessor object
             XQueryProcessorJS* xp = ObjectWrap::Unwrap<XQueryProcessorJS>(args.This());
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
             for(uint32_t index=0;index<parameterNames->Length();index++)
             {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
+                Local<Object> obj=parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                 String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                String::Utf8Value pnValue(isolate, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()->ToString(context).ToLocalChecked());
                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                 //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
             }
@@ -190,9 +190,9 @@ namespace saxon_node {
         static void executeQueryToString(const v8::FunctionCallbackInfo<Value>& args) {
             v8::Isolate* isolate = v8::Isolate::GetCurrent();
             v8::Local<v8::Context> context = isolate->GetCurrentContext();
-            Local<Object> parameters=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> parameters=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> parameterNames=parameters->GetOwnPropertyNames(context).ToLocalChecked();
-            Local<Object> properties=args.This()->Get(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked())->ToObject(context).ToLocalChecked();
+            Local<Object> properties=args.This()->Get(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
             Local<Array> propertyNames=properties->GetOwnPropertyNames(context).ToLocalChecked();
             switch(args.Length())
             {
@@ -206,10 +206,10 @@ namespace saxon_node {
                             for(uint32_t index=0;index<parameterNames->Length();index++)
                             {
     //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                                Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
+                                Local<Object> obj=parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked();
     //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                                 String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                                String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                                String::Utf8Value pnValue(isolate, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()->ToString(context).ToLocalChecked());
                                 //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                                 //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                             }
@@ -240,18 +240,18 @@ namespace saxon_node {
                         for(uint32_t index=0;index<parameterNames->Length();index++)
                         {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                            Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
+                            Local<Object> obj=parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                             String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                            String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                            String::Utf8Value pnValue(isolate, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()->ToString(context).ToLocalChecked());
                             //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                         }
                         for(uint32_t index=0;index<propertyNames->Length();index++)
                         {
-                            Local<Object> obj=propertyNames->Get(index)->ToObject(context).ToLocalChecked();
+                            Local<Object> obj=propertyNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked();
                             String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                            String::Utf8Value pnValue(isolate, properties->Get(propertyNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                            String::Utf8Value pnValue(isolate, properties->Get(context, propertyNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()->ToString(context).ToLocalChecked());
                             //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                             xp->xqueryProcessor->setProperty(*pn, *pnValue);
                         }
@@ -280,10 +280,10 @@ namespace saxon_node {
                     for(uint32_t index=0;index<parameterNames->Length();index++)
                     {
 //                            std::cout<<" "<<parameterNames->IsNull()<<" "<<parameterNames->IsString()<<" "<<parameterNames->IsArray()<<" "<<parameterNames->Length()<<std::endl;
-                        Local<Object> obj=parameterNames->Get(index)->ToObject(context).ToLocalChecked();
+                        Local<Object> obj=parameterNames->Get(context, index).ToLocalChecked()->ToObject(context).ToLocalChecked();
 //                            std::cout<<"obj "<<obj->IsString()<<std::endl;
                         String::Utf8Value pn(isolate, obj->ToString(context).ToLocalChecked());
-                        String::Utf8Value pnValue(isolate, parameters->Get(parameterNames->Get(index)->ToString(context).ToLocalChecked())->ToString(context).ToLocalChecked());
+                        String::Utf8Value pnValue(isolate, parameters->Get(context, parameterNames->Get(context, index).ToLocalChecked()->ToString(context).ToLocalChecked()).ToLocalChecked()->ToString(context).ToLocalChecked());
                         //std::cout<<(*pn)<<" "<<(*pnValue)<<std::endl;
                         //@todo xp->xqueryProcessor->setParameter(*pn, new XdmValue(*pnValue));
                     }

@@ -42,7 +42,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "itemAt", itemAt);
             NODE_SET_PROTOTYPE_METHOD(t, "size", size);
             // append this function to the target object
-            target->Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "XdmValue", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
+            target->Set(context, v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "XdmValue", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
         };
 
         static v8::Local<v8::Object> Instantiate(v8::Local<v8::Object> proc) {
@@ -95,8 +95,8 @@ namespace saxon_node {
             xp->Wrap(args.This());
 
             // attach various properties
-            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
-            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            //args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "parameters", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
+            //args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "properties", v8::NewStringType::kInternalized).ToLocalChecked(), Object::New(v8::Isolate::GetCurrent()));
         };
 
         static void addXdmValueWithType(const v8::FunctionCallbackInfo<v8::Value>& args) {

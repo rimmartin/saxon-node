@@ -65,7 +65,7 @@ namespace saxon_node {
             NODE_SET_PROTOTYPE_METHOD(t, "version", version);
             NODE_SET_PROTOTYPE_METHOD(t, "release", release);
             // append this function to the target object
-            target->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "SaxonProcessor"), t->GetFunction(context).ToLocalChecked());
+            target->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "SaxonProcessor", v8::NewStringType::kInternalized).ToLocalChecked(), t->GetFunction(context).ToLocalChecked());
         };
 
 
@@ -102,7 +102,7 @@ namespace saxon_node {
             sp->Wrap(args.This());
 
             // attach various properties
-            //args.This()->Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), "path"), String::NewFromUtf8(v8::Isolate::GetCurrent(), f->m_file->getFileName().c_str(), v8::NewStringType::kInternalized).ToLocalChecked());
+            //args.This()->Set(context, String::NewFromUtf8(v8::Isolate::GetCurrent(), "path"), String::NewFromUtf8(v8::Isolate::GetCurrent(), f->m_file->getFileName().c_str(), v8::NewStringType::kInternalized).ToLocalChecked());
         };
         static void newTransformer(const v8::FunctionCallbackInfo<Value>& args);
 
@@ -135,7 +135,7 @@ namespace saxon_node {
                 xmlNode=xp->processor->makeStringValue(*str);
             }
             else if(args[0]->IsBoolean()){
-                xmlNode=xp->processor->makeBooleanValue(args[0]->BooleanValue(context).ToChecked());
+                xmlNode=xp->processor->makeBooleanValue(args[0]->BooleanValue(isolate));
             }
             else if(args[0]->IsInt32() ){
                 xmlNode=xp->processor->makeIntegerValue(args[0]->Int32Value(context).ToChecked());
@@ -293,7 +293,7 @@ namespace saxon_node {
             v8::Local<v8::Context> context = isolate->GetCurrentContext();
             if (args.Length() != 1 || !args[0]->IsString()) {
 
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml as filePath")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml as filePath", v8::NewStringType::kInternalized).ToLocalChecked()));
                 args.GetReturnValue().SetUndefined();
                 return;
 
@@ -312,7 +312,7 @@ namespace saxon_node {
                 for(unsigned int exceptionIndex=0;exceptionIndex<xp->processor->getException()->count();exceptionIndex++){
                     ss<<xp->processor->getException()->getErrorMessage(exceptionIndex)<<std::endl;
                 }
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str(), v8::NewStringType::kInternalized).ToLocalChecked()));
                 args.GetReturnValue().SetUndefined();
                 return;
                 
@@ -331,7 +331,7 @@ namespace saxon_node {
             v8::Local<v8::Context> context = isolate->GetCurrentContext();
             if (args.Length() != 1 || !args[0]->IsString()) {
 
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml as uri")));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "expected xml as uri", v8::NewStringType::kInternalized).ToLocalChecked()));
                 args.GetReturnValue().SetUndefined();
                 return;
 
@@ -351,7 +351,7 @@ namespace saxon_node {
                 for(unsigned int exceptionIndex=0;exceptionIndex<xp->processor->getException()->count();exceptionIndex++){
                     ss<<xp->processor->getException()->getErrorMessage(exceptionIndex)<<std::endl;
                 }
-                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str())));
+                v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), ss.str().c_str(), v8::NewStringType::kInternalized).ToLocalChecked()));
                 args.GetReturnValue().SetUndefined();
                 return;
                 
@@ -364,12 +364,12 @@ namespace saxon_node {
         };
 
         static void setProperty(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
         static void getProperties(const v8::FunctionCallbackInfo<Value>& args) {
-            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method")));
+            v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(String::NewFromUtf8(v8::Isolate::GetCurrent(), "unsupported method", v8::NewStringType::kInternalized).ToLocalChecked()));
             args.GetReturnValue().SetUndefined();
         };
 
@@ -409,7 +409,7 @@ namespace saxon_node {
         static void version(const v8::FunctionCallbackInfo<Value>& args) {
                 SaxonProcessorJS* sp = ObjectWrap::Unwrap<SaxonProcessorJS>(args.This());
                 const char* buffer=sp->processor->version();
-                args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, String::kNormalString, std::strlen(buffer)));
+                args.GetReturnValue().Set(String::NewFromUtf8(v8::Isolate::GetCurrent(), buffer, v8::NewStringType::kNormal, std::strlen(buffer)).ToLocalChecked());
         };
 
         static void release(const v8::FunctionCallbackInfo<Value>& args) {
