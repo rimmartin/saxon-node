@@ -57,11 +57,9 @@ install:
       refreshenv;
       echo PATH=${PATH};
       ls /c/ProgramData/chocolatey/bin/*;
-      ls /c/"Program Files"/ojdkbuild/*;
-      ls /c/"Program Files"/ojdkbuild/include/*;
+      ls -lastr /c/"Program Files"/ojdkbuild/*;
+      ls -lastr /c/"Program Files"/ojdkbuild/java*;
       echo ${JAVA_HOME};
-      where java;
-      ls /c/"Program Files"/Java/*;
       echo JAVA_HOME=${JAVA_HOME};
       ls /c/"Program Files"/ojdkbuild/java-13-openjdk-13.0.1.9-1/include;
       export JAVA_HOME=/c/"Program Files"/ojdkbuild/java-13-openjdk-13.0.1.9-1;
