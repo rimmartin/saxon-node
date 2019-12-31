@@ -51,6 +51,7 @@ install:
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
       choco install ojdkbuild;
+      ls /c/"Program Files"/ojdkbuild/*;
       ls /c/"Program Files"/ojdkbuild/java-13-openjdk-13.0.1.9-1/include;
       export JAVA_HOME=/c/"Program Files"/ojdkbuild/java-13-openjdk-13.0.1.9-1;
     fi
