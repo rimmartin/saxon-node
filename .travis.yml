@@ -27,26 +27,26 @@ osx_image: xcode8
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
-      wget https://www.saxonica.com/saxon-c/libsaxon-HEC-mac-setup-v1.2.0.zip -O /tmp/libsaxon-HEC-mac-setup-v1.2.0.zip;
-      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.2.0.zip -d /tmp/libsaxon-HEC-mac-setup-v1.2.0;
-      mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
-      cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
+      wget https://www.saxonica.com/saxon-c/libsaxon-HEC-mac-setup-v1.2.1.zip -O /tmp/libsaxon-HEC-mac-setup-v1.2.1.zip;
+      printf "y/n" | unzip /tmp/libsaxon-HEC-mac-setup-v1.2.1.zip -d /tmp/libsaxon-HEC-mac-setup-v1.2.1;
+      mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.1;
+      cp -r -p /tmp/libsaxon-HEC-mac-setup-v1.2.1/* `pwd`/../Saxonica/SaxonHEC1.2.1;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
-      wget –quiet http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.0.exe -O ../libsaxon-HEC-win-setup-v1.2.0.exe;
-      mkdir -p ../tmp/libsaxon-HEC-win-setup-v1.2.0;
-      ../libsaxon-HEC-win-setup-v1.2.0.exe //batch //no-reg //force //dest "..\tmp\libsaxon-HEC-win-setup-v1.2.0";
-      mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.0;
-      cp -r -p ../tmp/libsaxon-HEC-win-setup-v1.2.0/* `pwd`/../Saxonica/SaxonHEC1.2.0;
-      sed 's/bool isSchemaAware/\/\/bool isSchemaAware/' `pwd`/../Saxonica/SaxonHEC1.2.0/Saxon.C.API/SaxonProcessor.h;
+      wget –quiet http://www.saxonica.com/saxon-c/libsaxon-HEC-win-setup-v1.2.1.exe -O ../libsaxon-HEC-win-setup-v1.2.1.exe;
+      mkdir -p ../tmp/libsaxon-HEC-win-setup-v1.2.1;
+      ../libsaxon-HEC-win-setup-v1.2.1.exe //batch //no-reg //force //dest "..\tmp\libsaxon-HEC-win-setup-v1.2.1";
+      mkdir -p `pwd`/../Saxonica/SaxonHEC1.2.1;
+      cp -r -p ../tmp/libsaxon-HEC-win-setup-v1.2.1/* `pwd`/../Saxonica/SaxonHEC1.2.1;
+      sed 's/bool isSchemaAware/\/\/bool isSchemaAware/' `pwd`/../Saxonica/SaxonHEC1.2.1/Saxon.C.API/SaxonProcessor.h;
     else
-      wget https://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.2.0.zip -O /tmp/libsaxon-HEC-setup64-v1.2.0.zip;
-      printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.2.0.zip -d /tmp;
-      printf "`pwd`/../Saxonica/SaxonHEC1.2.0\n" | /tmp/libsaxon-HEC-setup64-v1.2.0;
+      wget https://www.saxonica.com/saxon-c/libsaxon-HEC-setup64-v1.2.1.zip -O /tmp/libsaxon-HEC-setup64-v1.2.1.zip;
+      printf "y/n" | unzip /tmp/libsaxon-HEC-setup64-v1.2.1.zip -d /tmp;
+      printf "`pwd`/../Saxonica/SaxonHEC1.2.1\n" | /tmp/libsaxon-HEC-setup64-v1.2.1;
     fi
-  - export SAXONC_HOME=`pwd`/../Saxonica/SaxonHEC1.2.0
+  - export SAXONC_HOME=`pwd`/../Saxonica/SaxonHEC1.2.1
   
 install:
-  - export SAXONC_HOME=`pwd`/../Saxonica/SaxonHEC1.2.0
+  - export SAXONC_HOME=`pwd`/../Saxonica/SaxonHEC1.2.1
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
       ls /Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/*;
       find /Library/Java/JavaVirtualMachines -name jni.h;
@@ -57,21 +57,21 @@ install:
       export JAvA_HOME=/c/"Program Files"/ojdkbuild/java-12-openjdk-12.0.2-1;
     fi
   - npm install -g node-gyp
-  - npm install --build-from-source --saxonc_home=../Saxonica/SaxonHEC1.2.0
+  - npm install --build-from-source --saxonc_home=../Saxonica/SaxonHEC1.2.1
   - ls ./build/Release
 
 before-scripte:
   - export PATH=`pwd`/node_modules/.bin:${PATH}
   
 script:
-  - export PATH=`pwd`/node_modules/.bin:`pwd`/../Saxonica/SaxonHEC1.2.0:`pwd`/build/Release:${PATH}
+  - export PATH=`pwd`/node_modules/.bin:`pwd`/../Saxonica/SaxonHEC1.2.1:`pwd`/build/Release:${PATH}
   - if [[ -z "$var" ]] ; then
       export NODE_PATH=`pwd`/build/Release;
     else
       export NODE_PATH=`pwd`/build/Release:${NODE_PATH};
     fi
-  - export LD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${LD_LIBRARY_PATH}
-  - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.0:${DYLD_LIBRARY_PATH}
+  - export LD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.1:${LD_LIBRARY_PATH}
+  - export DYLD_LIBRARY_PATH=`pwd`/../Saxonica/SaxonHEC1.2.1:${DYLD_LIBRARY_PATH}
   - ls `pwd`/build/Release
   - echo ${PATH}
   - echo ${NODE_PATH}
