@@ -55,8 +55,7 @@ install:
       echo ${JAVA_HOME};
       choco install ojdkbuild;
       refreshenv;
-      echo PATH=${PATH};
-      ls /c/ProgramData/chocolatey/bin/*;
+      cat C:\ProgramData\chocolatey\logs\chocolatey.log;
       ls -lastr /c/"Program Files"/ojdkbuild/*;
       ls -lastr /c/"Program Files"/ojdkbuild/release/*;
       ls -lastr /c/"Program Files"/ojdkbuild/release/java*;
