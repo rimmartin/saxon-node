@@ -51,18 +51,12 @@ install:
       export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]] ; then
       echo PATH=${PATH};
-      where java;
       echo ${JAVA_HOME};
-      choco install ojdkbuild;
-      refreshenv;
-      cat C:\ProgramData\chocolatey\logs\chocolatey.log;
-      ls -lastr /c/"Program Files"/ojdkbuild/*;
-      ls -lastr /c/"Program Files"/ojdkbuild/release/*;
-      ls -lastr /c/"Program Files"/ojdkbuild/release/java*;
-      echo ${JAVA_HOME};
+      choco install zulu12;
+      ls -lastr /c/"Program Files"/zulu12/*;
       echo JAVA_HOME=${JAVA_HOME};
-      ls /c/"Program Files"/ojdkbuild/release/java-13-openjdk-13.0.1.9-1/include;
-      export JAVA_HOME=/c/"Program Files"/ojdkbuild/release/java-13-openjdk-13.0.1.9-1;
+      ls /c/"Program Files"/zulu12/java-13-openjdk-13.0.1.9-1/include;
+      export JAVA_HOME=/c/"Program Files"/zulu12/release/java-13-openjdk-13.0.1.9-1;
     fi
   - npm install -g node-gyp
   - npm install --build-from-source --saxonc_home=../Saxonica/SaxonHEC1.2.1
