@@ -53,6 +53,8 @@ install:
       echo PATH=${PATH};
       echo ${JAVA_HOME};
       choco install zulu12;
+      cat C:\ProgramData\chocolatey\logs\chocolatey.log;
+      ls -lastr /c/"Program Files"/*;
       ls -lastr /c/"Program Files"/zulu12/*;
       echo JAVA_HOME=${JAVA_HOME};
       ls /c/"Program Files"/zulu12/java-13-openjdk-13.0.1.9-1/include;
