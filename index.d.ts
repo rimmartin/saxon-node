@@ -4,7 +4,7 @@ declare module 'saxon-node' {
      * Constructs a saxon processor.
      * @param license a license license is to be used. Default is false
      */
-    constructor(license: boolean);
+    constructor(license?: boolean);
     
     newTransformer(): XsltProcessor;
     newXQueryProcessor(): XQueryProcessor;
@@ -88,7 +88,7 @@ declare module 'saxon-node' {
      * Precompiles the string for subsequent transforms.
      * @param xml xml in a string
      */
-    setSorceFromString(xml: string): void;
+    setSourceFromString(xml: string): void;
 
     /**
      * Loads stylesheet and precompiles for subsequent transforms.
@@ -139,7 +139,7 @@ declare module 'saxon-node' {
      * Precompiles the string for subsequent transforms.
      * @param xml xml in a string
      */
-    setSorceFromString(xml: string): void;
+    setSourceFromString(xml: string): void;
 
     /**
      * Loads stylesheet and precompiles for subsequent transforms.
