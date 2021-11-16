@@ -26,7 +26,7 @@
         "co": "4.6.0",
         "should": "13.2.3",
         "mocha": "6.2.2",
-        "aws-sdk": "2.568.0"
+        "aws-sdk": "2.814.0"
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build --jobs max ",
